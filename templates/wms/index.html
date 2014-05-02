@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'wms/menu.css' %}" />
+    <title>{% block title %}Solvo.Web{% endblock %}</title>
+	
+	{% block head %}
+		<h1 id="site-name">{% trans 'Solvo.Web index page' %}</h1>
+	{% endblock %}
+	{% block menu %}
+		<h1 id="site-name">{% trans 'Solvo.Web index page' %}</h1>
+	{% endblock %}
+</head>
+
+<body>
+        {% block body %}
+        {% endblock %}
+</body>
+		{% block footer %}
+			<a href="/wms/main">На главную</a>
+			<br>
+			<a href="/wms/logout">Выход из системы</a>
+        {% endblock %}
+</html>

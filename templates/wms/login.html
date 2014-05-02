@@ -1,0 +1,28 @@
+{% extends "wms/index.html" %}
+<html>
+<body>
+{% block head %}
+<h1>Вход в систему</h1>
+{% endblock %}
+{% block body %}
+{% if form.errors %}
+<p>Имя пользователя или пароль неверно. Попробуйте еще раз</p>
+{% endif %}
+<form method="post" action=".">
+{% csrf_token %}
+<table>
+<tr>
+    <td>Имя пользователя:</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>Пароль:</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+<input type="hidden" name="next" value="/wms/main/" />
+<input type="submit" value="login" />
+</form>
+{% endblock %}
+</body>
+</html>

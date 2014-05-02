@@ -1,0 +1,9 @@
+{% extends "wms/main.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block head %}
+<h1 id="site-name">{% trans 'Solvo.Web sku list' %}</h1>
+{% endblock %}
+{% block body %}
+<p>Ваши товары, {{ user_obj.first_name }}</p>
+{% endblock %}
