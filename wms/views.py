@@ -33,7 +33,8 @@ def sku(request):
 def order(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
-    return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
+    available_order_details=OrderDetail.objects.select_related('order').filter(order=available_orders)
+    return render_to_response('wms/order.html', {'available_orders':available_orders, 'available_order_details':available_order_details}, context_instance=RequestContext(request))
 
 @login_required
 def incoming(request):

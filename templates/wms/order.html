@@ -4,13 +4,23 @@
 {% block head %}
 <h1 id="site-name">{% trans 'Solvo.Web order list' %}</h1>
 {% endblock %}
-{% block body %}
-<p>Ваши заказы, {{ user.first_name }}</p>
-{% for us in available_orders %}
-<li>{{ us.display_name }}
-{% for choice in us.order_detail_set.all %}
-    <li>{{ choice.units }}</li>
-{% endfor %}
-</li>
-{% endfor %}
+{% block header %}
+<table border="1">
+    {% for a in available_orders %}
+    <tr>
+        <td>{{ a.display_name }}</td>
+        <td>{{ a.holder }}</td>
+    </tr>
+    <p>Ваши заказы, {{ user.first_name }}</p>
+    {% endfor %}
+{% endblock %}
+{% block detail %}
+</table>
+    <table border="1">
+        {% for i in available_order_details %}
+        <tr>
+            <td>{{ i.sku }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
