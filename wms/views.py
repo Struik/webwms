@@ -16,25 +16,23 @@ def index(request):
 
 @login_required
 def main(request):
-    user_id = request.user.id
-    user_obj = get_object_or_404(User, pk=user_id)
-    return render_to_response('wms/main.html', {'user_obj': user_obj}, context_instance=RequestContext(request))
+    return render_to_response('wms/main.html', context_instance=RequestContext(request))
 	
 @login_required
 def client(request):
-    return render_to_response('wms/client.html')
+    return render_to_response('wms/client.html', context_instance=RequestContext(request))
 	
 @login_required
 def sku(request):
-    return render_to_response('wms/sku.html')
+    return render_to_response('wms/sku.html', context_instance=RequestContext(request))
 	
 @login_required
 def order(request):
-    return render_to_response('wms/order.html')
+    return render_to_response('wms/order.html', context_instance=RequestContext(request))
 	
 @login_required
 def incoming(request):
-    return render_to_response('wms/incoming.html')
+    return render_to_response('wms/incoming.html', context_instance=RequestContext(request))
 	
 def logout_page(request):
     """
