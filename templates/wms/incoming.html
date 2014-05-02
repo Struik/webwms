@@ -6,4 +6,7 @@
 {% endblock %}
 {% block body %}
 <p>Ваши поставки, {{ user.first_name }}</p>
+{% for us in available_incomings %}
+<li>{{ us.display_name }}</li>
+{% endfor %}
 {% endblock %}

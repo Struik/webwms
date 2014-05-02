@@ -6,4 +6,7 @@
 {% endblock %}
 {% block body %}
 <p>Ваши товары, {{ user.first_name }}</p>
+{% for us in available_sku %}
+<li>{{ us.name }}</li>
+{% endfor %}
 {% endblock %}

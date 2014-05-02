@@ -6,4 +6,7 @@
 {% endblock %}
 {% block body %}
 <p>Ваши контрагенты, {{ user.first_name }}</p>
+{% for us in available_clients %}
+<li>{{ us.name }}</li>
+{% endfor %}
 {% endblock %}

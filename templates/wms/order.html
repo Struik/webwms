@@ -6,4 +6,11 @@
 {% endblock %}
 {% block body %}
 <p>Ваши заказы, {{ user.first_name }}</p>
+{% for us in available_orders %}
+<li>{{ us.display_name }}
+{% for choice in us.order_detail_set.all %}
+    <li>{{ choice.units }}</li>
+{% endfor %}
+</li>
+{% endfor %}
 {% endblock %}

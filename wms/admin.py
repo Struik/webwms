@@ -15,7 +15,10 @@ class ClientAdmin(admin.ModelAdmin):
     list_filter = ['name']
     search_fields = ['name']
     inlines = [RefClientInline]
-	
+
+class SkuAdmin(admin.ModelAdmin):
+    list_display = ('name', 'holder')
+
 class OrderDetailInline(admin.TabularInline):
     model = OrderDetail
     extra = 5
@@ -39,7 +42,7 @@ class IncomingAdmin(admin.ModelAdmin):
     inlines = [IncomingDetailInline]
 
 admin.site.register(Client, ClientAdmin)
-admin.site.register(Sku)
+admin.site.register(Sku, SkuAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Incoming, IncomingAdmin)
 

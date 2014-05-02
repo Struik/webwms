@@ -12,8 +12,11 @@ class Client(models.Model):
         return self.name
         
 class ReferredClients(models.Model):
-    user = models.ForeignKey(Client)
-    client = models.ForeignKey(User)
+    client = models.ForeignKey(Client)
+    user = models.ForeignKey(User)
+
+    def __int__(self):
+        return self.client_id
     
 class Sku(models.Model):
     sku_id = models.CharField(max_length=200)
