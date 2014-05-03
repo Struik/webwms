@@ -2,19 +2,47 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block head %}
-<h1 id="site-name">{% trans 'Solvo.Web order list' %}</h1>
+        <h1 id="site-name">{% trans 'Solvo.Web order list' %}</h1>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+               $('#order_table').on('click', 'tr', function(){
+                    $.ajax({url:"/wms/order_detail/",
+                        data:{id: $(this).attr("id")},
+                        success:function(result){
+                            $("#order_details").html(result)}
+                    });
+                })
+            });
+        </script>
+        <!--script type="text/javascript">
+            var ids = {id: 1};
+
+            function start(){
+                xhttp=new XMLHttpRequest();
+                xhttp.onreadystatechange=function(){
+                    if (xhttp.readyState==4 && xhttp.status==200)
+                        document.getElementById('order_details').innerHTML=xhttp.responseText;
+                }
+                xhttp.open('GET','/wms/order_detail/'+ids,true);
+                xhttp.send();
+            }
+        </script-->
 {% endblock %}
 {% block header %}
-<table border="1">
+<table border="1" id="order_table">
+    <p>Ваши заказы, {{ user.first_name }}</p>
+    <input id="next_order" type="button" value="Другой заказ" />
     {% for a in available_orders %}
-    <tr>
+    <tr id={{ a.id }} onclick="start()">
+        <td>{{ a.id }}</td>
         <td>{{ a.display_name }}</td>
         <td>{{ a.holder }}</td>
     </tr>
-    <p>Ваши заказы, {{ user.first_name }}</p>
     {% endfor %}
 {% endblock %}
 {% block detail %}
+
 </table>
     <table border="1">
         {% for i in available_order_details %}
@@ -23,4 +51,5 @@
         </tr>
         {% endfor %}
     </table>
+<p id='order_details'>details</p>
 {% endblock %}
