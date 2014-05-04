@@ -16,7 +16,7 @@ class ClientAdmin(admin.ModelAdmin):
     inlines = [RefClientInline]
 
 class SkuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'holder_id')
+    list_display = ('name', 'holder')
 
 class OrderDetailInline(admin.TabularInline):
     model = OrderDetail
@@ -25,7 +25,7 @@ class OrderDetailInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['display_name']}),
-        (None, 				 {'fields': ['holder_id']}),
+        (None, 				 {'fields': ['holder']}),
     ]
     inlines = [OrderDetailInline]
 	
@@ -36,7 +36,7 @@ class IncomingDetailInline(admin.TabularInline):
 class IncomingAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['display_name']}),
-        (None, 				 {'fields': ['holder_id']}),
+        (None, 				 {'fields': ['holder']}),
     ]
     inlines = [IncomingDetailInline]
 

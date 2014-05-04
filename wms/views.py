@@ -29,22 +29,21 @@ def client(request):
 @login_required
 def sku(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
-    available_sku=Sku.objects.select_related('client').filter(holder_id=available_clients)
-    return render_to_response('wms/sku.html', {'available_sku':available_clients}, context_instance=RequestContext(request))
+    available_sku=Sku.objects.select_related('client').filter(holder=available_clients)
+    return render_to_response('wms/sku.html', {'available_sku':available_sku}, context_instance=RequestContext(request))
 
 @login_required
 def order(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
-    available_orders=Order.objects.select_related('client').filter(holder_id=available_clients)
-    available_order_details=OrderDetail.objects.select_related('order').filter(order_id=available_orders)
-    return render_to_response('wms/order.html', {'available_orders':available_orders, 'available_order_details':available_order_details}, context_instance=RequestContext(request))
+    available_orders=Order.objects.select_related('client').filter(holder=available_clients)
+    return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
 
 @csrf_exempt
 @login_required
 def order_detail(request):
-    serialized_queryset = serializers.serialize('json', OrderDetail.objects.filter(order_id=request.POST.get('id')))
-    return HttpResponse(json.dumps(serialized_queryset,
+    current_order_details = serializers.serialize('json', OrderDetail.objects.filter(order=request.POST.get('id')))
+    return HttpResponse(json.dumps(current_order_details,
             ensure_ascii=False), content_type='application/json')
 
 @login_required
