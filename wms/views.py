@@ -1,4 +1,5 @@
 import json
+from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -44,17 +45,19 @@ def order(request):
 def order_detail(request):
     message = "0"
     print(request.method)
-    print(request.POST.get('id'))
+    print(request.POST)
     id=request.POST.get('id')
-
-    if request.is_ajax():
-        message = request.POST.get('id')
-    else:
-        message = "Not Ajax"
-    return HttpResponse(json.dumps({'id' : 'awesome'},
-            ensure_ascii=False), mimetype='application/javascript')
-    #return HttpResponse(json.dumps({'id': id}), content_type="application/json")
-    #return HttpResponse(message)
+    a = {'id': 1}
+    current_order_details=OrderDetail.objects.filter(order=id)
+    b= current_order_details
+    ans = {'id': str(current_order_details)}
+    serialized_queryset = serializers.serialize('json', OrderDetail.objects.filter(order=id))
+    print(serialized_queryset)
+    print(a)
+    print(b)
+    print(ans)
+    return HttpResponse(json.dumps(serialized_queryset,
+            ensure_ascii=False), content_type='application/json')
 
 @login_required
 def incoming(request):

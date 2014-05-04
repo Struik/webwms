@@ -1,4 +1,8 @@
 import datetime
+import json
+from django.utils.functional import Promise
+from django.utils.encoding import force_text
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
@@ -37,7 +41,10 @@ class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
     sku = models.ForeignKey(Sku)
     units = models.IntegerField()
-    
+
+    def __str__(self):
+        return str(self.order) + ' ' + str(self.sku) + ' ' + str(self.units)
+
 class Incoming(models.Model):
     display_name = models.CharField(max_length=200)
     holder = models.ForeignKey(Client)
