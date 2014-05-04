@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7a90776e-b324-4262-9a03-c2f9c2bc7cfe" name="Default" comment="Pages">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
+    <list default="true" id="7a90776e-b324-4262-9a03-c2f9c2bc7cfe" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/wms/order.html" afterPath="$PROJECT_DIR$/templates/wms/order.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/urls.py" afterPath="$PROJECT_DIR$/wms/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/views.py" afterPath="$PROJECT_DIR$/wms/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -41,7 +39,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wms/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="22" selection-start="2141" selection-end="2141" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1071">
+            <state line="42" column="24" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="1088">
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -88,7 +86,7 @@
       <file leaf-file-name="order.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/wms/order.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="18" selection-start="678" selection-end="678" vertical-scroll-proportion="0.4524715" vertical-offset="0" max-vertical-offset="1037">
+            <state line="14" column="0" selection-start="693" selection-end="804" vertical-scroll-proportion="0.4201521" vertical-offset="17" max-vertical-offset="1088">
               <folding />
             </state>
           </provider>
@@ -467,13 +465,18 @@
       <created>1399039514866</created>
       <updated>1399039514866</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Ajax stuff">
+      <created>1399103754458</created>
+      <updated>1399103754458</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -488,7 +491,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32997763" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -509,7 +511,8 @@
     <MESSAGE value="Pycharm test" />
     <MESSAGE value="User handling" />
     <MESSAGE value="Pages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pages" />
+    <MESSAGE value="Ajax stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajax stuff" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -730,13 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wms/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="24" selection-start="712" selection-end="712" vertical-scroll-proportion="0.0" vertical-offset="94" max-vertical-offset="952">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wms/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="1" selection-start="672" selection-end="672" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
@@ -744,9 +740,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wms/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="24" selection-start="712" selection-end="712" vertical-scroll-proportion="0.0" vertical-offset="94" max-vertical-offset="952">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wms/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="22" selection-start="2141" selection-end="2141" vertical-scroll-proportion="0.0" vertical-offset="73" max-vertical-offset="1071">
+        <state line="42" column="24" selection-start="2065" selection-end="2065" vertical-scroll-proportion="0.0" vertical-offset="442" max-vertical-offset="1088">
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -755,7 +758,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/wms/order.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="18" selection-start="678" selection-end="678" vertical-scroll-proportion="0.4524715" vertical-offset="0" max-vertical-offset="1037">
+        <state line="14" column="0" selection-start="693" selection-end="804" vertical-scroll-proportion="0.4201521" vertical-offset="17" max-vertical-offset="1088">
           <folding />
         </state>
       </provider>
