@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def index(request):
@@ -37,13 +38,23 @@ def order(request):
     available_order_details=OrderDetail.objects.select_related('order').filter(order=available_orders)
     return render_to_response('wms/order.html', {'available_orders':available_orders, 'available_order_details':available_order_details}, context_instance=RequestContext(request))
 
+
+@csrf_exempt
+@login_required
 def order_detail(request):
     message = "0"
+    print(request.method)
+    print(request.POST.get('id'))
+    id=request.POST.get('id')
+
     if request.is_ajax():
-        message = "123!"
+        message = request.POST.get('id')
     else:
         message = "Not Ajax"
-    return HttpResponse(message)
+    return HttpResponse(json.dumps({'id' : 'awesome'},
+            ensure_ascii=False), mimetype='application/javascript')
+    #return HttpResponse(json.dumps({'id': id}), content_type="application/json")
+    #return HttpResponse(message)
 
 @login_required
 def incoming(request):

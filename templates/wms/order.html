@@ -9,9 +9,10 @@
                $('#order_table').on('click', 'tr', function(){
                     $.ajax({url:"/wms/order_detail/",
                         data:{id: $(this).attr("id")},
-                        type: "GET",
+                        type: "POST",
+                        dataType: "json",
                         contentType: 'application/json',
-                        success : function(response) { alert (response)}
+                        success : function(response) { alert (response.id)}
                         /*success:function(result){
                             $("#order_details").html(result)}*/
                     });

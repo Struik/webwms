@@ -55,7 +55,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 TEMPLATE_DIRS = (
-    'C:/Django/webwms/templates', # Change this to your own directory.
+    './templates', # Change this to your own directory.
 )
 
 ROOT_URLCONF = 'webwms.urls'
