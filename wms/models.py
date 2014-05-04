@@ -8,51 +8,93 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Client(models.Model):
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=200)
-    wms_id = models.IntegerField()
-    is_holder = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    sdid = models.CharField(max_length=200)
 	
     def __str__(self):
         return self.name
+
+    class Meta:
+        managed = False
+        db_table = 'web_client'
         
 class ReferredClients(models.Model):
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
 
-    def __int__(self):
-        return self.client_id
-    
 class Sku(models.Model):
+    id = models.IntegerField(primary_key=True)
     sku_id = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
-    holder = models.ForeignKey(Client)
-	
+    holder_id = models.ForeignKey(Client)
+    sdid = models.CharField(max_length=200)
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        managed = False
+        db_table = 'web_sku'
     
 class Order(models.Model):
+    id = models.IntegerField(primary_key=True)
+    sdid = models.CharField(max_length=200)
     display_name = models.CharField(max_length=200)
-    holder = models.ForeignKey(Client)
-	
+    holder_id = models.ForeignKey(Client)
+    client_name = models.CharField(max_length=200)
+    date_to_ship = models.DateTimeField
+    status = models.CharField(max_length=200)
+
     def __str__(self):
         return self.display_name
+
+    class Meta:
+        managed = False
+        db_table = 'web_order'
 
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order)
-    sku = models.ForeignKey(Sku)
-    units = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
+    order_id = models.ForeignKey(Order)
+    line = models.IntegerField
+    sku_id = models.ForeignKey(Sku)
+    sku_name = models.CharField(max_length=200)
+    qty = models.IntegerField()
+    planned = models.IntegerField()
+    moved = models.IntegerField()
+    packed = models.IntegerField()
+    shiped = models.IntegerField()
 
-    def __str__(self):
-        return str(self.order) + ' ' + str(self.sku) + ' ' + str(self.units)
+    class Meta:
+        managed = False
+        db_table = 'web_order_detail'
 
 class Incoming(models.Model):
+    id = models.IntegerField(primary_key=True)
+    sdid = models.CharField(max_length=200)
     display_name = models.CharField(max_length=200)
-    holder = models.ForeignKey(Client)
+    holder_id = models.ForeignKey(Client)
+    client_name = models.CharField(max_length=200)
+    date_to_ship = models.DateTimeField
+    status = models.CharField(max_length=200)
 	
     def __str__(self):
         return self.display_name
 
+    class Meta:
+        managed = False
+        db_table = 'web_incoming'
+
 class IncomingDetail(models.Model):
-    inc = models.ForeignKey(Incoming)
-    sku = models.ForeignKey(Sku)
-    units = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
+    inc_id = models.ForeignKey(Order)
+    line = models.IntegerField
+    sku_id = models.ForeignKey(Sku)
+    sku_name = models.CharField(max_length=200)
+    qty = models.IntegerField()
+    received = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'web_incoming_detail'
