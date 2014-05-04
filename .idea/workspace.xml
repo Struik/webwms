@@ -2,15 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a90776e-b324-4262-9a03-c2f9c2bc7cfe" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Django\webwms\wms\migrations\0002_auto__del_field_client_is_holder.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Django\webwms\wms\migrations\0003_auto__add_field_client_is_holder.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Django\webwms\wms\migrations\0004_initial.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Django\webwms\wms\migrations\0005_auto__add_field_client_is_holder.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Django\webwms\wms\migrations\0006_auto__chg_field_referredclients_client__chg_field_referredclients_user.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/wms/migrations/0001_initial.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/admin.py" afterPath="$PROJECT_DIR$/wms/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/models.py" afterPath="$PROJECT_DIR$/wms/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/views.py" afterPath="$PROJECT_DIR$/wms/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webwms.iws" />
@@ -508,7 +499,11 @@
       <created>1399227211244</created>
       <updated>1399227211244</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Custom views">
+      <created>1399228780543</created>
+      <updated>1399228780543</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
