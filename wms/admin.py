@@ -8,16 +8,15 @@ class RefClientInline(admin.TabularInline):
 class ClientAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['name']}),
-        (None, 				 {'fields': ['wms_id']}),
-        (None, 				 {'fields': ['is_holder']}),
+        (None, 				 {'fields': ['sdid']}),
     ]
-    list_display = ('name', 'wms_id', 'is_holder')
+    list_display = ('name', 'sdid')
     list_filter = ['name']
     search_fields = ['name']
     inlines = [RefClientInline]
 
 class SkuAdmin(admin.ModelAdmin):
-    list_display = ('name', 'holder')
+    list_display = ('name', 'holder_id')
 
 class OrderDetailInline(admin.TabularInline):
     model = OrderDetail
@@ -26,7 +25,7 @@ class OrderDetailInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['display_name']}),
-        (None, 				 {'fields': ['holder']}),
+        (None, 				 {'fields': ['holder_id']}),
     ]
     inlines = [OrderDetailInline]
 	
@@ -37,7 +36,7 @@ class IncomingDetailInline(admin.TabularInline):
 class IncomingAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,               {'fields': ['display_name']}),
-        (None, 				 {'fields': ['holder']}),
+        (None, 				 {'fields': ['holder_id']}),
     ]
     inlines = [IncomingDetailInline]
 

@@ -44,7 +44,7 @@ class Order(models.Model):
     display_name = models.CharField(max_length=200)
     holder_id = models.ForeignKey(Client)
     client_name = models.CharField(max_length=200)
-    date_to_ship = models.DateTimeField
+    date_to_ship = models.DateTimeField()
     status = models.CharField(max_length=200)
 
     def __str__(self):
@@ -57,7 +57,7 @@ class Order(models.Model):
 class OrderDetail(models.Model):
     id = models.IntegerField(primary_key=True)
     order_id = models.ForeignKey(Order)
-    line = models.IntegerField
+    line = models.IntegerField()
     sku_id = models.ForeignKey(Sku)
     sku_name = models.CharField(max_length=200)
     qty = models.IntegerField()
@@ -76,7 +76,7 @@ class Incoming(models.Model):
     display_name = models.CharField(max_length=200)
     holder_id = models.ForeignKey(Client)
     client_name = models.CharField(max_length=200)
-    date_to_ship = models.DateTimeField
+    date_to_ship = models.DateTimeField()
     status = models.CharField(max_length=200)
 	
     def __str__(self):
@@ -89,7 +89,7 @@ class Incoming(models.Model):
 class IncomingDetail(models.Model):
     id = models.IntegerField(primary_key=True)
     inc_id = models.ForeignKey(Order)
-    line = models.IntegerField
+    line = models.IntegerField()
     sku_id = models.ForeignKey(Sku)
     sku_name = models.CharField(max_length=200)
     qty = models.IntegerField()

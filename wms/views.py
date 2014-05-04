@@ -30,7 +30,7 @@ def client(request):
 def sku(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
     available_sku=Sku.objects.select_related('client').filter(holder_id=available_clients)
-    return render_to_response('wms/sku.html', {'available_sku':available_sku}, context_instance=RequestContext(request))
+    return render_to_response('wms/sku.html', {'available_sku':available_clients}, context_instance=RequestContext(request))
 
 @login_required
 def order(request):
