@@ -2,6 +2,38 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block head %}
+        <style type="text/css">
+        table {
+            width:  100%;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+        }
+        .scrollingTable {
+            width: 30em;
+            overflow-y: auto;
+        }
+    </style>
+
+        <script type="text/javascript">
+        function makeTableScroll() {
+            // Constant retrieved from server-side via JSP
+            var maxRows = 20;
+
+            var table = document.getElementById('order_header');
+            var wrapper = table.parentNode;
+            var rowsInTable = table.rows.length;
+            var height = 0;
+            if (rowsInTable > maxRows) {
+                for (var i = 0; i < maxRows; i++) {
+                    height += table.rows[i].clientHeight;
+                }
+                wrapper.style.height = height + "px";
+            }
+        }
+    </script>
+
         <h1 id="site-name">{% trans 'Solvo.Web order list' %}</h1>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
         <script type="text/javascript">
@@ -35,6 +67,8 @@
 
 {% block header %}
 <p>Ваши заказы, {{ user.first_name }}</p>
+<body onload="makeTableScroll();">
+<div class="scrollingTable">
 <table id="order_header" border="1">
     <tr><th>Номер</th><th>Накладная</th><th>Владелец</th></tr>
     {% for a in available_orders %}
@@ -45,6 +79,8 @@
     </tr>
     {% endfor %}
 </table>
+</div>
+</body>
 {% endblock %}
 
 {% block detail %}
