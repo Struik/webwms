@@ -11,9 +11,9 @@
                         data:{id: $(this).attr("id")},
                         type: "GET",
                         contentType: 'application/json',
-                        success : function(response) { alert ('sometext')}
-                        success:function(result){
-                            $("#order_details").html(result)}
+                        success : function(response) { alert (response)}
+                        /*success:function(result){
+                            $("#order_details").html(result)}*/
                     });
                 })
             });
