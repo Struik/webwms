@@ -95,21 +95,38 @@ table {
     border-collapse: collapse;
 }
 
+table td {
+    border: 1px solid black;
+}
+
 table tr:hover {
     background-color: #f5f5f5;
 }
 
-.clickedRow {
-    background-color: #0088cc;
-    color: #ffffff;
-}
-
-table td {
-    border: 1px solid black;
+table tr.SelectedRow:hover  {
+    background-color: #f5f5f5;
+    color: #0088cc;
 }
 
 .scrollingTable {
     width: 30em;
     overflow-y: auto;
 }
+
+.SelectedRow {
+    background-color: #0088cc;
+    color: #ffffff;
+}
+
+.nonSelectedRow {
+    background-color: #ffffff;
+    color: #0088cc;
+}
+
+.nonSelectedRow.P {
+    background-color: yellow;
+    color: #0088cc;
+}
+
+
 

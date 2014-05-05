@@ -19,7 +19,6 @@
             }
         }
     </script>
-
         <h1 id="site-name">{% trans 'Solvo.Web order list' %}</h1>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
         <script type="text/javascript">
@@ -49,7 +48,8 @@
                     });
                 })
                 $( "tr" ).click(function() {
-                    $(this).addClass("clickedRow");
+                    $('.SelectedRow').toggleClass("SelectedRow").toggleClass("nonSelectedRow");
+                    $(this).toggleClass("nonSelectedRow").toggleClass("SelectedRow");
                 });
             });
         </script>
@@ -60,11 +60,12 @@
 <body onload="makeTableScroll();">
 <div class="scrollingTable">
 <table id="order_header" border="1">
-    <tr><th>Номер</th><th>Накладная</th><th>Владелец</th></tr>
+    <tr><th>Номер</th><th>Накладная</th><th>Статус</th><th>Владелец</th></tr>
     {% for a in available_orders %}
-    <tr id="{{ a.id }}">
+    <tr id="{{ a.id }}" class="nonSelectedRow {{ a.status }}">
         <td>{{ a.id }}</td>
         <td>{{ a.display_name }}</td>
+        <td>{{ a.status }}</td>
         <td>{{ a.holder }}</td>
     </tr>
     {% endfor %}
