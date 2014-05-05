@@ -65,22 +65,22 @@ WSGI_APPLICATION = 'webwms.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-"""
+# """
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+# """
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'localhost',
-        'PORT': '31521',
+        'HOST': 'hercules',
+        'PORT': '1521',
     }
 }
 

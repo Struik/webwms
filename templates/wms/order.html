@@ -2,20 +2,6 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block head %}
-        <style type="text/css">
-        table {
-            width:  100%;
-            border-collapse: collapse;
-        }
-        td {
-            border: 1px solid black;
-        }
-        .scrollingTable {
-            width: 30em;
-            overflow-y: auto;
-        }
-    </style>
-
         <script type="text/javascript">
         function makeTableScroll() {
             // Constant retrieved from server-side via JSP
@@ -44,6 +30,7 @@
                         type: "POST",
                         dataType: "json",
                         success: function(response) {
+                            /*alert(this);*/
                             var order_details = eval(response);
                             var base="<table id='order_details' border='1'><tr><th>Заказ</th><th>Товар</th> \
                             <th>Количество</th></tr>";
@@ -61,6 +48,9 @@
                             $("#order_details_place").html(result)}*/
                     });
                 })
+                $( "tr" ).click(function() {
+                    $(this).addClass("clickedRow");
+                });
             });
         </script>
 {% endblock %}
