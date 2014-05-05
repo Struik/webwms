@@ -1,6 +1,35 @@
 {% extends "wms/main.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% block header %}
+<p>Ваши заказы, {{ user.first_name }}</p>
+<body onload="makeTableScroll();">
+<div class="scrollingTable">
+<table id="order_header" border="1">
+    <tr><th>Номер</th><th>Накладная</th><th>Статус</th><th>Владелец</th></tr>
+    {% for a in available_orders %}
+    <tr id="{{ a.id }}" class="nonSelectedRow {{ a.status }}">
+        <td>{{ a.id }}</td>
+        <td>{{ a.display_name }}</td>
+        <td>{{ a.status }}</td>
+        <td>{{ a.holder }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+</body>
+{% endblock %}
+
+{% block detail %}
+    <!--table border="1">
+        {% for i in available_order_details %}
+        <tr>
+            <td>{{ i.sku }}</td>
+        </tr>
+        {% endfor %}
+    </table-->
+<div id='order_details_place'></div>
+{% endblock %}
 {% block head %}
         <script type="text/javascript">
         function makeTableScroll() {
@@ -53,34 +82,4 @@
                 });
             });
         </script>
-{% endblock %}
-
-{% block header %}
-<p>Ваши заказы, {{ user.first_name }}</p>
-<body onload="makeTableScroll();">
-<div class="scrollingTable">
-<table id="order_header" border="1">
-    <tr><th>Номер</th><th>Накладная</th><th>Статус</th><th>Владелец</th></tr>
-    {% for a in available_orders %}
-    <tr id="{{ a.id }}" class="nonSelectedRow {{ a.status }}">
-        <td>{{ a.id }}</td>
-        <td>{{ a.display_name }}</td>
-        <td>{{ a.status }}</td>
-        <td>{{ a.holder }}</td>
-    </tr>
-    {% endfor %}
-</table>
-</div>
-</body>
-{% endblock %}
-
-{% block detail %}
-    <!--table border="1">
-        {% for i in available_order_details %}
-        <tr>
-            <td>{{ i.sku }}</td>
-        </tr>
-        {% endfor %}
-    </table-->
-<div id='order_details_place'></div>
 {% endblock %}

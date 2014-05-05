@@ -2,26 +2,8 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block head %}
-<h1 id="site-name">{% trans 'Solvo.Web main menu' %}</h1>
 {% endblock %}
 {% block menu %}
-<ul class="menu">
-    <li><a href="/wms/main">Главная</a></li>
-    <li><a href="">Справочники</a>
-        <ul>
-            <li><a href="/wms/client">Контрагенты</a></li>
-            <li><a href="/wms/sku">Товары</a></li>
-        </ul>
-    </li>
-    <li><a href="">Документы</a>
-        <ul>
-            <li><a href="/wms/order">Заказы</a></li>
-            <li><a href="/wms/incoming">Поставки</a></li>
-        </ul>
-    </li>
-    <li><a href="/wms/logout">Выход из системы</a></li>
-</ul>
 {% endblock %}
 {% block body %}
-<p>Добро пожаловать, {{ user.first_name }}</p>
 {% endblock %}

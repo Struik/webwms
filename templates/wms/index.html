@@ -2,29 +2,83 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'wms/menu.css' %}"/>
-    <title>{% block title %}Solvo.Web{% endblock %}</title>
+    <head>
+        <meta charset="utf-8">
+        {% block title %}<title>Solvo.Web</title>{% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'wms/superhero.bootstrap.css' %}"/>
+        <script>
 
-    {% block head %}
-    <h1 id="site-name">{% trans 'Solvo.Web index page' %}</h1>
-    {% endblock %}
-    {% block menu %}
-    <h1 id="site-name">{% trans 'Solvo.Web index page' %}</h1>
-    {% endblock %}
-</head>
+             var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', 'UA-23019901-1']);
+              _gaq.push(['_setDomainName', "bootswatch.com"]);
+                _gaq.push(['_setAllowLinker', true]);
+              _gaq.push(['_trackPageview']);
 
-<body>
-{% block body %}
-{% endblock %}
-{% block header %}
-{% endblock %}
-{% block detail %}
-{% endblock %}
-</body>
-{% block footer %}
-<a href="/wms/main">На главную</a>
-<br>
-<a href="/wms/logout">Выход из системы</a>
-{% endblock %}
+             (function() {
+               var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+               ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+               var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+             })();
+        </script>
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/wms/main" class="navbar-brand">Solvo.Web</a>
+                </div>
+
+                <div class="navbar-collapse collapse" id="navbar-main">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="reference">Справочники<span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="download">
+                                <li><a href="/wms/client">Контрагенты</a></li>
+                                <li><a href="/wms/sku">Товары</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="documents">Документы<span class="caret"></span></a>
+                            <ul class="dropdown-menu" aria-labelledby="download">
+                                <li><a href="/wms/order">Заказы</a></li>
+                                <li><a href="/wms/incoming">Поставки</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="">{{ user.first_name }}</a></li>
+                        <li><a href="/wms/logout">Выход</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="page-header" id="banner">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p class="lead">{% block page-header %}Главная{% endblock %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="container">
+                {% block table_header %}
+                {% endblock %}
+            </div>
+
+        {% block header %}
+        {% endblock %}
+        {% block detail %}
+        {% endblock %}
+        {% block footer %}
+        {% endblock %}
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="{% static 'wms/bootstrap.js' %}"></script>
+        <!--script src="{% static 'wms/bootswatch.js' %}"></script-->
+    </body>
 </html>

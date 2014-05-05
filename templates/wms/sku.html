@@ -1,12 +1,26 @@
 {% extends "wms/main.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% block head %}
-<h1 id="site-name">{% trans 'Solvo.Web sku list' %}</h1>
-{% endblock %}
-{% block body %}
-<p>Ваши товары, {{ user.first_name }}</p>
-{% for us in available_sku %}
-<li>{{ us.name }}</li>
-{% endfor %}
+{% block page-header %}Справочник товаров{% endblock %}
+{% block table_header %}
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Артикул</th>
+          <th>Наименование</th>
+          <th>Код товара</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for as in available_sku %}
+            <tr>
+              <td>{{ as.id }}</td>
+              <td>{{ as.sku_id }}</td>
+              <td>{{ as.name }}</td>
+              <td>{{ as.sdid }}t</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}

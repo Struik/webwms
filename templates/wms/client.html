@@ -1,12 +1,27 @@
 {% extends "wms/main.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% block head %}
-<h1 id="site-name">{% trans 'Solvo.Web client list' %}</h1>
-{% endblock %}
-{% block body %}
-<p>Ваши контрагенты, {{ user.first_name }}</p>
-{% for us in available_clients %}
-<li>{{ us.name }}</li>
-{% endfor %}
+{% block page-header %}Справочник контрагентов{% endblock %}
+{% block table_header %}
+    <table class="table table-striped table-hover ">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Наименование</th>
+          <th>Адрес</th>
+          <th>Код</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for as in available_clients %}
+            <tr>
+              <td>{{ as.id }}</td>
+              <td>{{ as.name }}</td>
+              <td>{{ as.address }}</td>
+              <td>{{ as.sdid }}t</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
 {% endblock %}
