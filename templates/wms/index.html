@@ -6,9 +6,8 @@
         <meta charset="utf-8">
         {% block title %}<title>Solvo.Web</title>{% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="{% static 'wms/superhero.bootstrap.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'wms/yeti.bootstrap.css' %}"/>
         <script>
-
              var _gaq = _gaq || [];
               _gaq.push(['_setAccount', 'UA-23019901-1']);
               _gaq.push(['_setDomainName', "bootswatch.com"]);
@@ -20,6 +19,21 @@
                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
              })();
+        </script>
+        <link id="dyncss" rel="stylesheet" type="text/css" href="">
+        <script type="text/javascript">
+            function setDynCSS(url) {
+            if (!arguments.length) {
+            url = (url = document.cookie.match(/\bdyncss=([^;]*)/)) && url[1];
+            if (!url) return '';
+            }
+            document.getElementById('dyncss').href = url;
+            var d = new Date();
+            d.setFullYear(d.getFullYear() + 1);
+            document.cookie = ['dyncss=', url, ';expires=', d.toGMTString(), ';path=/;'].join('');
+            return url;
+            }
+            setDynCSS();
         </script>
     </head>
     <body>
@@ -47,7 +61,7 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="">{{ user.first_name }}</a></li>
+                        <li><a href="/wms/profile">{{ user.first_name }}</a></li>
                         <li><a href="/wms/logout">Выход</a></li>
                     </ul>
                 </div>
@@ -65,14 +79,16 @@
             </div>
         </div>
 
+            <div class="container">
+                {% block header %}
+                {% endblock %}
+            </div>
 
             <div class="container">
                 {% block table_header %}
                 {% endblock %}
             </div>
 
-        {% block header %}
-        {% endblock %}
         {% block detail %}
         {% endblock %}
         {% block footer %}

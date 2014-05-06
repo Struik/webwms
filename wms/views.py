@@ -22,6 +22,10 @@ def main(request):
     return render_to_response('wms/main.html', context_instance=RequestContext(request))
 
 @login_required
+def profile(request):
+    return render_to_response('wms/profile.html', context_instance=RequestContext(request))
+
+@login_required
 def client(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
     return render_to_response('wms/client.html', {'available_clients':available_clients}, context_instance=RequestContext(request))
