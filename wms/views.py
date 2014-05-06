@@ -2,6 +2,7 @@ import json
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
+from annoying.decorators import render_to
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
@@ -40,14 +41,21 @@ def sku(request):
 def order(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
+    print(available_orders)
     return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
+# @csrf_exempt
+# @login_required
+# def order_detail(request):
+#     current_order_details = serializers.serialize('json', OrderDetail.objects.filter(order=request.POST.get('id')))
+#     return HttpResponse(json.dumps(current_order_details,
+#             ensure_ascii=False), content_type='application/json')
 @csrf_exempt
 @login_required
+#@render_to('wms/order.html')#annoying-decorator
 def order_detail(request):
-    current_order_details = serializers.serialize('json', OrderDetail.objects.filter(order=request.POST.get('id')))
-    return HttpResponse(json.dumps(current_order_details,
-            ensure_ascii=False), content_type='application/json')
+    current_order_details=OrderDetail.objects.filter(order=request.POST.get('id'))
+    return render_to_response('wms/order_detail.html', {'current_order_details':current_order_details}, context_instance=RequestContext(request))
 
 @login_required
 def incoming(request):

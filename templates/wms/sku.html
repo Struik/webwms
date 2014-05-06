@@ -13,12 +13,12 @@
         </tr>
       </thead>
       <tbody>
-        {% for as in available_sku %}
+        {% for query in available_sku %}
             <tr>
-              <td>{{ as.id }}</td>
-              <td>{{ as.sku_id }}</td>
-              <td>{{ as.name }}</td>
-              <td>{{ as.sdid }}t</td>
+              <td>{{ query.id }}</td>
+              <td>{{ query.sku_id }}</td>
+              <td>{{ query.name }}</td>
+              <td>{{ query.sdid }}</td>
             </tr>
         {% endfor %}
       </tbody>

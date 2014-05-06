@@ -7,6 +7,7 @@
         {% block title %}<title>Solvo.Web</title>{% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{% static 'wms/superhero.bootstrap.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'wms/custom.css' %}"/>
         <script>
              var _gaq = _gaq || [];
               _gaq.push(['_setAccount', 'UA-23019901-1']);
@@ -36,7 +37,7 @@
             setDynCSS();
         </script>
     </head>
-    <body>
+    <body onload="makeTableScroll();">
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -94,9 +95,16 @@
                 {% endblock %}
             </div>
 
+            <div class="container">
+                {% block table_detail %}
+                {% endblock %}
+            </div>
+
         {% block detail %}
         {% endblock %}
         {% block footer %}
+        {% endblock %}
+        {% block script %}
         {% endblock %}
         <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
         <script src="{% static 'wms/bootstrap.js' %}"></script>

@@ -13,12 +13,12 @@
         </tr>
       </thead>
       <tbody>
-        {% for as in available_clients %}
+        {% for query in available_clients %}
             <tr>
-              <td>{{ as.id }}</td>
-              <td>{{ as.name }}</td>
-              <td>{{ as.address }}</td>
-              <td>{{ as.sdid }}t</td>
+              <td>{{ query.id }}</td>
+              <td>{{ query.name }}</td>
+              <td>{{ query.address }}</td>
+              <td>{{ query.sdid }}t</td>
             </tr>
         {% endfor %}
       </tbody>

@@ -1,0 +1,28 @@
+{% block table_header %}
+    <table id="order_detail_test" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th id="jsts">Линия</th>
+          <th>Артикул</th>
+          <th>Наименование</th>
+          <th>Количество</th>
+          <th>Спланировано</th>
+          <th>Отобрано</th>
+          <th>Упаковано</th>
+          <th>Отгружено</th>
+        </tr>
+      </thead>
+        {% for query in current_order_details %}
+            <tr id="{{ query.id }}">
+              <td>{{ query.line }}</td>
+              <td>{{ query.sku_id }}</td>
+              <td>{{ query.sku_name }}</td>
+              <td>{{ query.qty }}</td>
+              <td>{{ query.planned }}</td>
+              <td>{{ query.moved }}</td>
+              <td>{{ query.packed }}</td>
+              <td>{{ query.shiped }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
