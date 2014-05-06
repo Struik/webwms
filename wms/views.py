@@ -41,7 +41,6 @@ def sku(request):
 def order(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
-    print(available_orders)
     return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
 # @csrf_exempt
