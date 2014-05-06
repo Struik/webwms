@@ -1,10 +1,8 @@
 {% extends "wms/index.html" %}
 <html>
 <body>
-{% block head %}
-<h1>Вход в систему</h1>
-{% endblock %}
-{% block body %}
+{% block page-header %}Вход в систему{% endblock %}
+{% block content %}
 {% if form.errors %}
 <p>Имя пользователя или пароль неверно. Попробуйте еще раз</p>
 {% endif %}

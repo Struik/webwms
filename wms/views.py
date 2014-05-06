@@ -42,7 +42,6 @@ def order(request):
     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
     return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
-
 @csrf_exempt
 @login_required
 def order_detail(request):
