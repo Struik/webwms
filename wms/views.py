@@ -71,26 +71,30 @@ def incoming_detail(request):
     current_incoming_details=IncomingDetail.objects.filter(incoming=request.POST.get('id'))
     return render_to_response('wms/incoming_detail.html', {'current_incoming_details':current_incoming_details}, context_instance=RequestContext(request))
 
-# @login_required
-# def graph(request):
-#     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
-#     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
-#     qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
-#     today = datetime.date.today()
-#     year_ago = today - datetime.timedelta(days=365)
-#     order_stats = qsstats.time_series(year_ago, today, interval='days')
-#     return render_to_response('wms/graph.html', {'order_stats':order_stats}, context_instance=RequestContext(request))
-
 @login_required
 def graph(request):
-    queryset = Payment.objects.all()
-    # считаем количество платежей...
-    qsstats = QuerySetStats(queryset, date_field='datetime', aggregate=Count('id'))
-    # ...в день за указанный период
+    available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
+    available_orders=Order.objects.select_related('client').filter(holder=available_clients)
+    qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
     today = datetime.date.today()
-    five_year_ago = today - datetime.timedelta(days=5)
-    values = qsstats.time_series(five_year_ago, today, interval='days')
-    return render_to_response('wms/graph.html', {'order_stats': values})
+    five_year_ago = today - datetime.timedelta(days=30)
+    order_stats = qsstats.time_series(five_year_ago, today, interval='days')
+    return render_to_response('wms/graph.html', {'order_stats':order_stats}, context_instance=RequestContext(request))
+
+@login_required
+def graph2(request):
+    return render_to_response('wms/graph2.html', context_instance=RequestContext(request))
+
+# @login_required
+# def graph(request):
+#     queryset = Payment.objects.all()
+#     # считаем количество платежей...
+#     qsstats = QuerySetStats(queryset, date_field='datetime', aggregate=Count('id'))
+#     # ...в день за указанный период
+#     today = datetime.date.today()
+#     five_year_ago = today - datetime.timedelta(days=5)
+#     values = qsstats.time_series(five_year_ago, today, interval='days')
+#     return render_to_response('wms/graph.html', {'order_stats': values})
 
 def logout_page(request):
     """

@@ -1,0 +1,80 @@
+{% extends "wms/main.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}<title>Solvo.Web Графики</title>{% endblock %}
+{% block page-header %}Графики 2{% endblock %}
+{% block head_script %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://code.highcharts.com/stock/highstock.js"></script>
+<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+{% endblock %}
+{% block table_header %}
+<div id="blmCockpitDataGraph" style="min-width: 310px; height: 400px; margin: 0 auto"><input type = "button" value = "Highcharts Test" onclick="drawChart()"/></div>
+
+        <script type="text/javascript">
+function drawChart() {
+
+   var chart1 = new Highcharts.Chart({
+
+      chart : {
+         renderTo : 'blmCockpitDataGraph',
+         zoomType : 'x',
+         spacingRight : 20
+      },
+
+      title : {
+         text : '',
+         x : -20
+      },
+
+      xAxis : {
+         title : {
+            text : 'Zeit'
+         },
+         categories : [ '00:00', '01:00', '02:00', '03:00', '04:00',
+               '05:00', '06:00', '07:00', '08:00', '09:00', '10:00',
+               '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+               '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
+               '23:00', ]
+      },
+      yAxis : {
+         title : {
+            text : 'Menge'
+         },
+
+         plotLines : [ {
+            value : 0,
+            width : 1,
+            color : '#808080'
+         } ]
+      },
+
+      legend : {
+         layout : 'vertical',
+         align : 'right',
+         verticalAlign : 'middle',
+         borderWidth : 0
+      },
+      series : [ {
+         name : 'ALZ',
+         data : [ 7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3 ]
+      }, {
+         name : 'SBZ',
+         data : [ 0.0, 0.8, 5.7, 11.3, 17.0, 24.8, 24.1, 20.1, 8.6, 2.5 ]
+      }, {
+         name : 'SBZ-Takt',
+         data : [ 3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3 ]
+      } ]
+   });
+
+}
+
+
+        </script>
+
+{% endblock %}
+{% block script %}
+
+
+
+{% endblock %}
