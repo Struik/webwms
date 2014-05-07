@@ -11,8 +11,8 @@ class ClientAdmin(admin.ModelAdmin):
         (None, 				 {'fields': ['sdid']}),
     ]
     list_display = ('name', 'sdid')
-    list_filter = ['name']
-    search_fields = ['name']
+    list_filter = ['name', 'sdid']
+    search_fields = ['name', 'sdid']
     inlines = [RefClientInline]
 
 class SkuAdmin(admin.ModelAdmin):

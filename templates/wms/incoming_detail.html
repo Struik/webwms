@@ -19,6 +19,16 @@
                   <td>{{ query.qty }}</td>
                   <td>{{ query.received }}</td>
                 </tr>
+            {% empty %}
+                <div class="container">
+                    <div class="page-header" id="banner">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p id="doc_info" class="lead">Детали не найдены</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
           </tbody>
         </table>
