@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'wms',
+    'googlecharts',
+    'qsstats'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,8 +82,8 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'hercules  ',
-        'PORT': '1521',
+        'HOST': 'localhost  ',
+        'PORT': '31521',
     }
 }
 

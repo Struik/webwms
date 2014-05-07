@@ -21,8 +21,13 @@ class Client(models.Model):
         db_table = 'web_client'
         
 class ReferredClients(models.Model):
+    id = models.IntegerField(primary_key=True)
     client = models.ForeignKey(Client)
     user = models.ForeignKey(User)
+
+    class Meta:
+        managed = False
+        db_table = 'wms_referredclients'
 
 class Sku(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -98,3 +103,7 @@ class IncomingDetail(models.Model):
     class Meta:
         managed = False
         db_table = 'web_incoming_detail'
+
+class Payment(models.Model):
+    amount = models.DecimalField(max_digits=11, decimal_places=4)
+    datetime = models.DateTimeField()

@@ -5,6 +5,8 @@ body {
 }
 
 .need_scroll {overflow: auto}
+
+rect { fill: #f0ad4e;}
 /*
 .table > tbody > tr.C {
   background-color: #d9534f;
