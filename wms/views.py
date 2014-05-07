@@ -62,6 +62,12 @@ def incoming(request):
     available_incomings=Incoming.objects.select_related('client').filter(holder=available_clients)
     return render_to_response('wms/incoming.html', {'available_incomings':available_incomings}, context_instance=RequestContext(request))
 
+@csrf_exempt
+@login_required
+def incoming_detail(request):
+    current_incoming_details=IncomingDetail.objects.filter(incoming=request.POST.get('id'))
+    return render_to_response('wms/incoming_detail.html', {'current_incoming_details':current_incoming_details}, context_instance=RequestContext(request))
+
 def logout_page(request):
     """
     Log users out and re-direct them to the main page.

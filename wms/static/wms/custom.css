@@ -1,1 +1,20 @@
+@import url("//fonts.googleapis.com/css?family=Roboto:100|Open Sans:300&subset=latin,cyrillic");
+
+body {
+  font-family : "Open Sans","Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
 .need_scroll {overflow: auto}
+/*
+.table > tbody > tr.C {
+  background-color: #d9534f;
+}
+
+.table > tbody > tr.D {
+  background-color: #5cb85c;
+}
+
+.table > tbody > tr.\+ > td{
+  background-color: #f0ad4e ;
+}
+*/

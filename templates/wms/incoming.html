@@ -1,10 +1,84 @@
 {% extends "wms/main.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% block head %}
+{% block title %}<title>Solvo.Web Поставки</title>{% endblock %}
+{% block page-header %}Поставки{% endblock %}
+{% block table_header %}
+    <div class="need_scroll">
+        <table id="doc_header" class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Код</th>
+              <th>Накладная</th>
+              <th>Дата поставки</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for query in available_incomings %}
+                <tr id="{{ query.id }}" class="nonSelectedRow {{query.status}}">
+                  <td>{{ query.id }}</td>
+                  <td>{{ query.sdid }}</td>
+                  <td>{{ query.display_name }}</td>
+                  <td>{{ query.date_to_ship }}</td>
+                  <td>{{ query.status }}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+        <a name="doc_detail_position"></a>
+        <div class="container">
+            <div class="page-header" id="banner">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p id="doc_info" class="lead">Детали поставки</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div id="doc_detail"></div>
 {% endblock %}
-{% block body %}
-{% for us in available_incomings %}
-<li>{{ us.display_name }}</li>
-{% endfor %}
+
+{% block script %}
+        <script type="text/javascript">
+            function makeTableScroll() {
+                // Constant retrieved from server-side via JSP
+                var maxRows = 20;
+
+                var table = document.getElementById('doc_header');
+                var wrapper = table.parentNode;
+                var rowsInTable = table.rows.length;
+                var height = 0;
+                if (rowsInTable > maxRows) {
+                    for (var i = 0; i < maxRows; i++) {
+                        height += table.rows[i].clientHeight;
+                    }
+                    wrapper.style.height = height + "px";
+                }
+            }
+        </script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+               $('#doc_header').on('click', 'tbody tr', function(){
+                    var doc_id=$(this).attr("id")
+                    $.ajax({url:"/wms/incoming_detail/",
+                        data:{id: doc_id},
+                        type: "POST",
+                        success: function(response) {
+                            $("#doc_info").text("Детали поставки  #" + doc_id);
+                            $("#doc_detail").html(response);
+                            document.location.href = "#doc_detail_position";
+                          }
+                    });
+                })
+                $( "tbody tr" ).click(function() {
+                    $(' .info').toggleClass("info").toggleClass("nonSelectedRow");
+                    $(this).toggleClass("nonSelectedRow").toggleClass("info");
+                });
+            });
+        </script>
 {% endblock %}

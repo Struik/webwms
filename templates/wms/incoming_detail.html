@@ -5,24 +5,19 @@
               <th>Линия</th>
               <th>Артикул</th>
               <th>Наименование</th>
-              <th>Количество</th>
-              <th>Спланировано</th>
-              <th>Отобрано</th>
-              <th>Упаковано</th>
-              <th>Отгружено</th>
+              <th>Ожидалось</th>
+              <th>Принято</th>
+
             </tr>
           </thead>
           <tbody>
-            {% for query in current_order_details %}
+            {% for query in current_incoming_details %}
                 <tr id="{{ query.id }}">
                   <td>{{ query.line }}</td>
                   <td>{{ query.sku_id }}</td>
                   <td>{{ query.sku_name }}</td>
                   <td>{{ query.qty }}</td>
-                  <td>{{ query.planned }}</td>
-                  <td>{{ query.moved }}</td>
-                  <td>{{ query.packed }}</td>
-                  <td>{{ query.shiped }}</td>
+                  <td>{{ query.received }}</td>
                 </tr>
             {% endfor %}
           </tbody>

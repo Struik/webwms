@@ -88,7 +88,7 @@ class Incoming(models.Model):
 
 class IncomingDetail(models.Model):
     id = models.IntegerField(primary_key=True)
-    inc = models.ForeignKey(Order)
+    incoming = models.ForeignKey(Order)
     line = models.IntegerField()
     sku = models.ForeignKey(Sku)
     sku_name = models.CharField(max_length=200)

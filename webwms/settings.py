@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
+os.path
+os.environ['Path']='C:\\OracleClient\\Oleg\product\\11.2.0\\client_1\\BIN;'+os.environ['Path']
 from django.core.urlresolvers import reverse_lazy
 
 LOGIN_URL = '/wms/login/'
@@ -79,8 +80,8 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'localhost  ',
-        'PORT': '31521',
+        'HOST': 'hercules  ',
+        'PORT': '1521',
     }
 }
 

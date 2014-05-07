@@ -34,7 +34,7 @@ where i.id>0;
 
 create or replace view web_incoming_detail as
 select
-rownum id,  i.id inc_id, id.line, id.sku_id, s.name sku_name, id.qty, sum(rd.units_received) received
+rownum id,  i.id incoming_id, id.line, id.sku_id, s.name sku_name, id.qty, sum(rd.units_received) received
 from bst.incomings i
 join bst.incoming_details id on id.inc_id=i.id
 join bst.sku s on s.id=id.sku_id
