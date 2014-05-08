@@ -1,13 +1,17 @@
 {% extends "wms/index.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% block head %}
+{% block extrajs %}
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 {% endblock %}
-{% block body %}
-<div id="documents_over_period" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="holder_orders" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+{% block content %}
+    <div class="panel panel-default">
+        <div id="documents_over_period" class="panel-body"></div>
+    </div>
+    <div class="panel panel-default">
+        <div id="holder_orders" class="panel-body"></div>
+    </div>
 
         <script type="text/javascript">
 $(function () {
@@ -27,7 +31,7 @@ $(function () {
          },
          categories : [
             {% for x, y in order_stats %}
-                '{{ x }}',
+                '{{ x|date:"M j" }}',
             {% endfor %}
          ]
       },
@@ -48,14 +52,14 @@ $(function () {
          borderWidth : 0
       },
       series : [ {
-         name : 'orders',
+         name : 'Заказы',
          data : [
             {% for x, y in order_stats %}
                 {{ y }},
             {% endfor %}
          ]
       },{
-         name : 'incomings',
+         name : 'Поставки',
          data : [
             {% for x, y in incoming_stats %}
                 {{ y }},
@@ -79,6 +83,9 @@ $(function () {
         title: {
             text: 'Browser market shares at a specific website, 2014'
         },
+        legend: {
+            enabled: true
+        },
         tooltip: {
     	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
@@ -91,7 +98,8 @@ $(function () {
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
+                    },
+                    showInLegend: true
                 }
             }
         },

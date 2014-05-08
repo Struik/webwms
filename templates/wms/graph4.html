@@ -1,0 +1,15 @@
+{% extends "wms/index.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block extrajs %}
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+        <div id="documents_over_period" class="panel-body"></div>
+    </div>
+    <div class="panel panel-default">
+        <div id="holder_orders" class="panel-body"></div>
+    </div>
+{% endblock %}

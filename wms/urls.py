@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^graph/$', views.graph, name='graph'),
     url(r'^graph2/$', views.graph2, name='graph2'),
     url(r'^graph3/$', views.graph3, name='graph3'),
+    url(r'^graph4/$', views.graph4, name='graph4'),
 	url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
 )

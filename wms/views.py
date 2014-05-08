@@ -110,6 +110,10 @@ def graph2(request):
 def graph3(request):
     return render_to_response('wms/graph3.html', context_instance=RequestContext(request))
 
+@login_required
+def graph4(request):
+    return render_to_response('wms/graph4.html', context_instance=RequestContext(request))
+
 # @login_required
 # def graph(request):
 #     queryset = Payment.objects.all()
