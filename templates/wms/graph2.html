@@ -1,54 +1,46 @@
-{% extends "wms/main.html" %}
+{% extends "wms/index.html" %}
 {% load staticfiles %}
 {% load i18n %}
-{% block title %}<title>Solvo.Web Графики</title>{% endblock %}
-{% block page-header %}Графики 2{% endblock %}
-{% block head_script %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="http://code.highcharts.com/stock/highstock.js"></script>
-<script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+{% block head %}
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 {% endblock %}
-{% block table_header %}
-<div id="blmCockpitDataGraph" style="min-width: 310px; height: 400px; margin: 0 auto"><input type = "button" value = "Highcharts Test" onclick="drawChart()"/></div>
+{% block body %}
+<div id="documents_over_period" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="holder_orders" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
         <script type="text/javascript">
-function drawChart() {
-
+$(function () {
    var chart1 = new Highcharts.Chart({
-
       chart : {
-         renderTo : 'blmCockpitDataGraph',
+         renderTo : 'documents_over_period',
          zoomType : 'x',
          spacingRight : 20
       },
-
       title : {
          text : '',
          x : -20
       },
-
       xAxis : {
          title : {
             text : 'Zeit'
          },
-         categories : [ '00:00', '01:00', '02:00', '03:00', '04:00',
-               '05:00', '06:00', '07:00', '08:00', '09:00', '10:00',
-               '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
-               '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
-               '23:00', ]
+         categories : [
+            {% for x, y in order_stats %}
+                '{{ x }}',
+            {% endfor %}
+         ]
       },
       yAxis : {
          title : {
             text : 'Menge'
          },
-
          plotLines : [ {
             value : 0,
             width : 1,
             color : '#808080'
          } ]
       },
-
       legend : {
          layout : 'vertical',
          align : 'right',
@@ -56,22 +48,65 @@ function drawChart() {
          borderWidth : 0
       },
       series : [ {
-         name : 'ALZ',
-         data : [ 7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3 ]
-      }, {
-         name : 'SBZ',
-         data : [ 0.0, 0.8, 5.7, 11.3, 17.0, 24.8, 24.1, 20.1, 8.6, 2.5 ]
-      }, {
-         name : 'SBZ-Takt',
-         data : [ 3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3 ]
-      } ]
+         name : 'orders',
+         data : [
+            {% for x, y in order_stats %}
+                {{ y }},
+            {% endfor %}
+         ]
+      },{
+         name : 'incomings',
+         data : [
+            {% for x, y in incoming_stats %}
+                {{ y }},
+            {% endfor %}
+         ]
+      }]
    });
 
-}
+})
 
 
         </script>
-
+        <script type="text/javascript">
+$(function () {
+    $('#holder_orders').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Browser market shares at a specific website, 2014'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Browser share',
+            data: [
+                {% for query in orders_by_holders %}
+                ['{{query.client_name}}',{{query.id__count}}],
+                {% endfor %}
+             ]
+        }]
+    });
+  })
+        </script>
 {% endblock %}
 {% block script %}
 

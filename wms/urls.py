@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 	url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'wms/login.html'}, name='login'),
     url(r'^graph/$', views.graph, name='graph'),
     url(r'^graph2/$', views.graph2, name='graph2'),
+    url(r'^graph3/$', views.graph3, name='graph3'),
 	url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
 )

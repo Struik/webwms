@@ -79,11 +79,36 @@ def graph(request):
     today = datetime.date.today()
     five_year_ago = today - datetime.timedelta(days=30)
     order_stats = qsstats.time_series(five_year_ago, today, interval='days')
+    print(order_stats)
     return render_to_response('wms/graph.html', {'order_stats':order_stats}, context_instance=RequestContext(request))
+
+
+# @login_required
+# def graph2(request):
+#     return render_to_response('wms/graph2.html', context_instance=RequestContext(request))
 
 @login_required
 def graph2(request):
-    return render_to_response('wms/graph2.html', context_instance=RequestContext(request))
+    today = datetime.date.today()
+    start_date= today - datetime.timedelta(days=30)
+    end_date = today - datetime.timedelta(days=10)
+
+    available_orders=Order.objects.all()
+    qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
+    order_stats = qsstats.time_series(start_date, end_date, interval='days')
+
+    available_incomings=Incoming.objects.all()
+    qsstats = QuerySetStats(available_incomings, date_field='date_to_ship', aggregate=Count('id'))
+    incoming_stats = qsstats.time_series(start_date, end_date, interval='days')
+
+    orders_by_holders = Order.objects.values("client_name").annotate(Count("id"))
+
+
+    return render_to_response('wms/graph2.html', {'order_stats':order_stats,'incoming_stats':incoming_stats, 'orders_by_holders':orders_by_holders}, context_instance=RequestContext(request))
+
+@login_required
+def graph3(request):
+    return render_to_response('wms/graph3.html', context_instance=RequestContext(request))
 
 # @login_required
 # def graph(request):

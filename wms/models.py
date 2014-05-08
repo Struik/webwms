@@ -81,7 +81,7 @@ class Incoming(models.Model):
     display_name = models.CharField(max_length=200)
     holder = models.ForeignKey(Client)
     client_name = models.CharField(max_length=200)
-    date_to_ship = models.DateTimeField()
+    date_to_ship = models.DateField()
     status = models.CharField(max_length=200)
 	
     def __str__(self):
