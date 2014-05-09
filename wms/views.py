@@ -122,11 +122,9 @@ def chart_data(request):
     data = {}
     params = request.GET
     today = datetime.date.today().strftime('%Y-%m-%d')
-
     chart_type = params.get('chartType','ignore')
     start_date = datetime.datetime.strptime(params.get('startDate') or (today), '%Y-%m-%d')
     end_date = datetime.datetime.strptime(params.get('endDate') or (today), '%Y-%m-%d')
-
     if chart_type == 'documentsCount':
         available_orders=Order.objects.all()
         qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
@@ -140,14 +138,37 @@ def chart_data(request):
         type('Received something else but documentsCount')
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+@csrf_exempt
+@login_required
+def add_chart(request):
+    data = {}
+    params = request.GET
+
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    chart_type = params.get('chart_type','ignore')
+    start_date = datetime.datetime.strptime(params.get('start_date') or (today), '%Y-%m-%d')
+    end_date = datetime.datetime.strptime(params.get('end_date') or (today), '%Y-%m-%d')
+
+    if chart_type == 'over_period':
+        available_orders=Order.objects.all()
+        qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
+        order_stats = qsstats.time_series(start_date, end_date, interval='days')
+
+        data = {'dates': [], 'values': []}
+        for item in order_stats:
+            data['dates'].append(item[0].strftime('%d %b'))
+            data['values'].append(item[1])
+    else:
+        print('Received something else but over_period')
+    print(json.dumps(data))
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
 @login_required
 def form(request):
-    # This view is missing all form handling logic for simplicity of the example
     return render(request, 'wms/form.html', {'form': MessageForm()})
 
 @login_required
 def form2(request):
-    # This view is missing all form handling logic for simplicity of the example
     return render(request, 'wms/form2.html', {'form': ChartForm()})
 
 # @login_required

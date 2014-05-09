@@ -1,23 +1,58 @@
 # -*- coding: utf-8 -*-
 import itertools
+import datetime
 from django import forms
 from wms.models import ChartType
  
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
+from crispy_forms.layout import Layout, Div, Submit, Reset, HTML, Button, Row, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
+DATE_FORMAT = '%m/%d/%Y'
+TIME_FORMAT = '%I:%M %p'
+
+
 class ChartForm(forms.Form):
+
+    start_date = forms.DateField(label='С', required=False, input_formats=[DATE_FORMAT])
+    end_date = forms.DateField(label='По', required=False, input_formats=[DATE_FORMAT])
+
+    documents = forms.MultipleChoiceField(
+        label='Документы',
+        choices = (
+            ('order', "Заказы"),
+            ('incoming', 'Поставки'),
+        ),
+        initial = 'option_one', widget = forms.CheckboxSelectMultiple, help_text = "Отметьте документы для отображения",
+    )
 
     def __init__(self, *args, **kwargs):
         super(ChartForm, self).__init__(*args, **kwargs)
 
-        self.fields['chart_types'] = forms.ChoiceField(
+        self.helper = FormHelper()
+        self.helper.form_id = 'add_chart'
+        self.helper.form_method = 'get'
+
+        self.fields['end_date'].initial = datetime.date.today().strftime(DATE_FORMAT)
+
+        self.fields['chart_type'] = forms.ChoiceField(
+            label='Тип графика',
             choices = self.get_chart_types(ChartType.objects.all()),
-            required=True)
+            required=False)
+
+        self. helper.layout = Layout(
+            Field('chart_type', css_class='input_sm'),
+            Field('start_date', placeholder='From (mm/dd/yyyy)'),
+            Field('end_date', placeholder='To (mm/dd/yyyy)'),
+            Field('documents',),
+            FormActions(
+                Submit('submit', 'Построить'),
+                Reset('reset', 'Сбросить'),
+            ),
+        )
 
     def get_chart_types(self, queryset):
-        choices = [('', '---')] +list([(i.pk, i.label) for i in queryset])
+        choices = [('', '---')] +list([(i.type, i.label) for i in queryset])
         return choices
 
 

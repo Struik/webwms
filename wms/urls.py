@@ -19,7 +19,9 @@ urlpatterns = patterns('',
     url(r'^graph4/$', views.graph4, name='graph4'),
     url(r'^form/$', views.form, name='form'),
     url(r'^form2/$', views.form2, name='form2'),
+    url(r'^form2/add_chart/$', views.add_chart, name='add_chart'),
 	url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
     url(r'^chart_data/$', views.chart_data, name='chart_data'),
+
 )
