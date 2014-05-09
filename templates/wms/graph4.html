@@ -1,15 +1,53 @@
 {% extends "wms/index.html" %}
 {% load staticfiles %}
 {% load i18n %}
+
 {% block extrajs %}
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 {% endblock %}
+
 {% block content %}
-    <div class="panel panel-default">
+    <input id="start_date" type="date"/>
+    <input id="end_date" type="date"/>
+    <input type="button" value="Нарисовать график" onclick="chart()"/>
+     <div class="panel panel-default">
         <div id="documents_over_period" class="panel-body"></div>
     </div>
     <div class="panel panel-default">
         <div id="holder_orders" class="panel-body"></div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+	    function chart() {
+            var documentsCount = {
+                chart: {renderTo: 'documents_over_period', zoomType: 'x', spacingRight: 20},
+                title: {text: '',x : -20},
+                xAxis: {title: {text : 'Дата'}},
+                yAxis: {title: {text: 'Плановое кол-во документов'}, plotLines: [{value: 0, width: 1,color: '#808080'}]},
+                legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
+                /*series: [{}],*/
+                series : [ {}]
+            };
+
+            var chartDataUrl = "{% url 'wms:chart_data' %}";
+            function loadChart() {
+                var start_date=$('#start_date').val()
+                var end_date=$('#end_date').val()
+                $.ajax({url:chartDataUrl,
+                    data:{chartType: 'documentsCount', startDate: start_date, endDate: end_date},
+                    success: function(data) {
+                        documentsCount.xAxis.categories = data['dates'];
+                        documentsCount.series[0].name = 'Заказы';
+                        documentsCount.series[0].data = data['values'];
+                        var chart = new Highcharts.Chart(documentsCount);
+                    }
+                });
+            }
+
+            loadChart()
+        };
+    </script>
 {% endblock %}

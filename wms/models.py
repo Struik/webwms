@@ -104,6 +104,7 @@ class IncomingDetail(models.Model):
         managed = False
         db_table = 'web_incoming_detail'
 
-class Payment(models.Model):
-    amount = models.DecimalField(max_digits=11, decimal_places=4)
-    datetime = models.DateTimeField()
+class ChartType(models.Model):
+    type = models.CharField(max_length=200)
+    label = models.CharField(max_length=200)
+    highchart_type = models.CharField(max_length=200)

@@ -13,7 +13,7 @@
         <div id="holder_orders" class="panel-body"></div>
     </div>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 $(function () {
    var chart1 = new Highcharts.Chart({
       chart : {
@@ -27,7 +27,7 @@ $(function () {
       },
       xAxis : {
          title : {
-            text : 'Zeit'
+            text : 'Дата'
          },
          categories : [
             {% for x, y in order_stats %}
@@ -37,7 +37,7 @@ $(function () {
       },
       yAxis : {
          title : {
-            text : 'Menge'
+            text : 'Плановое кол-во документов'
          },
          plotLines : [ {
             value : 0,
@@ -81,7 +81,7 @@ $(function () {
             plotShadow: false
         },
         title: {
-            text: 'Browser market shares at a specific website, 2014'
+            text: 'Количество заявок от поклажедателей'
         },
         legend: {
             enabled: true

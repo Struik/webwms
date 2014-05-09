@@ -1,5 +1,5 @@
 from django.contrib import admin
-from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail
+from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType
 
 class RefClientInline(admin.TabularInline):
     model = ReferredClients
@@ -40,6 +40,7 @@ class IncomingAdmin(admin.ModelAdmin):
     ]
     inlines = [IncomingDetailInline]
 
+admin.site.register(ChartType)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Sku, SkuAdmin)
 admin.site.register(Order, OrderAdmin)

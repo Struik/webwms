@@ -45,7 +45,9 @@ INSTALLED_APPS = (
     'south',
     'wms',
     'googlecharts',
-    'qsstats'
+    'qsstats',
+    'crispy_forms',
+    'stickymessages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,6 +58,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+
+    'stickymessages.context_processors.latest_sticky_message',
+    'django.contrib.auth.context_processors.auth',
+)
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 TEMPLATE_DIRS = (
     './templates', # Change this to your own directory.

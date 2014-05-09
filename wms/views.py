@@ -2,6 +2,7 @@ import json
 import datetime, qsstats
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
+from wms.forms import MessageForm, ChartForm
 from django.http import HttpResponseRedirect, HttpResponse
 from annoying.decorators import render_to
 from django.core.urlresolvers import reverse
@@ -12,10 +13,12 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, Payment
+from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType
 from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
 from django.db.models import Count
+from collections import defaultdict
+
 
 @login_required
 def index(request):
@@ -71,6 +74,7 @@ def incoming_detail(request):
     current_incoming_details=IncomingDetail.objects.filter(incoming=request.POST.get('id'))
     return render_to_response('wms/incoming_detail.html', {'current_incoming_details':current_incoming_details}, context_instance=RequestContext(request))
 
+
 @login_required
 def graph(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
@@ -79,7 +83,6 @@ def graph(request):
     today = datetime.date.today()
     five_year_ago = today - datetime.timedelta(days=30)
     order_stats = qsstats.time_series(five_year_ago, today, interval='days')
-    print(order_stats)
     return render_to_response('wms/graph.html', {'order_stats':order_stats}, context_instance=RequestContext(request))
 
 
@@ -113,6 +116,39 @@ def graph3(request):
 @login_required
 def graph4(request):
     return render_to_response('wms/graph4.html', context_instance=RequestContext(request))
+
+@login_required
+def chart_data(request):
+    data = {}
+    params = request.GET
+    today = datetime.date.today().strftime('%Y-%m-%d')
+
+    chart_type = params.get('chartType','ignore')
+    start_date = datetime.datetime.strptime(params.get('startDate') or (today), '%Y-%m-%d')
+    end_date = datetime.datetime.strptime(params.get('endDate') or (today), '%Y-%m-%d')
+
+    if chart_type == 'documentsCount':
+        available_orders=Order.objects.all()
+        qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
+        order_stats = qsstats.time_series(start_date, end_date, interval='days')
+
+        data = {'dates': [], 'values': []}
+        for item in order_stats:
+            data['dates'].append(item[0].strftime('%d %b'))
+            data['values'].append(item[1])
+    else:
+        type('Received something else but documentsCount')
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@login_required
+def form(request):
+    # This view is missing all form handling logic for simplicity of the example
+    return render(request, 'wms/form.html', {'form': MessageForm()})
+
+@login_required
+def form2(request):
+    # This view is missing all form handling logic for simplicity of the example
+    return render(request, 'wms/form2.html', {'form': ChartForm()})
 
 # @login_required
 # def graph(request):
