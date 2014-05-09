@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, Reset, HTML, Button, Row, Field
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
-DATE_FORMAT = '%m/%d/%Y'
+DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%I:%M %p'
 
 
@@ -33,6 +33,7 @@ class ChartForm(forms.Form):
         self.helper.form_id = 'add_chart'
         self.helper.form_method = 'get'
 
+        self.fields['start_date'].initial = datetime.date.today().strftime(DATE_FORMAT)
         self.fields['end_date'].initial = datetime.date.today().strftime(DATE_FORMAT)
 
         self.fields['chart_type'] = forms.ChoiceField(
@@ -42,8 +43,8 @@ class ChartForm(forms.Form):
 
         self. helper.layout = Layout(
             Field('chart_type', css_class='input_sm'),
-            Field('start_date', placeholder='From (mm/dd/yyyy)'),
-            Field('end_date', placeholder='To (mm/dd/yyyy)'),
+            Field('start_date', placeholder='From (mm.dd.yyyy)',),
+            Field('end_date', placeholder='To (mm.dd.yyyy)', ),
             Field('documents',),
             FormActions(
                 Submit('submit', 'Построить'),

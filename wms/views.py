@@ -143,12 +143,15 @@ def chart_data(request):
 def add_chart(request):
     data = {}
     params = request.GET
-
-    today = datetime.date.today().strftime('%Y-%m-%d')
+    print('1')
+    today = datetime.date.today().strftime('%d.%m.%Y')
     chart_type = params.get('chart_type','ignore')
-    start_date = datetime.datetime.strptime(params.get('start_date') or (today), '%Y-%m-%d')
-    end_date = datetime.datetime.strptime(params.get('end_date') or (today), '%Y-%m-%d')
-
+    print('2')
+    print(params.get('start_date'))
+    start_date = datetime.datetime.strptime(params.get('start_date') or (today), '%d.%m.%Y')
+    end_date = datetime.datetime.strptime(params.get('end_date') or (today), '%d.%m.%Y')
+    print(start_date)
+    print(end_date)
     if chart_type == 'over_period':
         available_orders=Order.objects.all()
         qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
