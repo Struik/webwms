@@ -52,24 +52,33 @@
             $(".dateinput").attr('date-data-format', 'dd.mm.yyyy');
 
             $('#id_start_date').datepicker({
-				format: 'dd.mm.yyyy'
+				format: 'dd.mm.yyyy',
+				readonly: true
             });
 
             $('#id_end_date').datepicker({
 				format: 'dd.mm.yyyy'
             });
 
-             $('#id_start_date').datepicker()
+            $('#id_start_date').datepicker()
 				.on('changeDate', function(){
-				    alert($('#id_start_date').attr('value'));
+				    /*alert($('#id_start_date').attr('value'));
 				    alert($('#id_end_date').attr('value'))
 					if ($('#id_start_date').attr('value') > $('#id_end_date').attr('value')){
 						alert('The start date can not be greater then the end date1');
 					} else {
 					    alert('The start date can not be greater then the end date2');
-					}
+					}*/
 					$('#id_start_date').datepicker('hide');
-				});
+            });
+
+            $('#id_end_date').datepicker()
+				.on('changeDate', function(){
+					$('#id_end_date').datepicker('hide');
+            });
+
+
+
        });
     </script>
     <script type="text/javascript">
@@ -83,7 +92,7 @@
                 xAxis: {title: {text : 'Дата'}},
                 yAxis: {title: {text: 'Плановое кол-во документов'}, plotLines: [{value: 0, width: 1,color: '#808080'}]},
                 legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
-                series : [{}]
+                series : []
             };
 
                 $.ajax({
@@ -91,9 +100,14 @@
                     url: chartDataUrl,
                     data: frm.serialize(),
                     success: function(data) {
-                        documentsCount.xAxis.categories = data['dates'];
-                        documentsCount.series[0].name = 'Заказы';
-                        documentsCount.series[0].data = data['values'];
+                        var y=0
+                        $.each(data, function(i, item) {
+                            documentsCount.xAxis.categories = data[i]['dates'];
+                            /*documentsCount.series[y].data = data[i]['values'];
+                            documentsCount.series[y].name = i;*/
+                            documentsCount.series.push({ "name": i, "data": data[i]['values'] });
+                            y++
+                        });
                         var chart = new Highcharts.Chart(documentsCount);
                     },
                     error: function(data) {

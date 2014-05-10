@@ -19,9 +19,12 @@ class ChartForm(forms.Form):
 
     documents = forms.MultipleChoiceField(
         label='Документы',
+        required=False,
         choices = (
-            ('order', "Заказы"),
-            ('incoming', 'Поставки'),
+            ('Order', "Заказы"),
+            ('Incoming', 'Поставки'),
+            # ('OrderDetail', "Строки заказов"),
+            # ('IncomingDetail', 'Строки поставок'),
         ),
         initial = 'option_one', widget = forms.CheckboxSelectMultiple, help_text = "Отметьте документы для отображения",
     )

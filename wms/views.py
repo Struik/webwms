@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
 from django.db.models import Count
 from collections import defaultdict
+from wms.reports import ChartData
 
 
 @login_required
@@ -136,6 +137,7 @@ def chart_data(request):
             data['values'].append(item[1])
     else:
         type('Received something else but documentsCount')
+    print(data)
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 @csrf_exempt
@@ -143,28 +145,19 @@ def chart_data(request):
 def add_chart(request):
     data = {}
     params = request.GET
-    print('1')
+
     today = datetime.date.today().strftime('%d.%m.%Y')
     chart_type = params.get('chart_type','ignore')
-    print('2')
-    print(params.get('start_date'))
-    start_date = datetime.datetime.strptime(params.get('start_date') or (today), '%d.%m.%Y')
-    end_date = datetime.datetime.strptime(params.get('end_date') or (today), '%d.%m.%Y')
-    print(start_date)
-    print(end_date)
-    if chart_type == 'over_period':
-        available_orders=Order.objects.all()
-        qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
-        order_stats = qsstats.time_series(start_date, end_date, interval='days')
 
-        data = {'dates': [], 'values': []}
-        for item in order_stats:
-            data['dates'].append(item[0].strftime('%d %b'))
-            data['values'].append(item[1])
+    if chart_type == 'over_period':
+        chart_data=ChartData.documents_over_period(params.get('start_date'), params.get('end_date'), params.getlist('documents'))
     else:
         print('Received something else but over_period')
-    print(json.dumps(data))
-    return HttpResponse(json.dumps(data), content_type='application/json')
+        chart_data={}
+
+    print(chart_data)
+    print(json.dumps(chart_data))
+    return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @login_required
 def form(request):
