@@ -1,26 +1,42 @@
 {% extends "wms/index.html" %}
+{% load staticfiles %}
 {% load crispy_forms_tags %}
- 
 {% block content %}
-   <div class="row">
-        <div class="col-sm-4 col-md-4">
+
+    <!--div class="row">
+        <div class="col-lg-12">
+            <h2>Alerts</h2>
+            <div class="bs-component">
+                <div class="alert alert-dismissable alert-warning">
+                    <button type="button" class="close" data-dismiss="alert"/>&times;</button>
+                    <h4>Warning!</h4>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div-->
+
+
+   <div class="row" id="rowrow">
+        <div class="col-sm-3 col-md-3">
             <div id="accordion" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody">
-                            Новый график<span class="pull-right"></span>
+                            Новый график
                         </a>
                     </h4>
                 </div>
                 <div id="collapseBody" class="panel-collapse collapse in">
                     <div class="panel-body">
                         {% crispy form %}
+                        <a name="anchor"></a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-8 col-md-8">
+        <div class="col-sm-9 col-md-9">
             <div id="accordion2" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -36,46 +52,123 @@
                 </div>
             </div>
         </div>
-
     </div>
 {% endblock %}
 
 {% block extrajs %}
-		<script src="http://code.highcharts.com/highcharts.js"></script>
-		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+		<script src="{% static 'wms/highcharts.js' %}"></script>
+		<script src="{% static 'wms/exporting.js' %}"></script>
 {% endblock %}
 
 
 {% block script %}
+    <script>
+
+
+    // this line will add an event handler to the selected inputs, both
+    // current and future, whenever they are clicked...
+    // this is delegation at work, and you can use any containing element
+    // you like - I just used the "body" tag for convenience...
+    $("#id_start_date_1").click(function(){
+
+        // as an added bonus, if you are afraid of attaching the "datepicker"
+        // multiple times, you can check for the "hasDatepicker" class...
+            alert('sss');
+            $(this).datepicker();
+            $(this).datepicker("show");
+    });
+
+    </script>
+    <script>
+    $("input[name='reset']").click(function() {
+        /*$('.datepicker').datepicker('update', '2011-03-05');*/
+        /*$('[id^="add_chart"] .dateinput').attr({'value': '123'})
+        $('[id^="add_chart"] .dateinput').datepicker({format: 'dd.mm.yyyy'});
+        $('[id^="add_chart"] .dateinput').datepicker('place')*/
+        /*$("#id_start_date_1").datepicker('remove');
+        $("#id_start_date_1").datepicker({
+            format: "dd/mm/yyyy"
+        })*/
+        $('[id^="add_chart"] .dateinput').datetimepicker('_attachEvents');
+    });
+
+    </script>
+    <script>
+        $("input[name='add']").click(function() {
+            cloneMore('.row:last', ($('form').length));
+            document.location.href = "#anchor";
+        });
+
+        function cloneMore(selector, counter) {
+            var newElement = $(selector).clone(true);
+            newElement.find('[id]').each(function(){
+                if(counter==1)
+                    var id=$(this).attr('id') + '_' + counter
+                else
+                    var id=$(this).attr('id').replace('_'+(counter-1),'_'+counter)
+
+                $(this).attr({'id': id });
+            })
+            newElement.find('[name]').each(function(){
+                if(counter==1)
+                    var name=$(this).attr('name') + '_' + counter
+                else
+                    var name=$(this).attr('name').replace('_'+(counter-1),'_'+counter)
+
+                $(this).attr({'name': name });
+            })
+            newElement.attr({'id': 'row_'+counter })
+            alert(newElement.attr('id'));
+            alert(newElement.attr('class'));
+            newElement.find('input.dateinput').each(function(){
+                alert('q');
+                $(this).datetimepicker({format: 'dd.mm.yyyy'});
+            })
+
+            $(selector).after(newElement);
+
+            alert("#add_chart_" + counter + " .dateinput")
+
+            /*$('#id_start_date_1').bind('load', function() {
+                alert('q');
+                $(this).datepicker();
+            });*/
+
+           /* $("#add_chart_" + counter + " .dateinput").datepicker({format: 'dd.mm.yyyy'});*/
+            $("#add_chart" + counter + " .dateinput").attr({'value': '123'})
+        }
+    </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $(".dateinput").attr('date-data-format', 'dd.mm.yyyy');
 
-            $('#id_start_date').datepicker({
-				format: 'dd.mm.yyyy',
-				readonly: true
-            });
+        $("body").on("click", ".dateinput", function(){
+        alert('Please!');
+        alert($(this).attr('id'));
 
-            $('#id_end_date').datepicker({
-				format: 'dd.mm.yyyy'
-            });
+        // as an added bonus, if you are afraid of attaching the "datepicker"
+        // multiple times, you can check for the "hasDatepicker" class...
+        $(this).datetimepicker({format: 'dd.mm.yyyy'});
 
-            $('#id_start_date').datepicker()
+    });
+
+        $('#add_chart .dateinput').datetimepicker({format: 'dd.mm.yyyy'});
+
+            /*$('#id_start_date').datepicker()
 				.on('changeDate', function(){
-				    /*alert($('#id_start_date').attr('value'));
+				    alert($('#id_start_date').attr('value'));
 				    alert($('#id_end_date').attr('value'))
 					if ($('#id_start_date').attr('value') > $('#id_end_date').attr('value')){
 						alert('The start date can not be greater then the end date1');
 					} else {
 					    alert('The start date can not be greater then the end date2');
-					}*/
+					}
 					$('#id_start_date').datepicker('hide');
             });
 
             $('#id_end_date').datepicker()
 				.on('changeDate', function(){
 					$('#id_end_date').datepicker('hide');
-            });
+            });*/
 
 
 
@@ -100,7 +193,8 @@
                     url: chartDataUrl,
                     data: frm.serialize(),
                     success: function(data) {
-                        var y=0
+                        var y=0;
+                        $('#id_chart_type').focus().select();
                         $.each(data, function(i, item) {
                             documentsCount.xAxis.categories = data[i]['dates'];
                             /*documentsCount.series[y].data = data[i]['values'];

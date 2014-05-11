@@ -19,6 +19,7 @@ from qsstats import QuerySetStats
 from django.db.models import Count
 from collections import defaultdict
 from wms.reports import ChartData
+from django.contrib import messages
 
 
 @login_required
@@ -143,7 +144,6 @@ def chart_data(request):
 @csrf_exempt
 @login_required
 def add_chart(request):
-    data = {}
     params = request.GET
 
     today = datetime.date.today().strftime('%d.%m.%Y')
@@ -153,7 +153,6 @@ def add_chart(request):
         chart_data=ChartData.documents_over_period(params.get('start_date'), params.get('end_date'), params.getlist('documents'))
     else:
         print('Received something else but over_period')
-        chart_data={}
 
     print(chart_data)
     print(json.dumps(chart_data))

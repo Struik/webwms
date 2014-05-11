@@ -50,8 +50,9 @@ class ChartForm(forms.Form):
             Field('end_date', placeholder='To (mm.dd.yyyy)', ),
             Field('documents',),
             FormActions(
-                Submit('submit', 'Построить'),
-                Reset('reset', 'Сбросить'),
+                Submit('submit', 'Построить', css_class="btn-success btn-xs"),
+                Reset('reset', 'Сбросить', css_class="btn-default btn-xs"),
+                Button('add', 'Добавить', css_class="btn-primary btn-xs"),
             ),
         )
 
