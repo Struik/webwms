@@ -63,42 +63,15 @@
 
 {% block script %}
     <script>
-
-
-    // this line will add an event handler to the selected inputs, both
-    // current and future, whenever they are clicked...
-    // this is delegation at work, and you can use any containing element
-    // you like - I just used the "body" tag for convenience...
-    $("#id_start_date_1").click(function(){
-
-        // as an added bonus, if you are afraid of attaching the "datepicker"
-        // multiple times, you can check for the "hasDatepicker" class...
-            alert('sss');
-            $(this).datepicker();
-            $(this).datepicker("show");
-    });
-
-    </script>
-    <script>
-    $("input[name='reset']").click(function() {
-        /*$('.datepicker').datepicker('update', '2011-03-05');*/
-        /*$('[id^="add_chart"] .dateinput').attr({'value': '123'})
-        $('[id^="add_chart"] .dateinput').datepicker({format: 'dd.mm.yyyy'});
-        $('[id^="add_chart"] .dateinput').datepicker('place')*/
-        /*$("#id_start_date_1").datepicker('remove');
-        $("#id_start_date_1").datepicker({
-            format: "dd/mm/yyyy"
-        })*/
-        $('[id^="add_chart"] .dateinput').datetimepicker({
-                    pickTime: false
-                });
-    });
-
-    </script>
-    <script>
         $("input[name='add']").click(function() {
+            $(document).find('.dateinput').each(function(){
+                $(this).data("DateTimePicker").destroy();
+            });
             cloneMore('.row:last', ($('form').length));
-            document.location.href = "#anchor";
+            /*document.location.href =  $("a[name='anchor']:last")*/
+
+            $("form:last").get(0).scrollIntoView();
+
         });
 
         function cloneMore(selector, counter) {
@@ -111,6 +84,7 @@
 
                 $(this).attr({'id': id });
             })
+
             newElement.find('[name]').each(function(){
                 if(counter==1)
                     var name=$(this).attr('name') + '_' + counter
@@ -119,37 +93,19 @@
 
                 $(this).attr({'name': name });
             })
-            newElement.attr({'id': 'row_'+counter })
-            /*alert(newElement.attr('id'));
-            alert(newElement.attr('class'));
-            newElement.find('input.dateinput').each(function(){
-                alert('q');
-                $(this).datetimepicker({format: 'dd.mm.yyyy'});
-            })*/
 
+            newElement.attr({'id': 'row_'+counter })
             $(selector).after(newElement);
 
-            /*alert("#add_chart_" + counter + " .dateinput")*/
-
-            /*$('#id_start_date_1').bind('load', function() {
-                alert('q');
-                $(this).datepicker();
-            });*/
-
-           /* $("#add_chart_" + counter + " .dateinput").datepicker({format: 'dd.mm.yyyy'});*/
-            /*$("#add_chart" + counter + " .dateinput").attr({'value': '123'})*/
+            $(document).find('.dateinput').each(function(){
+                $(this).datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
+            })
         }
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
 
-
-                $('#add_chart .dateinput').datetimepicker({
-                    pickTime: false
-                });
-
-
-        /*$('#add_chart .dateinput').datetimepicker({format: 'dd.mm.yyyy'});*/
+        $('#add_chart .dateinput').datetimepicker({ pickTime: false,format: 'DD.MM.YYYY'});
 
             /*$('#id_start_date').datepicker()
 				.on('changeDate', function(){
@@ -167,15 +123,12 @@
 				.on('changeDate', function(){
 					$('#id_end_date').datepicker('hide');
             });*/
-
-
-
        });
     </script>
     <script type="text/javascript">
         var frm = $('#add_chart');
         var chartDataUrl = "{% url 'wms:add_chart' %}";
-        frm.submit(function () {
+        $('form').submit(function () {
 
             var documentsCount = {
                 chart: {renderTo: 'documents_over_period', zoomType: 'x', spacingRight: 20},
@@ -189,7 +142,7 @@
                 $.ajax({
                     type: frm.attr('method'),
                     url: chartDataUrl,
-                    data: frm.serialize(),
+                    data: $(this).serialize(),
                     success: function(data) {
                         var y=0;
                         $('#id_chart_type').focus().select();

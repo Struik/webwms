@@ -1,5 +1,4 @@
-import json
-import datetime, qsstats
+import json, datetime, qsstats, re
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
 from wms.forms import MessageForm, ChartForm
@@ -146,11 +145,27 @@ def chart_data(request):
 def add_chart(request):
     params = request.GET
 
+    print(params)
+    print(params.get('start_date'))
+    print(params.getlist('start_date'))
+    print(params.get('documents'))
+
     today = datetime.date.today().strftime('%d.%m.%Y')
     chart_type = params.get('chart_type','ignore')
 
-    if chart_type == 'over_period':
-        chart_data=ChartData.documents_over_period(params.get('start_date'), params.get('end_date'), params.getlist('documents'))
+    chart_params=[]
+    chart_params_dict=('start_date*', 'end_date*', 'documents*', 'chart_type*')
+    for chart_param in chart_params_dict:
+        for param in params:
+            if re.match(chart_param, param):
+                chart_params.append(params.getlist(param))
+
+    print (chart_params)
+    print(chart_params[3])
+    print(tuple(chart_params[0:3]))
+
+    if chart_params[3][0] == 'over_period':
+        chart_data=ChartData.documents_over_period(tuple(chart_params[0:3]))
     else:
         print('Received something else but over_period')
 

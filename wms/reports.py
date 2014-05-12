@@ -7,14 +7,15 @@ from collections import defaultdict
 class ChartData(object):
 
     @classmethod
-    def documents_over_period(cls, start_date, end_date, documents):
+    def documents_over_period(cls, start_date, end_date, documents, *args):
+        print(start_date[0], end_date[0])
         today = datetime.date.today().strftime('%d.%m.%Y')
         start_date = datetime.datetime.strptime(start_date or (today), '%d.%m.%Y')
         end_date = datetime.datetime.strptime(end_date or (today), '%d.%m.%Y')
-
+        print(start_date, end_date, documents)
         document_stats={}
         data = defaultdict()
-
+        print(start_date, end_date, documents)
         for document in documents:
             if document=='Order':
                 queryset=Order.objects.all()
