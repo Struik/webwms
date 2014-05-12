@@ -89,7 +89,9 @@
         $("#id_start_date_1").datepicker({
             format: "dd/mm/yyyy"
         })*/
-        $('[id^="add_chart"] .dateinput').datetimepicker('_attachEvents');
+        $('[id^="add_chart"] .dateinput').datetimepicker({
+                    pickTime: false
+                });
     });
 
     </script>
@@ -118,16 +120,16 @@
                 $(this).attr({'name': name });
             })
             newElement.attr({'id': 'row_'+counter })
-            alert(newElement.attr('id'));
+            /*alert(newElement.attr('id'));
             alert(newElement.attr('class'));
             newElement.find('input.dateinput').each(function(){
                 alert('q');
                 $(this).datetimepicker({format: 'dd.mm.yyyy'});
-            })
+            })*/
 
             $(selector).after(newElement);
 
-            alert("#add_chart_" + counter + " .dateinput")
+            /*alert("#add_chart_" + counter + " .dateinput")*/
 
             /*$('#id_start_date_1').bind('load', function() {
                 alert('q');
@@ -135,23 +137,19 @@
             });*/
 
            /* $("#add_chart_" + counter + " .dateinput").datepicker({format: 'dd.mm.yyyy'});*/
-            $("#add_chart" + counter + " .dateinput").attr({'value': '123'})
+            /*$("#add_chart" + counter + " .dateinput").attr({'value': '123'})*/
         }
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
 
-        $("body").on("click", ".dateinput", function(){
-        alert('Please!');
-        alert($(this).attr('id'));
 
-        // as an added bonus, if you are afraid of attaching the "datepicker"
-        // multiple times, you can check for the "hasDatepicker" class...
-        $(this).datetimepicker({format: 'dd.mm.yyyy'});
+                $('#add_chart .dateinput').datetimepicker({
+                    pickTime: false
+                });
 
-    });
 
-        $('#add_chart .dateinput').datetimepicker({format: 'dd.mm.yyyy'});
+        /*$('#add_chart .dateinput').datetimepicker({format: 'dd.mm.yyyy'});*/
 
             /*$('#id_start_date').datepicker()
 				.on('changeDate', function(){
