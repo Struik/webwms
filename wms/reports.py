@@ -7,20 +7,21 @@ from collections import defaultdict
 class ChartData(object):
 
     @classmethod
-    def documents_over_period(cls, start_date, end_date, documents, *args):
-        print(start_date[0], end_date[0])
+    def documents_over_period(cls, chart_params):
+        print('111')
         today = datetime.date.today().strftime('%d.%m.%Y')
-        start_date = datetime.datetime.strptime(start_date or (today), '%d.%m.%Y')
-        end_date = datetime.datetime.strptime(end_date or (today), '%d.%m.%Y')
-        print(start_date, end_date, documents)
+        start_date = datetime.datetime.strptime(chart_params['start_date'][0] or (today), '%d.%m.%Y')
+        end_date = datetime.datetime.strptime(chart_params['end_date'][0] or (today), '%d.%m.%Y')
         document_stats={}
         data = defaultdict()
-        print(start_date, end_date, documents)
-        for document in documents:
-            if document=='Order':
-                queryset=Order.objects.all()
-            elif document=='Incoming':
-                queryset=Incoming.objects.all()
+
+        print(chart_params)
+
+        for document in chart_params['documents']:
+            if document == 'Order':
+                queryset = Order.objects.all()
+            elif document == 'Incoming':
+                queryset = Incoming.objects.all()
 
             qsstats = QuerySetStats(queryset, date_field='date_to_ship', aggregate=Count('id'))
             document_stats[document] = qsstats.time_series(start_date, end_date, interval='days')

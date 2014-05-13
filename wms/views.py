@@ -19,6 +19,7 @@ from django.db.models import Count
 from collections import defaultdict
 from wms.reports import ChartData
 from django.contrib import messages
+from collections import defaultdict
 
 
 @login_required
@@ -153,19 +154,19 @@ def add_chart(request):
     today = datetime.date.today().strftime('%d.%m.%Y')
     chart_type = params.get('chart_type','ignore')
 
-    chart_params=[]
-    chart_params_dict=('start_date*', 'end_date*', 'documents*', 'chart_type*')
+    chart_params=defaultdict()
+    chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type')
     for chart_param in chart_params_dict:
         for param in params:
             if re.match(chart_param, param):
-                chart_params.append(params.getlist(param))
+                chart_params[chart_param]=(params.getlist(param))
 
-    print (chart_params)
-    print(chart_params[3])
-    print(tuple(chart_params[0:3]))
+    print(chart_params)
+    print(chart_params['chart_type'])
 
-    if chart_params[3][0] == 'over_period':
-        chart_data=ChartData.documents_over_period(tuple(chart_params[0:3]))
+    if chart_params['chart_type'][0] == 'over_period':
+        print('222')
+        chart_data=ChartData.documents_over_period(chart_params)
     else:
         print('Received something else but over_period')
 

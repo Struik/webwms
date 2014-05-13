@@ -22,12 +22,13 @@
             <div id="accordion" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody">
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBodyParams">
                             Новый график
+                            <span class="glyphicon glyphicon-chevron-up pull-right"></span>
                         </a>
                     </h4>
                 </div>
-                <div id="collapseBody" class="panel-collapse collapse in">
+                <div id="collapseBodyParams" class="panel-collapse collapse in">
                     <div class="panel-body">
                         {% crispy form %}
                         <a name="anchor"></a>
@@ -40,12 +41,12 @@
             <div id="accordion2" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody">
-                            Документы за период<span class="pull-right"></span>
+                        <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBodyChart">
+                            Документы за период<span class="glyphicon glyphicon-chevron-up pull-right"></span>
                         </a>
                     </h4>
                 </div>
-                <div id="collapseBody2" class="panel-collapse collapse in">
+                <div id="collapseBodyChart" class="panel-collapse collapse in">
                     <div class="panel-body">
                         <div id="documents_over_period"></div>
                     </div>
@@ -85,6 +86,15 @@
                 $(this).attr({'id': id });
             })
 
+            newElement.find('[data-target]').each(function(){
+                if(counter==1)
+                    var datatarget=$(this).attr('data-target') + '_' + counter
+                else
+                    var datatarget=$(this).attr('data-target').replace('_'+(counter-1),'_'+counter)
+
+                $(this).attr({'data-target': datatarget });
+            })
+
             newElement.find('[name]').each(function(){
                 if(counter==1)
                     var name=$(this).attr('name') + '_' + counter
@@ -104,6 +114,17 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
+
+    // For changing the icon in the Options panel
+        $('.collapse').on('shown.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-chevron-down")
+                .removeClass("glyphicon-chevron-down")
+                .addClass("glyphicon-chevron-up");
+        }).on('hidden.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-chevron-up")
+                .removeClass("glyphicon-chevron-up")
+                .addClass("glyphicon-chevron-down");
+        });
 
         $('#add_chart .dateinput').datetimepicker({ pickTime: false,format: 'DD.MM.YYYY'});
 
