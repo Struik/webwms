@@ -63,16 +63,51 @@
 
 
 {% block script %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        // For changing the icon in the Options panel
+        $('.collapse').on('shown.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-chevron-down")
+                .removeClass("glyphicon-chevron-down")
+                .addClass("glyphicon-chevron-up");
+        }).on('hidden.bs.collapse', function(){
+            $(this).parent().find(".glyphicon-chevron-up")
+                .removeClass("glyphicon-chevron-up")
+                .addClass("glyphicon-chevron-down");
+        });
+
+        $('#add_chart .dateinput').datetimepicker({ pickTime: false,format: 'DD.MM.YYYY'});
+
+        $("input[name='reset']").click(function() {
+            $( "#documents_over_period" ).empty();
+        });
+
+            /*$('#id_start_date').datepicker()
+				.on('changeDate', function(){
+				    alert($('#id_start_date').attr('value'));
+				    alert($('#id_end_date').attr('value'))
+					if ($('#id_start_date').attr('value') > $('#id_end_date').attr('value')){
+						alert('The start date can not be greater then the end date1');
+					} else {
+					    alert('The start date can not be greater then the end date2');
+					}
+					$('#id_start_date').datepicker('hide');
+            });
+
+            $('#id_end_date').datepicker()
+				.on('changeDate', function(){
+					$('#id_end_date').datepicker('hide');
+            });*/
+       });
+    </script>
     <script>
         $("input[name='add']").click(function() {
             $(document).find('.dateinput').each(function(){
                 $(this).data("DateTimePicker").destroy();
             });
             cloneMore('.row:last', ($('form').length));
-            /*document.location.href =  $("a[name='anchor']:last")*/
-
             $("form:last").get(0).scrollIntoView();
-
         });
 
         function cloneMore(selector, counter) {
@@ -113,46 +148,13 @@
         }
     </script>
     <script type="text/javascript">
-        $(document).ready(function() {
-
-    // For changing the icon in the Options panel
-        $('.collapse').on('shown.bs.collapse', function(){
-            $(this).parent().find(".glyphicon-chevron-down")
-                .removeClass("glyphicon-chevron-down")
-                .addClass("glyphicon-chevron-up");
-        }).on('hidden.bs.collapse', function(){
-            $(this).parent().find(".glyphicon-chevron-up")
-                .removeClass("glyphicon-chevron-up")
-                .addClass("glyphicon-chevron-down");
-        });
-
-        $('#add_chart .dateinput').datetimepicker({ pickTime: false,format: 'DD.MM.YYYY'});
-
-            /*$('#id_start_date').datepicker()
-				.on('changeDate', function(){
-				    alert($('#id_start_date').attr('value'));
-				    alert($('#id_end_date').attr('value'))
-					if ($('#id_start_date').attr('value') > $('#id_end_date').attr('value')){
-						alert('The start date can not be greater then the end date1');
-					} else {
-					    alert('The start date can not be greater then the end date2');
-					}
-					$('#id_start_date').datepicker('hide');
-            });
-
-            $('#id_end_date').datepicker()
-				.on('changeDate', function(){
-					$('#id_end_date').datepicker('hide');
-            });*/
-       });
-    </script>
-    <script type="text/javascript">
-        var frm = $('#add_chart');
         var chartDataUrl = "{% url 'wms:add_chart' %}";
         $('form').submit(function () {
 
+            var frm = $(this)
+
             var documentsCount = {
-                chart: {renderTo: 'documents_over_period', zoomType: 'x', spacingRight: 20},
+                chart: {zoomType: 'x', spacingRight: 20},
                 title: {text: '',x : -20},
                 xAxis: {title: {text : 'Дата'}},
                 yAxis: {title: {text: 'Плановое кол-во документов'}, plotLines: [{value: 0, width: 1,color: '#808080'}]},
@@ -161,16 +163,18 @@
             };
 
                 $.ajax({
-                    type: frm.attr('method'),
+                    type: $(this).attr('method'),
                     url: chartDataUrl,
                     data: $(this).serialize(),
                     success: function(data) {
                         var y=0;
-                        $('#id_chart_type').focus().select();
+                        var row_count=''
+                        if(frm.attr('id')!='add_chart'){
+                            row_count=(frm.attr('id')).substr(-2);}
+                        $('#id_chart_type'+row_count).focus().select();
+                        documentsCount.chart["renderTo"]= "documents_over_period"+row_count;
                         $.each(data, function(i, item) {
                             documentsCount.xAxis.categories = data[i]['dates'];
-                            /*documentsCount.series[y].data = data[i]['values'];
-                            documentsCount.series[y].name = i;*/
                             documentsCount.series.push({ "name": i, "data": data[i]['values'] });
                             y++
                         });

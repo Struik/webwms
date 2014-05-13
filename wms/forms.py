@@ -6,7 +6,7 @@ from wms.models import ChartType
  
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, Reset, HTML, Button, Row, Field
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, InlineField
 
 DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%I:%M %p'
@@ -45,9 +45,10 @@ class ChartForm(forms.Form):
             required=False)
 
         self. helper.layout = Layout(
-            Field('chart_type', css_class='input_sm'),
-            Field('start_date', placeholder='From (mm.dd.yyyy)',),
-            Field('end_date', placeholder='To (mm.dd.yyyy)', ),
+            Field('chart_type', css_class='input_sm',),
+            Field('start_date', placeholder='From (mm.dd.yyyy)'),
+            #Field('start_date', placeholder='From (mm.dd.yyyy)',),
+            Field('end_date', placeholder='To (mm.dd.yyyy)',),
             Field('documents',),
             FormActions(
                 Div(Submit('submit', 'Построить', css_class="btn-success btn-xs"),
@@ -55,6 +56,8 @@ class ChartForm(forms.Form):
                 Button('add', 'Добавить', css_class="btn-primary btn-xs"), css_class="btn-group"),
             ),
         )
+
+        #self.fields['date_p'].initial = '[GlucoseTracker] Glucose Data Report'
 
     def get_chart_types(self, queryset):
         choices = [('', '---')] +list([(i.type, i.label) for i in queryset])
