@@ -21,7 +21,6 @@ from wms.reports import ChartData
 from django.contrib import messages
 from collections import defaultdict
 
-
 @login_required
 def index(request):
     return render_to_response('wms/main.html')
@@ -51,12 +50,6 @@ def order(request):
     available_orders=Order.objects.select_related('client').filter(holder=available_clients)
     return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
-# @csrf_exempt
-# @login_required
-# def order_detail(request):
-#     current_order_details = serializers.serialize('json', OrderDetail.objects.filter(order=request.POST.get('id')))
-#     return HttpResponse(json.dumps(current_order_details,
-#             ensure_ascii=False), content_type='application/json')
 @csrf_exempt
 @login_required
 #@render_to('wms/order.html')#annoying-decorator
@@ -76,7 +69,6 @@ def incoming_detail(request):
     current_incoming_details=IncomingDetail.objects.filter(incoming=request.POST.get('id'))
     return render_to_response('wms/incoming_detail.html', {'current_incoming_details':current_incoming_details}, context_instance=RequestContext(request))
 
-
 @login_required
 def graph(request):
     available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
@@ -86,11 +78,6 @@ def graph(request):
     five_year_ago = today - datetime.timedelta(days=30)
     order_stats = qsstats.time_series(five_year_ago, today, interval='days')
     return render_to_response('wms/graph.html', {'order_stats':order_stats}, context_instance=RequestContext(request))
-
-
-# @login_required
-# def graph2(request):
-#     return render_to_response('wms/graph2.html', context_instance=RequestContext(request))
 
 @login_required
 def graph2(request):
@@ -108,7 +95,6 @@ def graph2(request):
 
     orders_by_holders = Order.objects.values("client_name").annotate(Count("id"))
 
-
     return render_to_response('wms/graph2.html', {'order_stats':order_stats,'incoming_stats':incoming_stats, 'orders_by_holders':orders_by_holders}, context_instance=RequestContext(request))
 
 @login_required
@@ -119,40 +105,10 @@ def graph3(request):
 def graph4(request):
     return render_to_response('wms/graph4.html', context_instance=RequestContext(request))
 
-@login_required
-def chart_data(request):
-    data = {}
-    params = request.GET
-    today = datetime.date.today().strftime('%Y-%m-%d')
-    chart_type = params.get('chartType','ignore')
-    start_date = datetime.datetime.strptime(params.get('startDate') or (today), '%Y-%m-%d')
-    end_date = datetime.datetime.strptime(params.get('endDate') or (today), '%Y-%m-%d')
-    if chart_type == 'documentsCount':
-        available_orders=Order.objects.all()
-        qsstats = QuerySetStats(available_orders, date_field='date_to_ship', aggregate=Count('id'))
-        order_stats = qsstats.time_series(start_date, end_date, interval='days')
-
-        data = {'dates': [], 'values': []}
-        for item in order_stats:
-            data['dates'].append(item[0].strftime('%d %b'))
-            data['values'].append(item[1])
-    else:
-        type('Received something else but documentsCount')
-    print(data)
-    return HttpResponse(json.dumps(data), content_type='application/json')
-
 @csrf_exempt
 @login_required
 def add_chart(request):
     params = request.GET
-
-    print(params)
-    print(params.get('start_date'))
-    print(params.getlist('start_date'))
-    print(params.get('documents'))
-
-    today = datetime.date.today().strftime('%d.%m.%Y')
-    chart_type = params.get('chart_type','ignore')
 
     chart_params=defaultdict()
     chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type')
@@ -161,11 +117,7 @@ def add_chart(request):
             if re.match(chart_param, param):
                 chart_params[chart_param]=(params.getlist(param))
 
-    print(chart_params)
-    print(chart_params['chart_type'])
-
     if chart_params['chart_type'][0] == 'over_period':
-        print('222')
         chart_data=ChartData.documents_over_period(chart_params)
     else:
         print('Received something else but over_period')
@@ -182,20 +134,6 @@ def form(request):
 def form2(request):
     return render(request, 'wms/form2.html', {'form': ChartForm()})
 
-# @login_required
-# def graph(request):
-#     queryset = Payment.objects.all()
-#     # считаем количество платежей...
-#     qsstats = QuerySetStats(queryset, date_field='datetime', aggregate=Count('id'))
-#     # ...в день за указанный период
-#     today = datetime.date.today()
-#     five_year_ago = today - datetime.timedelta(days=5)
-#     values = qsstats.time_series(five_year_ago, today, interval='days')
-#     return render_to_response('wms/graph.html', {'order_stats': values})
-
 def logout_page(request):
-    """
-    Log users out and re-direct them to the main page.
-    """
     logout(request)
     return HttpResponseRedirect('/')
