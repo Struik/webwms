@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType
+from django.views.generic import CreateView, UpdateView, DeleteView, FormView, TemplateView, ListView
 from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
 from django.db.models import Count
@@ -20,6 +21,7 @@ from collections import defaultdict
 from wms.reports import ChartData
 from django.contrib import messages
 from collections import defaultdict
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 @login_required
 def index(request):
@@ -135,3 +137,37 @@ def form2(request):
 def logout_page(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def data_table(request):
+    #return render_to_response('wms/DataTable.html', context_instance=RequestContext(request))
+    data = reverse('wms:order_list_json')
+    print('111')
+    print(data)
+    print('222')
+    return render_to_response(
+        'wms/DataTable.html',
+        {'data': data},
+        context_instance=RequestContext(request),
+    )
+
+class OrderListJson(ListView):
+    print('333')
+    model = Order
+    context_object_name = 'orders'
+    template_name = 'wms/DataTable.html'
+    print(Order.objects.all())
+
+    columns = ['display_name', 'date_to_ship', 'status']
+    order_columns = ['display_name', 'date_to_ship', 'status']
+    max_display_length = 500
+    print('444')
+
+    def get_queryset(self):
+        print('hhhh')
+        qs = Order.objects.all()
+        return qs
+
+
+
+

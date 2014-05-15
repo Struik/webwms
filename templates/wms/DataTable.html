@@ -1,0 +1,44 @@
+{% extends "wms/index.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}<title>Solvo.Web DataTable</title>{% endblock %}
+{% block page-header %}DataTable{% endblock %}
+
+{% block content %}
+        <div class="col-sm-8 col-md-8">
+            <div class="well">
+                <table id="glucose_table" class="datatable">
+                    <thead>
+						<tr>
+							<th>Name</th>
+							<th>Position</th>
+							<th>Office</th>
+						</tr>
+					</thead>
+                </table>
+                <br>
+            </div>
+        </div>
+{% endblock %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/>
+{% endblock %}
+
+{% block extrajs %}
+<script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="http://django-datatable-view.appspot.com/static/js/datatableview.js"></script>
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var oTable = $('#glucose_table').dataTable( {
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "{{ object_list }}"
+        });
+    });
+    </script>
+{% endblock %}
