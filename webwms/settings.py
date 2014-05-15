@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'qsstats',
     'crispy_forms',
     'stickymessages',
+    #'django_tables2',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,6 +63,7 @@ MIDDLEWARE_CLASSES = (
 TEMPLATE_CONTEXT_PROCESSORS = (
 
     'stickymessages.context_processors.latest_sticky_message',
+    #'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
 )
 
@@ -92,8 +94,8 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'localhost',
-        'PORT': '31521',
+        'HOST': 'hercules',
+        'PORT': '1521',
     }
 }
 

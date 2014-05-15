@@ -17,7 +17,7 @@
     </div-->
 
 
-   <div class="row" id="rowrow">
+   <div class="row row-form-chart" id="row">
         <div class="col-sm-3 col-md-3">
             <div id="accordion" class="panel panel-default">
                 <div class="panel-heading">
@@ -66,23 +66,31 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-        // For changing the icon in the Options panel
-        $('.collapse').on('shown.bs.collapse', function(){
-            $(this).parent().find(".glyphicon-chevron-down")
-                .removeClass("glyphicon-chevron-down")
-                .addClass("glyphicon-chevron-up");
-        }).on('hidden.bs.collapse', function(){
-            $(this).parent().find(".glyphicon-chevron-up")
-                .removeClass("glyphicon-chevron-up")
-                .addClass("glyphicon-chevron-down");
-        });
+            // For changing the collapsed icon in the panels
+            $('.collapse').on('shown.bs.collapse', function(){
+                $(this).parent().find(".glyphicon-chevron-down")
+                    .removeClass("glyphicon-chevron-down")
+                    .addClass("glyphicon-chevron-up");
+            }).on('hidden.bs.collapse', function(){
+                $(this).parent().find(".glyphicon-chevron-up")
+                    .removeClass("glyphicon-chevron-up")
+                    .addClass("glyphicon-chevron-down");
+            });
 
-        $('#add_chart .dateinput').datetimepicker({ pickTime: false,format: 'DD.MM.YYYY'});
+            //Initializing datetimepicker widgets for all elements with class='dateinput'
+            $('#add_chart .dateinput').datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
 
-        $("input[name='reset']").click(function() {
-            $( "#documents_over_period" ).empty();
-        });
+            //Clearing form(handled automatically somewhere inside) and div which might contain a chart already
+            //Also removing "data-highcharts-chart" attribute since it is inherited during cloning rows and highcharts would clear element from current chart when you are making a new one
+            //Thus when calling for new chart on the cloned form it may clear the chart on the previous form
+            //I hope someone will understand last two lines
+            $("input[name='reset']").click(function() {
+                var row_id = $(this).parents('div .row').attr('id');
+                $("div[id=" + row_id + "] [id^=documents_over_period]").empty();
+                $("div[id=" + row_id + "] [id^=documents_over_period]").removeAttr('data-highcharts-chart');
+            });
 
+            //Need to fix datepickers later on
             /*$('#id_start_date').datepicker()
 				.on('changeDate', function(){
 				    alert($('#id_start_date').attr('value'));
@@ -102,16 +110,33 @@
        });
     </script>
     <script>
+        //Adding new div with class='row' (I'll call it 'row' onward) to the page. Row includes the form itself and panel for the chart
         $("input[name='add']").click(function() {
+            //Destroying all datetimpicker widgets on the current page. We will initialize it two lines later for all existing and new elements with class='dateinput'
+            //Without this fix datetimepickers on new elements won't work properly
             $(document).find('.dateinput').each(function(){
                 $(this).data("DateTimePicker").destroy();
             });
-            cloneMore('.row:last', ($('form').length));
-            $("form:last").get(0).scrollIntoView();
+
+            //Not just cloning the last row, but also counting current number of rows present on the page in order to update 'id' attribute for new elements. Hail Stackoverflow
+            cloneMore('div .row-form-chart:last', ($('div .row-form-chart').length));
+
+            //Initializing datetimepicker widgets for all elements with class='dateinput'
+            $(document).find('.dateinput').each(function(){
+                $(this).datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
+            })
+
+            //Triggering click on new form's reset button to bring it to primeval state
+            $("div[id=row_" + counter + "] input[name^='reset']" ).trigger( "click" );
+
+            //Scroll to the new row. Animate effect could be implemented here.
+            $(".row-form-chart:last").get(0).scrollIntoView();
         });
 
+        //The cloning function itself, it's just copying last row from the page to the variable and then updating it's attributes depending on current number for rows
         function cloneMore(selector, counter) {
             var newElement = $(selector).clone(true);
+
             newElement.find('[id]').each(function(){
                 if(counter==1)
                     var id=$(this).attr('id') + '_' + counter
@@ -140,19 +165,19 @@
             })
 
             newElement.attr({'id': 'row_'+counter })
+            //Putting processed new elements after last row (selector) on the page
             $(selector).after(newElement);
-
-            $(document).find('.dateinput').each(function(){
-                $(this).datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
-            })
         }
     </script>
     <script type="text/javascript">
+        //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:add_chart' %}";
         $('form').submit(function () {
 
+            //saving current form object
             var frm = $(this)
 
+            //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence politics
             var documentsCount = {
                 chart: {zoomType: 'x', spacingRight: 20},
                 title: {text: '',x : -20},
@@ -162,17 +187,20 @@
                 series : []
             };
 
+                //The ajax call itself. Shouldn't be to hard for comprehension
                 $.ajax({
                     type: $(this).attr('method'),
                     url: chartDataUrl,
                     data: $(this).serialize(),
                     success: function(data) {
-                        var y=0;
-                        var row_count=''
+                        var y = 0;
+                        var chart_field = 'documents_over_period';
+                        var row_count= ''
                         if(frm.attr('id')!='add_chart'){
-                            row_count=(frm.attr('id')).substr(-2);}
+                            chart_field = chart_field + (frm.attr('id')).substr(-2);
+                            row_count = (frm.attr('id')).substr(-2);}
                         $('#id_chart_type'+row_count).focus().select();
-                        documentsCount.chart["renderTo"]= "documents_over_period"+row_count;
+                        documentsCount.chart["renderTo"]= chart_field;
                         $.each(data, function(i, item) {
                             documentsCount.xAxis.categories = data[i]['dates'];
                             documentsCount.series.push({ "name": i, "data": data[i]['values'] });
@@ -184,6 +212,7 @@
                         alert("Sorry, something went wrong!");
                     }
             });
+            //Not sure why it should be false, but it works for now
             return false;
         });
     </script>
