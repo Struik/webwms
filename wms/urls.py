@@ -22,6 +22,4 @@ urlpatterns = patterns('',
     url(r'^form2/add_chart/$', views.add_chart, name='add_chart'),
 	url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
-    url(r'^chart_data/$', views.chart_data, name='chart_data'),
-
 )

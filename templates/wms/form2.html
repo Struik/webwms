@@ -126,9 +126,6 @@
                 $(this).datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
             })
 
-            //Triggering click on new form's reset button to bring it to primeval state
-            $("div[id=row_" + counter + "] input[name^='reset']" ).trigger( "click" );
-
             //Scroll to the new row. Animate effect could be implemented here.
             $(".row-form-chart:last").get(0).scrollIntoView();
         });
@@ -167,6 +164,9 @@
             newElement.attr({'id': 'row_'+counter })
             //Putting processed new elements after last row (selector) on the page
             $(selector).after(newElement);
+
+            //Triggering click on new form's reset button to bring it to primeval state
+            $("div[id=row_" + counter + "] input[name^='reset']" ).trigger( "click" );
         }
     </script>
     <script type="text/javascript">

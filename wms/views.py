@@ -122,8 +122,6 @@ def add_chart(request):
     else:
         print('Received something else but over_period')
 
-    print(chart_data)
-    print(json.dumps(chart_data))
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @login_required
