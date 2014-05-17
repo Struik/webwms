@@ -151,22 +151,22 @@ def data_table(request):
         context_instance=RequestContext(request),
     )
 
-class OrderListJson(ListView):
+class OrderListJson(BaseDatatableView):
     print('333')
     model = Order
-    context_object_name = 'orders'
-    template_name = 'wms/DataTable.html'
+    # context_object_name = 'orders'
+    # template_name = 'wms/DataTable.html'
     print(Order.objects.all())
 
-    columns = ['display_name', 'date_to_ship', 'status']
-    order_columns = ['display_name', 'date_to_ship', 'status']
-    max_display_length = 500
+    columns = ['sdid', 'date_to_ship', 'status']
+    order_columns = ['sdid', 'date_to_ship', 'status']
+    max_display_length = 200
     print('444')
-
-    def get_queryset(self):
-        print('hhhh')
-        qs = Order.objects.all()
-        return qs
+    #
+    # def get_queryset(self):
+    #     print('hhhh')
+    #     qs = Order.objects.all()
+    #     return qs
 
 
 

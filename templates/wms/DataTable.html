@@ -4,40 +4,42 @@
 {% block title %}<title>Solvo.Web DataTable</title>{% endblock %}
 {% block page-header %}DataTable{% endblock %}
 
-{% block content %}
-        <div class="col-sm-8 col-md-8">
-            <div class="well">
-                <table id="glucose_table" class="datatable">
-                    <thead>
-						<tr>
-							<th>Name</th>
-							<th>Position</th>
-							<th>Office</th>
-						</tr>
-					</thead>
-                </table>
-                <br>
-            </div>
-        </div>
+{% block table_header %}
+    <table id="glucose_table" class="table table-striped table-hover datatable">
+      <thead>
+        <tr>
+          <th>Наименование</th>
+          <th>Адрес</th>
+          <th>Код</th>
+        </tr>
+      </thead>
+    </table>
+
 {% endblock %}
 
 {% block extracss %}
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/>
+<link rel="stylesheet" type="text/css" href="{% static 'wms/dataTables.bootstrap.css' %}"/>
+<!--link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/-->
 {% endblock %}
 
 {% block extrajs %}
 <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
-<script type="text/javascript" charset="utf8" src="http://django-datatable-view.appspot.com/static/js/datatableview.js"></script>
+<script src="{% static 'wms/dataTables.bootstrap.js' %}"></script>
+<!--script type="text/javascript" charset="utf8" src="http://django-datatable-view.appspot.com/static/js/datatableview.js"></script-->
 {% endblock %}
 
 
 {% block script %}
     <script type="text/javascript">
     $(document).ready(function() {
+        alert('{{ data }}');
+
         var oTable = $('#glucose_table').dataTable( {
+            "iDisplayLength": 25,
+            "aLengthMenu": [[20, 50, 100, -1], [25, 50, 100, "All"]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "{{ object_list }}"
+            "sAjaxSource": "{{data}}"
         });
     });
     </script>
