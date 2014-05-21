@@ -18,12 +18,13 @@
 {% endblock %}
 
 {% block extracss %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'wms/dataTables.bootstrap.css' %}"/>
 <!--link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"/-->
 {% endblock %}
 
 {% block extrajs %}
-
+<script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
+<script src="{% static 'wms/dataTables.bootstrap.js' %}"></script>
 <!--script type="text/javascript" charset="utf8" src="http://django-datatable-view.appspot.com/static/js/datatableview.js"></script-->
 {% endblock %}
 

@@ -3,26 +3,38 @@
 {% load i18n %}
 {% block title %}<title>Solvo.Web Справочник контрагентов</title>{% endblock %}
 {% block page-header %}Справочник контрагентов{% endblock %}
-{% block table_header %}
-    <table class="table table-striped table-hover ">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Наименование</th>
-          <th>Адрес</th>
-          <th>Код</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for query in available_clients %}
-            <tr>
-              <td>{{ query.id }}</td>
-              <td>{{ query.name }}</td>
-              <td>{{ query.address }}</td>
-              <td>{{ query.sdid }}t</td>
-            </tr>
-        {% endfor %}
-      </tbody>
-    </table>
 
+{% block table_header %}
+    <div class="container">
+        <table id="table_header" class="table table-striped table-hover datatable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Наименование</th>
+              <th>Адрес</th>
+              <th>Код</th>
+            </tr>
+          </thead>
+        </table>
+    </div>
+{% endblock %}
+
+{% block extracss %}
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var oTable = $('#table_header').dataTable( {
+            "iDisplayLength": 15,
+            "aLengthMenu": [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
+            "bProcessing": false,
+            "bServerSide": true,
+            "sAjaxSource": "{{data}}"
+        });
+    });
+    </script>
 {% endblock %}
