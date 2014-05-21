@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a90776e-b324-4262-9a03-c2f9c2bc7cfe" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wms/static/wms/dataTables.bootstrap.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wms/static/wms/dataTables.bootstrap.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/wms/DataTable.html" afterPath="$PROJECT_DIR$/templates/wms/DataTable.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/static/wms/custom.css" afterPath="$PROJECT_DIR$/wms/static/wms/custom.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/views.py" afterPath="$PROJECT_DIR$/wms/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/wms/index.html" afterPath="$PROJECT_DIR$/templates/wms/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webwms.iws" />
@@ -31,18 +32,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wms/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="156" column="28" selection-start="6746" selection-end="6746" vertical-scroll-proportion="-19.6" vertical-offset="2162" max-vertical-offset="3043">
-              <folding>
-                <element signature="e#0#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="custom.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wms/static/wms/custom.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="0" selection-start="97" selection-end="97" vertical-scroll-proportion="-0.68" vertical-offset="0" max-vertical-offset="459">
+            <state line="156" column="28" selection-start="6746" selection-end="6746" vertical-scroll-proportion="-18.56" vertical-offset="1797" max-vertical-offset="2652">
               <folding />
             </state>
           </provider>
@@ -51,16 +41,7 @@
       <file leaf-file-name="DataTable.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/wms/DataTable.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="33" selection-start="1214" selection-end="1214" vertical-scroll-proportion="0.73913044" vertical-offset="51" max-vertical-offset="867">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="client.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/wms/client.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="18" selection-start="254" selection-end="285" vertical-scroll-proportion="-3.9230769" vertical-offset="0" max-vertical-offset="578">
+            <state line="25" column="0" selection-start="621" selection-end="621" vertical-scroll-proportion="0.48733413" vertical-offset="21" max-vertical-offset="850">
               <folding />
             </state>
           </provider>
@@ -69,54 +50,7 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/wms/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="70" selection-start="416" selection-end="416" vertical-scroll-proportion="-3.5961537" vertical-offset="0" max-vertical-offset="2499">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="manage.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/manage.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="0" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="272">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webwms/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="83" selection-start="405" selection-end="420" vertical-scroll-proportion="-6.8" vertical-offset="0" max-vertical-offset="289">
-              <folding>
-                <element signature="e#0#51#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wms/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="77" selection-start="722" selection-end="737" vertical-scroll-proportion="-8.16" vertical-offset="0" max-vertical-offset="510">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webwms/settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="74" column="0" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wms/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="29" selection-start="1292" selection-end="1292" vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="1955">
+            <state line="27" column="0" selection-start="1402" selection-end="1402" vertical-scroll-proportion="-17.653847" vertical-offset="0" max-vertical-offset="2567">
               <folding />
             </state>
           </provider>
@@ -167,11 +101,11 @@
         <option value="$PROJECT_DIR$/webwms/urls.py" />
         <option value="$PROJECT_DIR$/wms/urls.py" />
         <option value="$PROJECT_DIR$/manage.py" />
-        <option value="$PROJECT_DIR$/templates/wms/index.html" />
         <option value="$PROJECT_DIR$/templates/wms/client.html" />
         <option value="$PROJECT_DIR$/wms/views.py" />
         <option value="$PROJECT_DIR$/wms/static/wms/custom.css" />
         <option value="$PROJECT_DIR$/templates/wms/DataTable.html" />
+        <option value="$PROJECT_DIR$/templates/wms/index.html" />
       </list>
     </option>
   </component>
@@ -207,6 +141,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -327,7 +262,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -670,18 +604,22 @@
       <created>1400193824715</created>
       <updated>1400193824715</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Cool datatables">
+      <created>1400353725107</created>
+      <updated>1400353725107</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39932886" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -689,12 +627,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39932886" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39932886" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -722,7 +660,8 @@
     <MESSAGE value="Forms" />
     <MESSAGE value="Form for chart" />
     <MESSAGE value="Bloody datatables" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bloody datatables" />
+    <MESSAGE value="Cool datatables" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cool datatables" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -904,11 +843,6 @@
         <state line="49" column="20" selection-start="1818" selection-end="1818" vertical-scroll-proportion="-17.0" vertical-offset="391" max-vertical-offset="2176" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/wms/graph2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="18" selection-start="798" selection-end="798" vertical-scroll-proportion="11.115385" vertical-offset="765" max-vertical-offset="2193" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/wms/graph4.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="34" selection-start="1393" selection-end="1393" vertical-scroll-proportion="0.0" vertical-offset="612" max-vertical-offset="986" />
@@ -941,74 +875,61 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wms/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="29" selection-start="1292" selection-end="1292" vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="1955">
-          <folding />
-        </state>
+        <state line="46" column="29" selection-start="1292" selection-end="1292" vertical-scroll-proportion="0.0" vertical-offset="782" max-vertical-offset="1955" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webwms/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="74" column="0" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2125">
-          <folding />
-        </state>
+        <state line="74" column="0" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="2125" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="272">
-          <folding />
-        </state>
+        <state line="10" column="0" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="272" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/webwms/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="83" selection-start="405" selection-end="420" vertical-scroll-proportion="-6.8" vertical-offset="0" max-vertical-offset="289">
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="10" column="83" selection-start="405" selection-end="420" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="289" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wms/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="77" selection-start="722" selection-end="737" vertical-scroll-proportion="-8.16" vertical-offset="0" max-vertical-offset="510">
+        <state line="15" column="77" selection-start="722" selection-end="737" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="561" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/wms/client.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="18" selection-start="254" selection-end="285" vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="578" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wms/static/wms/custom.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="459" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/wms/graph2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="10" selection-start="1938" selection-end="1938" vertical-scroll-proportion="0.48456058" vertical-offset="969" max-vertical-offset="2193" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wms/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="156" column="28" selection-start="6746" selection-end="6746" vertical-scroll-proportion="-18.56" vertical-offset="1797" max-vertical-offset="2652">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/wms/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="70" selection-start="416" selection-end="416" vertical-scroll-proportion="-3.5961537" vertical-offset="0" max-vertical-offset="2499">
+        <state line="27" column="0" selection-start="1402" selection-end="1402" vertical-scroll-proportion="-17.653847" vertical-offset="0" max-vertical-offset="2567">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/wms/client.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="18" selection-start="254" selection-end="285" vertical-scroll-proportion="-3.9230769" vertical-offset="0" max-vertical-offset="578">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wms/static/wms/custom.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="97" selection-end="97" vertical-scroll-proportion="-0.68" vertical-offset="0" max-vertical-offset="459">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wms/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="28" selection-start="6746" selection-end="6746" vertical-scroll-proportion="-19.6" vertical-offset="2162" max-vertical-offset="3043">
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/wms/DataTable.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="33" selection-start="1214" selection-end="1214" vertical-scroll-proportion="0.73913044" vertical-offset="51" max-vertical-offset="867">
+        <state line="25" column="0" selection-start="621" selection-end="621" vertical-scroll-proportion="0.48733413" vertical-offset="21" max-vertical-offset="850">
           <folding />
         </state>
       </provider>
