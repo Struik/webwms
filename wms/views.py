@@ -190,7 +190,7 @@ class SkuList(LoginRequiredMixin, BaseDatatableView):
 
 
 class SkuLists(DatatableView):
-    template_name = "wms/sku.html"
+    template_name = "wms/sku_new.html"
     model = Sku
     datatable_options = {
         'structure_template': "datatableview/bootstrap_structure.html",
@@ -199,8 +199,12 @@ class SkuLists(DatatableView):
             'sku_id',
             'name',
             'sdid',
-        ]
+        ],
+        'ordering': ['id'],
     }
+
+    def get_initial_queryset(self):
+        return self.model.objects.select_related('client').filter(holder=available_clients(self.request.user))
 
 class ClientList(LoginRequiredMixin, BaseDatatableView):
     model = Client

@@ -30,11 +30,11 @@ class ReferredClients(models.Model):
         db_table = 'wms_referredclients'
 
 class Sku(models.Model):
-    id = models.IntegerField(primary_key=True)
-    sku_id = models.CharField(max_length=200)
-    name = models.CharField(max_length=200)
-    holder = models.ForeignKey(Client)
-    sdid = models.CharField(max_length=200)
+    id = models.IntegerField(primary_key=True, verbose_name="Идентификатор")
+    sku_id = models.CharField(max_length=200, verbose_name="Артикул")
+    name = models.CharField(max_length=200, verbose_name="Наименование")
+    holder = models.ForeignKey(Client, verbose_name="Владелец")
+    sdid = models.CharField(max_length=200, verbose_name="Код товара")
 
     def __str__(self):
         return self.name
