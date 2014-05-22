@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'qsstats',
     'crispy_forms',
     'stickymessages',
+    'datatableview',
     #'django_tables2',
 )
 
@@ -94,8 +95,8 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'localhost',
-        'PORT': '31521',
+        'HOST': 'hercules',
+        'PORT': '1521',
     }
 }
 

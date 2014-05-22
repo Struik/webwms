@@ -24,6 +24,11 @@ from collections import defaultdict
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from braces.views import LoginRequiredMixin
 
+import datatableview
+from datatableview.views import DatatableView, XEditableDatatableView
+from datatableview.utils import get_datatable_structure
+from datatableview import helpers
+
 def available_clients(user_id):
     return Client.objects.select_related('client').filter(referredclients__user=user_id)
 
@@ -39,11 +44,6 @@ def main(request):
 def profile(request):
     return render_to_response('wms/profile.html', context_instance=RequestContext(request))
 
-@login_required
-def order(request):
-    available_clients=Client.objects.select_related('client').filter(referredclients__user=request.user.id)
-    available_orders=Order.objects.select_related('client').filter(holder=available_clients)
-    return render_to_response('wms/order.html', {'available_orders':available_orders}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
@@ -160,12 +160,18 @@ class OrderListJson(LoginRequiredMixin, BaseDatatableView):
 @login_required
 def client(request):
     data = reverse('wms:client_list')
-    return render_to_response('wms/client.html', {'data':data}, context_instance=RequestContext(request))
+    return render_to_response('wms/client.html', {'data': data}, context_instance=RequestContext(request))
 
 @login_required
 def sku(request):
     data = reverse('wms:sku_list')
-    return render_to_response('wms/sku.html', {'data':data}, context_instance=RequestContext(request))
+    return render_to_response('wms/sku.html', {'data': data}, context_instance=RequestContext(request))
+
+@login_required
+def order(request):
+    data = reverse('wms:order_list')
+    detail_data=reverse('wms:order_detail_list')
+    return render_to_response('wms/order_new.html', {'data': data, 'detail_data': detail_data}, context_instance=RequestContext(request))
 
 class SkuList(LoginRequiredMixin, BaseDatatableView):
     model = Sku
@@ -182,6 +188,20 @@ class SkuList(LoginRequiredMixin, BaseDatatableView):
             filtered = filtered.filter(name__icontains=sSearch)
         return filtered
 
+
+class SkuLists(DatatableView):
+    template_name = "wms/sku.html"
+    model = Sku
+    datatable_options = {
+        'structure_template': "datatableview/bootstrap_structure.html",
+        'columns': [
+            'id',
+            'sku_id',
+            'name',
+            'sdid',
+        ]
+    }
+
 class ClientList(LoginRequiredMixin, BaseDatatableView):
     model = Client
     columns = ['id','name','address','sdid']
@@ -196,3 +216,32 @@ class ClientList(LoginRequiredMixin, BaseDatatableView):
         if sSearch:
             filtered = filtered.filter(name__icontains=sSearch)
         return filtered
+
+
+class OrderList(LoginRequiredMixin, BaseDatatableView):
+    model = Order
+    columns = ['id', 'sdid', 'display_name', 'date_to_ship', 'status']
+    order_columns = ['id', 'sdid', 'display_name', 'date_to_ship', 'status']
+    max_display_length = 500
+
+    def get_initial_queryset(self):
+        return self.model.objects.select_related('client').filter(holder=available_clients(self.request.user))
+
+    def filter_queryset(self, filtered):
+        sSearch = self.request.GET.get('sSearch', None)
+        if sSearch:
+            filtered = filtered.filter(display_name__icontains=sSearch)
+        return filtered
+
+class OrderDetailList(LoginRequiredMixin, BaseDatatableView):
+    model = OrderDetail
+    columns = ['id', 'order_id', 'line', 'sku_id', 'sku_name', 'qty', 'planned', 'moved', 'packed', 'shiped']
+    order_columns = ['id', 'order_id', 'line', 'sku_id', 'sku_name', 'qty', 'planned', 'moved', 'packed', 'shiped']
+    max_display_length = 500
+
+    # def get_initial_queryset(self):
+    #     return self.model.objects.select_related('client').filter(holder=available_clients(self.request.user))
+
+#
+# def order_detail(request):
+#     current_order_details=OrderDetail.objects.filter(order=request.POST.get('id'))

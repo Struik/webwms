@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from wms import views
-from wms.views import OrderListJson, SkuList, ClientList
+from wms.views import OrderListJson, SkuList, ClientList, OrderList, OrderDetailList, SkuLists
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
@@ -14,8 +14,6 @@ urlpatterns = patterns('',
     url(r'^incoming/$', views.incoming, name='incoming'),
     url(r'^incoming_detail/$', views.incoming_detail, name='incoming_detail'),
     url(r'^order_list_json/$', OrderListJson.as_view(), name='order_list_json'),
-    url(r'^sku_list/$', SkuList.as_view(), name='sku_list'),
-    url(r'^client_list/$', ClientList.as_view(), name='client_list'),
     url(r'^data_table/$', views.data_table, name='data_table'),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'wms/login.html'}, name='login'),
     url(r'^graph/$', views.graph, name='graph'),
@@ -27,4 +25,10 @@ urlpatterns = patterns('',
     url(r'^form2/add_chart/$', views.add_chart, name='add_chart'),
     url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
+
+    url(r'^sku_list/$', SkuList.as_view(), name='sku_list'),
+    url(r'^sku_lists/$', SkuLists.as_view(), name='sku_lists'),
+    url(r'^client_list/$', ClientList.as_view(), name='client_list'),
+    url(r'^order_list/$', OrderList.as_view(), name='order_list'),
+    url(r'^order_detail_list/$', OrderDetailList.as_view(), name='order_detail_list'),
 )
