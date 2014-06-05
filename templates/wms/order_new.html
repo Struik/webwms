@@ -33,12 +33,13 @@
 {% endblock %}
 
 {% block extrajs %}
+    <script src="{% static 'wms/scripts.js' %}"></script>
 {% endblock %}
 
 {% block script %}
     <script type="text/javascript">
     $(document).ready(function() {
-        var oTable = $('#table_header').DataTable( {
+        var oTable = $('#table_header').dataTable( {
             "iDisplayLength": 15,
             "aLengthMenu": [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
             "bProcessing": false,
@@ -46,13 +47,31 @@
             "sAjaxSource": "{{data}}"
         });
 
-        var oTableDetail = $('#table_detail').DataTable( {
+        var oTableDetail = $('#table_detail').dataTable( {
             "iDisplayLength": 15,
             "aLengthMenu": [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
             "bProcessing": false,
             "bServerSide": true,
-            "sAjaxSource": "{{detail_data}}"
+            "sAjaxSource": "{{detail_data}}",
+
         });
+
+        $('#table_header').on('click', 'tbody tr', function(){
+                var doc_id=$(this).attr("id")
+                $.ajax({url:"",
+                    data:{doc_id: doc_id},
+                    type: "POST",
+                    success: function(data) {
+                        oTableDetail.fnReloadAjax(data);
+                        oTableDetail.fnDrawCallback(alert( 'DataTables has redrawn the table' ))
+                      }
+                });
+            })
+            /*$( "tbody tr" ).click(function() {
+                $(' .info').toggleClass("info").toggleClass("nonSelectedRow");
+                $(this).toggleClass("nonSelectedRow").toggleClass("info");
+            });
+            */
     });
     </script>
 {% endblock %}

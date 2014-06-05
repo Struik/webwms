@@ -167,10 +167,20 @@ def sku(request):
     data = reverse('wms:sku_list')
     return render_to_response('wms/sku.html', {'data': data}, context_instance=RequestContext(request))
 
+@csrf_exempt
 @login_required
 def order(request):
     data = reverse('wms:order_list')
     detail_data=reverse('wms:order_detail_list')
+
+    if request.method == 'POST' and request.is_ajax:
+        params = request.POST
+        # Create the URL query string and strip the last '&' at the end.
+        data = ('%s?%s' % (reverse('wms:order_detail_list'), ''.join(
+            ['%s=%s&' % (k, v) for k, v in params.items()])))\
+            .rstrip('&')
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
     return render_to_response('wms/order_new.html', {'data': data, 'detail_data': detail_data}, context_instance=RequestContext(request))
 
 class SkuList(LoginRequiredMixin, BaseDatatableView):
@@ -243,9 +253,13 @@ class OrderDetailList(LoginRequiredMixin, BaseDatatableView):
     order_columns = ['id', 'order_id', 'line', 'sku_id', 'sku_name', 'qty', 'planned', 'moved', 'packed', 'shiped']
     max_display_length = 500
 
-    # def get_initial_queryset(self):
-    #     return self.model.objects.select_related('client').filter(holder=available_clients(self.request.user))
+    def get_initial_queryset(self):
+        return self.model.objects.all()
 
-#
-# def order_detail(request):
-#     current_order_details=OrderDetail.objects.filter(order=request.POST.get('id'))
+    def filter_queryset(self, qs):
+        params = self.request.GET
+        doc_id = params.get('doc_id', '')
+        if doc_id:
+            qs = qs.filter(order=doc_id)
+
+        return qs
