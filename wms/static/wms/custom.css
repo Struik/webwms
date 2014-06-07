@@ -7,6 +7,21 @@ body {
 
 .need_scroll {overflow: auto}
 
+/*
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  cursor: pointer;
+}
+*/
+
+td.details-control {
+    background: url('details_open.png') no-repeat center center !important;
+    cursor: pointer;
+}
+tr.details td.details-control {
+    background: url('details_close.png') no-repeat center center !important;
+}
+
 
 /*
 .table > tbody > tr.C {
