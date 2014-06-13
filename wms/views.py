@@ -114,6 +114,8 @@ def add_chart(request):
 
     if chart_params['chart_type'][0] == 'over_period':
         chart_data=ChartData.documents_over_period(chart_params)
+    elif chart_params['chart_type'][0] == 'pie':
+        chart_data=ChartData.documents_over_period(chart_params)
     else:
         print('Received something else but over_period')
 
