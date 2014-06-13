@@ -41,14 +41,19 @@ class ChartForm(forms.Form):
 
         self.fields['chart_type'] = forms.ChoiceField(
             label='Тип графика',
-            choices = self.get_chart_types(ChartType.objects.all()),
+            choices=self.get_chart_types(ChartType.objects.all()),
+            required=False)
+
+        self.fields['chart_interval'] = forms.ChoiceField(
+            label='Интервал',
+            choices=(('days','День'), ('weeks','Неделя'), ('months','Месяц'), ('years','Год'), ('minutes','Минута'), ('hours','Час')),
             required=False)
 
         self. helper.layout = Layout(
             Field('chart_type', css_class='input_sm',),
             Field('start_date', placeholder='From (mm.dd.yyyy)'),
-            #Field('start_date', placeholder='From (mm.dd.yyyy)',),
             Field('end_date', placeholder='To (mm.dd.yyyy)',),
+            Field('chart_interval', css_class='input_sm',),
             Field('documents',),
             FormActions(
                 Div(Submit('submit', 'Построить', css_class="btn-success btn-xs"),
@@ -62,8 +67,6 @@ class ChartForm(forms.Form):
     def get_chart_types(self, queryset):
         choices = [('', '---')] +list([(i.type, i.label) for i in queryset])
         return choices
-
-
 
 class MessageForm(forms.Form):
     text_input = forms.CharField()

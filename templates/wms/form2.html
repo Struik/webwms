@@ -168,8 +168,31 @@
                 chart: {zoomType: 'x', spacingRight: 20},
                 title: {text: '',x : -20},
                 xAxis: {title: {text : 'Дата'}},
-                yAxis: {title: {text: 'Плановое кол-во документов'}, plotLines: [{value: 0, width: 1,color: '#808080'}]},
+                yAxis: {title: {text: 'Плановое кол-во документов'}},
                 legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
+                series : []
+            };
+
+            var columns = {
+                chart: {type: 'column'},
+                title: {text: 'Monthly Average Rainfall'},
+                subtitle: {text: 'Source: WorldClimate.com'},
+                xAxis: {title: {text : 'Дата'}},
+                yAxis: {title: {text: 'Плановое кол-во документов'}},
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
                 series : []
             };
 
@@ -177,14 +200,14 @@
                 chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false},
                 title: {text: 'Количество заявок от поклажедателей'},
                 legend: {enabled: true},
-                tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'},
+                tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
                 plotOptions: {
                     pie: {
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            format: '<b>{point.name}</b>: {point.percentage:.2f} % ({y})',
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             },
@@ -194,7 +217,7 @@
                 },
                 series: [{
                     type: 'pie',
-                    name: 'Browser share',
+                    name: 'Количество заявок',
                     data: []
                 }]
             };
@@ -229,6 +252,15 @@
                                 y++;
                             });
                             var chart = new Highcharts.Chart(pie)
+                        }
+                        else if (chart_type == 'columns'){
+                            columns.chart["renderTo"]= chart_field;
+                            $.each(chart_data, function(i, item) {
+                                columns.xAxis.categories = chart_data[i]['dates'];
+                                columns.series.push({ "name": i, "data": chart_data[i]['values'] });
+                                y++
+                            });
+                            var chart = new Highcharts.Chart(columns);
                         }
                         else{
                             alert("Sorry, something went wrong!");

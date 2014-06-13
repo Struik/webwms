@@ -106,13 +106,15 @@ def add_chart(request):
     params = request.GET
 
     chart_params=defaultdict()
-    chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type')
+    chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
     for chart_param in chart_params_dict:
         for param in params:
             if re.match(chart_param, param):
                 chart_params[chart_param]=(params.getlist(param))
 
     if chart_params['chart_type'][0] == 'over_period':
+        chart_data=ChartData.documents_over_period(chart_params)
+    elif chart_params['chart_type'][0] == 'columns':
         chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'pie':
         chart_data=ChartData.documents_over_period(chart_params)

@@ -108,3 +108,4 @@ class ChartType(models.Model):
     type = models.CharField(max_length=200)
     label = models.CharField(max_length=200)
     highchart_type = models.CharField(max_length=200)
+    interval = models.CharField(max_length=200)

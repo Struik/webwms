@@ -22,9 +22,9 @@ class ChartData(object):
                 queryset = Order.objects.all()
             elif document == 'Incoming':
                 queryset = Incoming.objects.all()
-
+            print(chart_params['chart_interval'][0])
             qsstats = QuerySetStats(queryset, date_field='date_to_ship', aggregate=Count('id'))
-            document_stats[document] = qsstats.time_series(start_date, end_date, interval='days')
+            document_stats[document] = qsstats.time_series(start_date, end_date, interval=chart_params['chart_interval'][0])
 
             data[document] = {'dates': [], 'values': [], 'count': []}
             for item in document_stats[document]:

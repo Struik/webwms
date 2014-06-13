@@ -87,7 +87,7 @@ $(function () {
             enabled: true
         },
         tooltip: {
-    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f} %{y}</b>'
         },
         plotOptions: {
             pie: {
@@ -95,7 +95,7 @@ $(function () {
                 cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    format: '<b>{point.name}</b>: {point.percentage:.2f} %{y}',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     },
