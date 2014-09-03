@@ -13,7 +13,6 @@ class ChartData(object):
         end_date = datetime.datetime.strptime(chart_params['end_date'][0] or (today), '%d.%m.%Y')
         document_stats={}
         data = defaultdict()
-        documents_count = 0
 
         print(chart_params)
 
