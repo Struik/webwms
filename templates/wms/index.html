@@ -13,6 +13,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'wms/superhero.bootstrap.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'wms/bootstrap-datetimepicker.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'wms/dataTables.bootstrap.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'wms/dataTables.editor.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/tabletools/2.2.3/css/dataTables.tableTools.css">
 
         {% block extracss %}{% endblock %}
 
@@ -25,6 +27,9 @@
         <script src="{% static 'wms/jquery.dataTables.js' %}"></script>
         <script src="{% static 'wms/dataTables.bootstrap.js' %}"></script>
         <script src="{% static 'wms/datatableview.js' %}"></script>
+        <script src="//cdn.datatables.net/tabletools/2.2.3/js/dataTables.tableTools.min.js"></script>
+        <!--script src="{% static 'wms/dataTables.editor.js' %}"></script-->
+
 
         {% block extrajs %}{% endblock %}
 
@@ -75,6 +80,7 @@
                             <ul class="dropdown-menu" aria-labelledby="download">
                                 <li><a href="/wms/client">Контрагенты</a></li>
                                 <li><a href="/wms/sku">Товары</a></li>
+                                <li><a href="/wms/charts">Графики</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">

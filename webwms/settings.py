@@ -95,7 +95,7 @@ DATABASES = {
         'NAME': 'wmsdb11',
         'USER': 'web',
         'PASSWORD': 'oracle',
-        'HOST': 'hercules',
+        'HOST': 'hercules.solvo.ru',
         'PORT': '1521',
     }
 }

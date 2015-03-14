@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType
+from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType, Charts
 from django.views.generic import CreateView, UpdateView, DeleteView, FormView, TemplateView, ListView
 from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
@@ -267,3 +267,25 @@ class OrderDetailList(LoginRequiredMixin, BaseDatatableView):
             qs = qs.filter(order=doc_id)
 
         return qs
+
+@login_required
+def charts(request):
+    print(111)
+    data = reverse('wms:chart_list')
+    return render_to_response('wms/charts.html', {'data': data}, context_instance=RequestContext(request))
+
+class ChartList(LoginRequiredMixin, BaseDatatableView):
+    model = Charts
+    print(222)
+    columns = ['id','chart_name','view_name','chart_type_id','x_axis_label','y_axis_label','x_axis_field','y_axis_field','with_table','created']
+    order_columns = ['id']
+    max_display_length = 500
+
+    def get_initial_queryset(self):
+        return self.model.objects.all()
+
+    # def filter_queryset(self, filtered):
+    #     sSearch = self.request.GET.get('sSearch', None)
+    #     if sSearch:
+    #         filtered = filtered.filter(name__icontains=sSearch)
+    #     return filtered

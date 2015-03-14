@@ -1,0 +1,40 @@
+{% extends "wms/table.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %}<title>Solvo.Web Справочник графиков</title>{% endblock %}
+{% block page-header %}Справочник графиков{% endblock %}
+
+{% block thead %}
+    <tr>
+        <th>#</th>
+        <th>Название</th>
+        <th>Объект БД</th>
+        <th>Тип графика</th>
+        <th>Название оси X</th>
+        <th>Название оси Y</th>
+        <th>Поле оси X</th>
+        <th>Поле оси Y</th>
+        <th>Вывод таблицы</th>
+        <th>Создан</th>
+    </tr>
+{% endblock %}
+
+{% block extracss %}
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var oTable = $('#table_header').dataTable( {
+            "iDisplayLength": 15,
+            "aLengthMenu": [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
+            "bProcessing": true,
+            "bServerSide": false,
+            "sAjaxSource": "{{data}}",
+        });
+    });
+    </script>
+{% endblock %}

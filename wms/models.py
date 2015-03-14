@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import json
 from django.utils.functional import Promise
 from django.utils.encoding import force_text
@@ -109,3 +109,16 @@ class ChartType(models.Model):
     label = models.CharField(max_length=200)
     highchart_type = models.CharField(max_length=200)
     interval = models.CharField(max_length=200)
+
+class Charts(models.Model):
+    id = models.IntegerField(primary_key=True)
+    chart_name = models.CharField(max_length=200)
+    view_name = models.CharField(max_length=200)
+    chart_type = models.ForeignKey(ChartType)
+    x_axis_label = models.CharField(max_length=200)
+    y_axis_label = models.CharField(max_length=200)
+    x_axis_field = models.CharField(max_length=200)
+    y_axis_field = models.CharField(max_length=200)
+    with_table = models.BooleanField(default=False)
+    created = models.DateField(default=datetime.now)
+

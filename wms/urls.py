@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from wms import views
-from wms.views import OrderListJson, SkuList, ClientList, OrderList, OrderDetailList, SkuLists
+from wms.views import OrderListJson, SkuList, ClientList, OrderList, OrderDetailList, SkuLists, ChartList
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^form/$', views.form, name='form'),
     url(r'^form2/$', views.form2, name='form2'),
     url(r'^form2/add_chart/$', views.add_chart, name='add_chart'),
+    url(r'^charts/$', views.charts, name='charts'),
     url(r'^logout/$', views.logout_page),
     url(r'^profile/$', views.profile),
 
@@ -31,4 +32,5 @@ urlpatterns = patterns('',
     url(r'^client_list/$', ClientList.as_view(), name='client_list'),
     url(r'^order_list/$', OrderList.as_view(), name='order_list'),
     url(r'^order_detail_list/$', OrderDetailList.as_view(), name='order_detail_list'),
+    url(r'^chart_list/$', ChartList.as_view(), name='chart_list'),
 )
