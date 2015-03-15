@@ -1,4 +1,4 @@
-import json, datetime, qsstats, re
+import json, datetime, qsstats, re, sqlalchemy
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
 from wms.forms import MessageForm, ChartForm
@@ -23,6 +23,13 @@ from django.contrib import messages
 from collections import defaultdict
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from braces.views import LoginRequiredMixin
+from wms.chart_data import Charts, get_chart_data
+
+
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
 
 import datatableview
 from datatableview.views import DatatableView, XEditableDatatableView
@@ -112,8 +119,15 @@ def add_chart(request):
             if re.match(chart_param, param):
                 chart_params[chart_param]=(params.getlist(param))
 
+    print('Getting data')
     if chart_params['chart_type'][0] == 'over_period':
-        chart_data=ChartData.documents_over_period(chart_params)
+        #chart_data=ChartData.documents_over_period(chart_params)
+        print('here')
+        chart_object = Charts.get_chart_description(1)
+        print('there')
+        chart_data = get_chart_data(chart_object, chart_params['start_date'][0], chart_params['end_date'][0])
+        print(chart_data)
+        print('over there')
     elif chart_params['chart_type'][0] == 'columns':
         chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'pie':
@@ -121,6 +135,7 @@ def add_chart(request):
     else:
         print('Received something else but over_period')
 
+    print(chart_data)
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 @login_required
