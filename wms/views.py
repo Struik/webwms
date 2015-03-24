@@ -1,7 +1,7 @@
 import json, datetime, qsstats, re, sqlalchemy
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
-from wms.forms import MessageForm, ChartForm
+from wms.forms import MessageForm, ChartForm, NewChartForm
 from django.http import HttpResponseRedirect, HttpResponse
 from annoying.decorators import render_to
 from django.core.urlresolvers import reverse
@@ -24,6 +24,7 @@ from collections import defaultdict
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from braces.views import LoginRequiredMixin
 from wms.chart_data import Charts, get_chart_data
+from wms.DjangoForms import ContactForm
 
 
 from sqlalchemy import Column, ForeignKey, Integer, String
@@ -120,7 +121,7 @@ def add_chart(request):
                 chart_params[chart_param]=(params.getlist(param))
 
     print('Getting data')
-    if chart_params['chart_type'][0] == 'over_period':
+    if chart_params['chart_type'][0] == '1':
         #chart_data=ChartData.documents_over_period(chart_params)
         print('here')
         chart_object = Charts.get_chart_description(1)
@@ -145,6 +146,11 @@ def form(request):
 @login_required
 def form2(request):
     return render(request, 'wms/form2.html', {'form': ChartForm()})
+
+@login_required
+def form3(request):
+    return render(request, 'wms/form3.html', {'form': NewChartForm()})
+    #return render(request, 'wms/form3.html', {'form': ContactForm()})
 
 def logout_page(request):
     logout(request)

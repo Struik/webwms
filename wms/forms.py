@@ -3,14 +3,57 @@ import itertools
 import datetime
 from django import forms
 from wms.models import ChartType
+from wms.chart_data import Charts
  
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, Reset, HTML, Button, Row, Field
-from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, InlineField
+from crispy_forms.layout import Layout, Div, Submit, Reset, HTML, Button, Row, Field, MultiField, ButtonHolder
+from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, InlineField, StrictButton
 
 DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%I:%M %p'
 
+class NewChartForm(forms.Form):
+
+    start_date = forms.DateField(required=False, input_formats=[DATE_FORMAT])
+    end_date = forms.DateField(required=False, input_formats=[DATE_FORMAT])
+
+    def __init__(self, *args, **kwargs):
+        super(NewChartForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_id = 'add_chart'
+        self.helper.form_method = 'get'
+        self.helper.form_class = 'form-inline'
+        self.helper.field_template = 'bootstrap3/layout/inline_field.html'
+        self.helper.form_show_labels = False
+
+        self.fields['start_date'].initial = datetime.date.today().strftime(DATE_FORMAT)
+        self.fields['end_date'].initial = datetime.date.today().strftime(DATE_FORMAT)
+
+        self.fields['chart_type'] = forms.ChoiceField(
+            choices = [('', '---')] + Charts.get_chart_names(),
+            required = False)
+
+        print(self.get_chart_types(ChartType.objects.all()))
+
+        self.fields['chart_interval'] = forms.ChoiceField(
+            choices=(('days','День'), ('weeks','Неделя'), ('months','Месяц'), ('years','Год'), ('minutes','Минута'), ('hours','Час')),
+            required=False)
+
+        self. helper.layout = Layout(
+            Field('chart_type', css_class='input_sm',),
+            Field('start_date', css_class='dateinput'),
+            Field('end_date', css_class='dateinput'),
+            Field('chart_interval', css_class='input_sm'),
+            (Submit('submit', 'Построить', css_class="btn-success")),
+            (Reset('reset', 'Сбросить', css_class="btn-default")),
+        )
+
+        #self.fields['date_p'].initial = '[GlucoseTracker] Glucose Data Report'
+
+    def get_chart_types(self, queryset):
+        choices = [('', '---')] +list([(i.type, i.label) for i in queryset])
+        return choices
 
 class ChartForm(forms.Form):
 
@@ -56,7 +99,7 @@ class ChartForm(forms.Form):
             Field('chart_interval', css_class='input_sm',),
             Field('documents',),
             FormActions(
-                Div(Submit('submit', 'Построить', css_class="btn-success btn-xs"),
+                Div(Submit('submit', 'G', css_class="btn-success btn-xs"),
                 Reset('reset', 'Сбросить', css_class="btn-default btn-xs"),
                 Button('add', 'Добавить', css_class="btn-primary btn-xs"), css_class="btn-group"),
             ),

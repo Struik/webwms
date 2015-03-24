@@ -1,15 +1,15 @@
 {% extends "wms/index.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% block page-header %}Графики{% endblock %}
 {% block content %}
-
    <div class="row row-form-chart" id="row">
-        <div class="col-sm-3 col-md-3">
-            <div id="accordion" class="panel panel-default">
+        <div class="col-sm-12 col-md-12">
+            <div id="accordion" class="panel panel-info">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBodyParams">
-                            Новый график
+                            Построить график
                             <span class="glyphicon glyphicon-chevron-up pull-right"></span>
                         </a>
                     </h4>
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="col-sm-9 col-md-9">
+        <div class="col-sm-12 col-md-12">
             <div id="accordion2" class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -42,16 +42,40 @@
     </div>
 {% endblock %}
 
-{% block extrajs %}
-		<script src="{% static 'wms/highcharts.js' %}"></script>
-		<script src="{% static 'wms/exporting.js' %}"></script>
+{% block extracss %}
+    <!--link rel="stylesheet" href="{% static 'wms/jquery-ui.css' %}"-->
 {% endblock %}
 
+{% block extrajs %}
+    <!--script src="{% static 'wms/jquery-ui.js' %}"></script-->
+    <!--script src="{% static 'wms/datepicker-ru.js' %}"></script-->
+    <script src="{% static 'wms/highcharts.js' %}"></script>
+	<script src="{% static 'wms/exporting.js' %}"></script>
+{% endblock %}
 
 {% block script %}
-    <script type="text/javascript">
+    <!--script>
+        $(function() {
+            $.datepicker.setDefaults( $.datepicker.regional[ "ru" ] );
+            $( "#id_start_date" ).datepicker({
+                showWeek: true,
+                firstDay: 1,
+                dateFormat: "dd.mm.yy",
+                regional: "ru"
+            });
+        });
+    </script-->
+    <script>
+        $(function() {
+            $('.dateinput').datepicker({
+                autoclose: true,
+                language: "ru",
+                orientation: "top left",
+            });
+        });
+    </script>
+    <script>
         $(document).ready(function() {
-
             // For changing the collapsed icon in the panels
             $('.collapse').on('shown.bs.collapse', function(){
                 $(this).parent().find(".glyphicon-chevron-down")
@@ -62,103 +86,12 @@
                     .removeClass("glyphicon-chevron-up")
                     .addClass("glyphicon-chevron-down");
             });
-
-            //Initializing datetimepicker widgets for all elements with class='dateinput'
-            $('#add_chart .dateinput').datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
-
-            //Clearing form(handled automatically somewhere inside) and div which might contain a chart already
-            //Also removing "data-highcharts-chart" attribute since it is inherited during cloning rows and highcharts would clear element from current chart when you are making a new one
-            //Thus when calling for new chart on the cloned form it may clear the chart on the previous form
-            //I hope someone will understand last two lines
-            $("input[name='reset']").click(function() {
-                var row_id = $(this).parents('div .row').attr('id');
-                $("div[id=" + row_id + "] [id^=documents_over_period]").empty();
-                $("div[id=" + row_id + "] [id^=documents_over_period]").removeAttr('data-highcharts-chart');
-            });
-
-            //Need to fix datepickers later on
-            /*$('#id_start_date').datepicker()
-				.on('changeDate', function(){
-				    alert($('#id_start_date').attr('value'));
-				    alert($('#id_end_date').attr('value'))
-					if ($('#id_start_date').attr('value') > $('#id_end_date').attr('value')){
-						alert('The start date can not be greater then the end date1');
-					} else {
-					    alert('The start date can not be greater then the end date2');
-					}
-					$('#id_start_date').datepicker('hide');
-            });
-
-            $('#id_end_date').datepicker()
-				.on('changeDate', function(){
-					$('#id_end_date').datepicker('hide');
-            });*/
-       });
-    </script>
-    <script>
-        //Adding new div with class='row' (I'll call it 'row' onward) to the page. Row includes the form itself and panel for the chart
-        $("input[name='add']").click(function() {
-            //Destroying all datetimpicker widgets on the current page. We will initialize it two lines later for all existing and new elements with class='dateinput'
-            //Without this fix datetimepickers on new elements won't work properly
-            $(document).find('.dateinput').each(function(){
-                $(this).data("DateTimePicker").destroy();
-            });
-
-            //Not just cloning the last row, but also counting current number of rows present on the page in order to update 'id' attribute for new elements. Hail Stackoverflow
-            cloneMore('div .row-form-chart:last', ($('div .row-form-chart').length));
-
-            //Initializing datetimepicker widgets for all elements with class='dateinput'
-            $(document).find('.dateinput').each(function(){
-                $(this).datetimepicker({ pickTime: false, format: 'DD.MM.YYYY'});
-            })
-
-            //Scroll to the new row. Animate effect could be implemented here.
-            $(".row-form-chart:last").get(0).scrollIntoView();
         });
-
-        //The cloning function itself, it's just copying last row from the page to the variable and then updating it's attributes depending on current number for rows
-        function cloneMore(selector, counter) {
-            var newElement = $(selector).clone(true);
-
-            newElement.find('[id]').each(function(){
-                if(counter==1)
-                    var id=$(this).attr('id') + '_' + counter
-                else
-                    var id=$(this).attr('id').replace('_'+(counter-1),'_'+counter)
-
-                $(this).attr({'id': id });
-            })
-
-            newElement.find('[data-target]').each(function(){
-                if(counter==1)
-                    var datatarget=$(this).attr('data-target') + '_' + counter
-                else
-                    var datatarget=$(this).attr('data-target').replace('_'+(counter-1),'_'+counter)
-
-                $(this).attr({'data-target': datatarget });
-            })
-
-            newElement.find('[name]').each(function(){
-                if(counter==1)
-                    var name=$(this).attr('name') + '_' + counter
-                else
-                    var name=$(this).attr('name').replace('_'+(counter-1),'_'+counter)
-
-                $(this).attr({'name': name });
-            })
-
-            newElement.attr({'id': 'row_'+counter })
-            //Putting processed new elements after last row (selector) on the page
-            $(selector).after(newElement);
-
-            //Triggering click on new form's reset button to bring it to primeval state
-            $("div[id=row_" + counter + "] input[name^='reset']" ).trigger( "click" );
-        }
     </script>
-    <script type="text/javascript">
+        <script type="text/javascript">
         //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:add_chart' %}";
-        $('#add_chart').submit(function () {
+        $('form').submit(function () {
 
             //saving current form object
             var frm = $(this)
@@ -263,11 +196,13 @@
                             var chart = new Highcharts.Chart(columns);
                         }
                         else{
+                            alert('aaa');
                             alert("Sorry, something went wrong!");
                         }
 
                     },
                     error: function(data) {
+                        alert('bbb');
                         alert("Sorry, something went wrong!");
                     }
             });
@@ -275,5 +210,4 @@
             return false;
         });
     </script>
-
 {% endblock %}

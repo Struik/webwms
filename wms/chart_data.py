@@ -20,6 +20,17 @@ class Charts(Base):
         session.close()
         return (current_chart.__dict__)
 
+    @staticmethod
+    def get_chart_names():
+        chart_names = []
+        session = create_session(bind=engine)
+        charts = session.query(Charts).filter()
+        for chart_name in charts:
+            chart_names.append((chart_name.id, chart_name.chart_name))
+        session.close()
+        print(chart_names)
+        return chart_names
+
 def get_chart_data(current_chart, date_start, date_end):
     session = create_session(bind=engine)
     chart_data_object = Table(current_chart['view_name'], metadata, autoload=True)
@@ -28,8 +39,6 @@ def get_chart_data(current_chart, date_start, date_end):
     chart_name = current_chart['chart_name']
     chart_date_field = getattr(chart_data_object.c, current_chart['x_axis_field'])
     chart_value_field = getattr(chart_data_object.c, current_chart['y_axis_field'])
-
-
 
     query_data =  session.execute(select([chart_date_field, chart_value_field]).\
                     where(and_(chart_date_field < date_end, chart_date_field > date_start)).\
