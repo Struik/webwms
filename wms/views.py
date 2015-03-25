@@ -1,4 +1,4 @@
-import json, datetime, qsstats, re, sqlalchemy
+import json, datetime, qsstats, re, sqlalchemy, ast
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
 from wms.forms import MessageForm, ChartForm, NewChartForm
@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType, Charts
+from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType, Chartss
 from django.views.generic import CreateView, UpdateView, DeleteView, FormView, TemplateView, ListView
 from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
@@ -111,7 +111,9 @@ def graph4(request):
 @csrf_exempt
 @login_required
 def add_chart(request):
+    print('Fetching chart data')
     params = request.GET
+    print(params)
 
     chart_params=defaultdict()
     chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
@@ -120,15 +122,9 @@ def add_chart(request):
             if re.match(chart_param, param):
                 chart_params[chart_param]=(params.getlist(param))
 
-    print('Getting data')
+
     if chart_params['chart_type'][0] == '1':
-        #chart_data=ChartData.documents_over_period(chart_params)
-        print('here')
-        chart_object = Charts.get_chart_description(1)
-        print('there')
-        chart_data = get_chart_data(chart_object, chart_params['start_date'][0], chart_params['end_date'][0])
-        print(chart_data)
-        print('over there')
+        chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'columns':
         chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'pie':
@@ -138,6 +134,35 @@ def add_chart(request):
 
     print(chart_data)
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
+
+@csrf_exempt
+@login_required
+def new_chart(request):
+    print('Fetching chart data')
+    params = request.GET
+    print(params)
+
+    chart_params=defaultdict()
+    chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
+    for chart_param in chart_params_dict:
+        for param in params:
+            if re.match(chart_param, param):
+                chart_params[chart_param]=(params.getlist(param))
+
+    chart_req = ast.literal_eval(chart_params['chart_type'][0])
+    print(chart_req)
+    if chart_req['chart_type_id'] == 1:
+        chart_object = Charts.get_chart_description(chart_req['chart_id'])
+        start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
+        end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
+        chart_data = get_chart_data(chart_object, start_date, end_date)
+        print(chart_data)
+    else:
+        print('Received something else but over_period')
+
+    print(chart_data)
+    return HttpResponse(json.dumps(chart_data), content_type='application/json')
+
 
 @login_required
 def form(request):
@@ -296,7 +321,7 @@ def charts(request):
     return render_to_response('wms/charts.html', {'data': data}, context_instance=RequestContext(request))
 
 class ChartList(LoginRequiredMixin, BaseDatatableView):
-    model = Charts
+    model = Chartss
     print(222)
     columns = ['id','chart_name','view_name','chart_type_id','x_axis_label','y_axis_label','x_axis_field','y_axis_field','with_table','created']
     order_columns = ['id']

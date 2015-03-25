@@ -88,123 +88,124 @@
             });
         });
     </script>
-        <script type="text/javascript">
-        //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
-        var chartDataUrl = "{% url 'wms:add_chart' %}";
-        $('form').submit(function () {
+    <script type="text/javascript">
+    //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
+    var chartDataUrl = "{% url 'wms:new_chart' %}";
+    $('form').submit(function () {
 
-            //saving current form object
-            var frm = $(this)
+        //saving current form object
+        var frm = $(this)
 
-            //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
-            var basic = {
-                chart: {zoomType: 'x', spacingRight: 20},
-                title: {text: '',x : -20},
-                xAxis: {title: {text : 'Дата'}},
-                yAxis: {title: {text: 'Плановое кол-во документов'}},
-                legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
-                series : []
-            };
+        //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
+        var basic = {
+            chart: {zoomType: 'x', spacingRight: 20},
+            title: {text: '',x : -20},
+            xAxis: {title: {text : 'Дата'}},
+            yAxis: {title: {text: 'Плановое кол-во документов'}},
+            legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
+            series : []
+        };
 
-            var columns = {
-                chart: {type: 'column'},
-                title: {text: 'Monthly Average Rainfall'},
-                subtitle: {text: 'Source: WorldClimate.com'},
-                xAxis: {title: {text : 'Дата'}},
-                yAxis: {title: {text: 'Плановое кол-во документов'}},
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
+        var columns = {
+            chart: {type: 'column'},
+            title: {text: 'Monthly Average Rainfall'},
+            subtitle: {text: 'Source: WorldClimate.com'},
+            xAxis: {title: {text : 'Дата'}},
+            yAxis: {title: {text: 'Плановое кол-во документов'}},
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series : []
+        };
+
+        var pie = {
+            chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false},
+            title: {text: 'Количество заявок от поклажедателей'},
+            legend: {enabled: true},
+            tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.2f} % ({y})',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        },
+                        showInLegend: true
                     }
-                },
-                series : []
-            };
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Количество заявок',
+                data: []
+            }]
+        };
 
-            var pie = {
-                chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false},
-                title: {text: 'Количество заявок от поклажедателей'},
-                legend: {enabled: true},
-                tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.2f} % ({y})',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            },
-                            showInLegend: true
-                        }
+            //The ajax call itself. Shouldn't be to hard for comprehension
+            $.ajax({
+                type: $(this).attr('method'),
+                url: chartDataUrl,
+                data: $(this).serialize(),
+                success: function(chart_data) {
+                    var y = 0;
+                    var chart_field = 'documents_over_period';
+                    var row_count= ''
+                    if(frm.attr('id')!='add_chart'){
+                        chart_field = chart_field + (frm.attr('id')).substr(-2);
+                        row_count = (frm.attr('id')).substr(-2);}
+                    $('#id_chart_type'+row_count).focus().select();
+                    chart_req = eval( "(" + $('#id_chart_type').val() + ")" );
+                    chart_type = chart_req['chart_type_name'];
+                    if(chart_type == 'line_chart'){
+                        basic.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            basic.xAxis.categories = chart_data[i]['dates'];
+                            basic.series.push({ "name": i, "data": chart_data[i]['values'] });
+                            y++
+                        });
+                        var chart = new Highcharts.Chart(basic);
                     }
-                },
-                series: [{
-                    type: 'pie',
-                    name: 'Количество заявок',
-                    data: []
-                }]
-            };
-
-                //The ajax call itself. Shouldn't be to hard for comprehension
-                $.ajax({
-                    type: $(this).attr('method'),
-                    url: chartDataUrl,
-                    data: $(this).serialize(),
-                    success: function(chart_data) {
-                        var y = 0;
-                        var chart_field = 'documents_over_period';
-                        var row_count= ''
-                        if(frm.attr('id')!='add_chart'){
-                            chart_field = chart_field + (frm.attr('id')).substr(-2);
-                            row_count = (frm.attr('id')).substr(-2);}
-                        $('#id_chart_type'+row_count).focus().select();
-                        chart_type = $('#id_chart_type'+row_count).val()
-                        if(chart_type == 'over_period'){
-                            basic.chart["renderTo"]= chart_field;
-                            $.each(chart_data, function(i, item) {
-                                basic.xAxis.categories = chart_data[i]['dates'];
-                                basic.series.push({ "name": i, "data": chart_data[i]['values'] });
-                                y++
-                            });
-                            var chart = new Highcharts.Chart(basic);
-                        }
-                        else if (chart_type == 'pie'){
-                            pie.chart["renderTo"]= chart_field;
-                            $.each(chart_data, function(i, item) {
-                                pie.series[0].data.push([ i, chart_data[i]['count'] ]);
-                                y++;
-                            });
-                            var chart = new Highcharts.Chart(pie)
-                        }
-                        else if (chart_type == 'columns'){
-                            columns.chart["renderTo"]= chart_field;
-                            $.each(chart_data, function(i, item) {
-                                columns.xAxis.categories = chart_data[i]['dates'];
-                                columns.series.push({ "name": i, "data": chart_data[i]['values'] });
-                                y++
-                            });
-                            var chart = new Highcharts.Chart(columns);
-                        }
-                        else{
-                            alert('aaa');
-                            alert("Sorry, something went wrong!");
-                        }
-
-                    },
-                    error: function(data) {
-                        alert('bbb');
+                    else if (chart_type == 'pie'){
+                        pie.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            pie.series[0].data.push([ i, chart_data[i]['count'] ]);
+                            y++;
+                        });
+                        var chart = new Highcharts.Chart(pie)
+                    }
+                    else if (chart_type == 'columns'){
+                        columns.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            columns.xAxis.categories = chart_data[i]['dates'];
+                            columns.series.push({ "name": i, "data": chart_data[i]['values'] });
+                            y++
+                        });
+                        var chart = new Highcharts.Chart(columns);
+                    }
+                    else{
+                        alert('aaa');
                         alert("Sorry, something went wrong!");
                     }
+
+                },
+                error: function(data) {
+                    alert('bbb');
+                    alert("Sorry, something went wrong!");
+                }
             });
             //Not sure why it should be false, but it works for now
             return false;

@@ -32,8 +32,12 @@ class NewChartForm(forms.Form):
 
         self.fields['chart_type'] = forms.ChoiceField(
             choices = [('', '---')] + Charts.get_chart_names(),
-            required = False)
-
+            required = False,
+            # widget = forms.Select(attrs = {
+            #     'onchange': "alert('foo !');",
+            # })
+        )
+        print(Charts.get_chart_names())
         print(self.get_chart_types(ChartType.objects.all()))
 
         self.fields['chart_interval'] = forms.ChoiceField(

@@ -110,7 +110,7 @@ class ChartType(models.Model):
     highchart_type = models.CharField(max_length=200)
     interval = models.CharField(max_length=200)
 
-class Charts(models.Model):
+class Chartss(models.Model):
     id = models.IntegerField(primary_key=True)
     chart_name = models.CharField(max_length=200)
     view_name = models.CharField(max_length=200)
@@ -121,4 +121,7 @@ class Charts(models.Model):
     y_axis_field = models.CharField(max_length=200)
     with_table = models.BooleanField(default=False)
     created = models.DateField(default=datetime.now)
+
+    class Meta:
+        db_table = 'wms_charts'
 
