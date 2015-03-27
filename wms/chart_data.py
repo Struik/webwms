@@ -1,6 +1,6 @@
 import datetime
 import sqlalchemy, sys
-from sqlalchemy import Table, MetaData, select, and_
+from sqlalchemy import Table, MetaData, func, select, and_
 from sqlalchemy.orm import create_session
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -75,7 +75,6 @@ def get_chart_data(current_chart, date_start, date_end):
     chart_date_field = getattr(chart_data_object.c, current_chart['x_axis_field'])
     chart_value_field = getattr(chart_data_object.c, current_chart['y_axis_field'])
 
-    print('aaa')
     try:
         query_data =  session.execute(select([chart_date_field, chart_value_field]).\
                     where(and_(chart_date_field < date_end, chart_date_field > date_start)).\
@@ -84,6 +83,11 @@ def get_chart_data(current_chart, date_start, date_end):
     except:
         print(sys.exc_info())
     print('bbb')
+
+    query_data =  session.execute(select([chart_date_field, func.sum(chart_value_field), chart_group_field]).\
+                    group_by(chart_group_field, chart_date_field).\
+                    order_by(chart_group_field, chart_date_field)).\
+                    fetchall()
 
     chart_data[chart_name] = {}
     chart_data[chart_name]['dates'] = []
