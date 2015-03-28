@@ -71,6 +71,7 @@
                 autoclose: true,
                 language: "ru",
                 orientation: "top left",
+                format: "dd.mm.yyyy",
             });
         });
     </script>
@@ -98,16 +99,16 @@
 
         //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
         var basic = {
-            chart: {zoomType: 'x', spacingRight: 20},
+            chart: {zoomType: 'x', spacingRight: 20, height: 400,},
             title: {text: '',x : -20},
             xAxis: {title: {text : 'Дата'}},
             yAxis: {title: {text: 'Плановое кол-во документов'}},
-            legend: {layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0},
+            legend: {layout: 'horizontal', align: 'center', verticalAlign: 'bottom', borderWidth: 0},
             series : []
         };
 
         var columns = {
-            chart: {type: 'column'},
+            chart: {type: 'column', height: 400,},
             title: {text: 'Monthly Average Rainfall'},
             subtitle: {text: 'Source: WorldClimate.com'},
             xAxis: {title: {text : 'Дата'}},
@@ -130,7 +131,7 @@
         };
 
         var pie = {
-            chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false},
+            chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, height: 400,},
             title: {text: 'Количество заявок от поклажедателей'},
             legend: {enabled: true},
             tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
@@ -182,7 +183,11 @@
                     else if (chart_type == 'pie'){
                         pie.chart["renderTo"]= chart_field;
                         $.each(chart_data, function(i, item) {
-                            pie.series[0].data.push([ i, chart_data[i]['count'] ]);
+                            var total = 0;
+                            $.each(chart_data[i]['values'],function() {
+                                total += this;
+                            });
+                            pie.series[0].data.push([ i, total ]);
                             y++;
                         });
                         var chart = new Highcharts.Chart(pie)
@@ -203,7 +208,6 @@
 
                 },
                 error: function(data) {
-                    alert('bbb');
                     alert("Sorry, something went wrong!");
                 }
             });

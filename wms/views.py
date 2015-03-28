@@ -123,14 +123,14 @@ def add_chart(request):
                 chart_params[chart_param]=(params.getlist(param))
 
 
-    if chart_params['chart_type'][0] == '1':
+    if chart_params['chart_type'][0] == 'line_chart':
         chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'columns':
         chart_data=ChartData.documents_over_period(chart_params)
     elif chart_params['chart_type'][0] == 'pie':
         chart_data=ChartData.documents_over_period(chart_params)
     else:
-        print('Received something else but over_period')
+        print('Received something else but line_chart')
 
     print(chart_data)
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
@@ -151,12 +151,11 @@ def new_chart(request):
 
     chart_req = ast.literal_eval(chart_params['chart_type'][0])
     print(chart_req)
-    if chart_req['chart_type_id'] == 1:
+    if chart_req['chart_type_id'] != 0:
         chart_object = Charts.get_chart_description(chart_req['chart_id'])
         start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
         end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
         chart_data = get_chart_data(chart_object, start_date, end_date)
-        print(chart_data)
     else:
         print('Received something else but over_period')
 
