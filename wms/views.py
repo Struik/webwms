@@ -155,7 +155,8 @@ def new_chart(request):
         chart_object = Charts.get_chart_description(chart_req['chart_id'])
         start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
         end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
-        chart_data = get_chart_data(chart_object, start_date, end_date)
+        grouping_type = chart_params['chart_interval'][0]
+        chart_data = get_chart_data(chart_object, start_date, end_date, grouping_type)
     else:
         print('Received something else but over_period')
 

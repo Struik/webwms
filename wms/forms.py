@@ -41,7 +41,7 @@ class NewChartForm(forms.Form):
         print(self.get_chart_types(ChartType.objects.all()))
 
         self.fields['chart_interval'] = forms.ChoiceField(
-            choices=(('days','День'), ('weeks','Неделя'), ('months','Месяц'), ('years','Год'), ('minutes','Минута'), ('hours','Час')),
+            choices=(('day','День'), ('week','Неделя'), ('month','Месяц'), ('year','Год'), ('minute','Минута'), ('hour','Час')),
             required=False)
 
         self. helper.layout = Layout(
