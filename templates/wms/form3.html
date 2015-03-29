@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-12">
+        <div id="chart_panel" class="col-sm-12 col-md-12">
             <div id="accordion2" class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -179,6 +179,7 @@
                             y++
                         });
                         var chart = new Highcharts.Chart(basic);
+                        $("#chart_panel").get(0).scrollIntoView();
                     }
                     else if (chart_type == 'pie'){
                         pie.chart["renderTo"]= chart_field;
