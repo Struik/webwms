@@ -1,6 +1,6 @@
 import datetime, calendar
 import sqlalchemy, sys
-from sqlalchemy import Table, MetaData, func, select, and_
+from sqlalchemy import Table, MetaData, func, select, text, literal_column, bindparam, and_
 from sqlalchemy.orm import create_session
 from sqlalchemy.ext.declarative import declarative_base
 from collections import defaultdict
@@ -70,9 +70,11 @@ class Charts(Base):
 
         return chart_names
 
-def generate_select(chart_date_field, chart_value_field, date_start, date_end):
+def generate_select(chart_date_field, chart_value_field, chart_group_field, date_start, date_end):
     print(sys._getframe().f_code.co_name + ': Generating simple select statement')
-    selection = select([chart_date_field, chart_value_field]).\
+    #'bindparam' is used to unify the code later. Grants ability to use single 'build_up_chart_data' function for both
+    #single and grouped selects ('build_up_grouped_chart_data' function is deprecated now)
+    selection = select([chart_date_field, chart_value_field, bindparam("grouping_field", chart_group_field)]).\
         where(and_(chart_date_field <= date_end, chart_date_field >= date_start)).\
         order_by(chart_date_field)
     return selection
@@ -95,7 +97,7 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
     chart_date_field = getattr(chart_data_object.c, current_chart['x_axis_field'])
     chart_value_field = getattr(chart_data_object.c, current_chart['y_axis_field'])
 
-
+    #Prepare select statement depending on chart's grouping flag
     print(sys._getframe().f_code.co_name + ': Determine select handling type')
     if str2bool(current_chart['grouping']):
         grouping_field = current_chart['grouping_field']
@@ -104,80 +106,90 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
         selection = generate_grouped_select(chart_date_field, chart_value_field, chart_sum_field, chart_group_field,
                                             date_start, date_end)
     else:
-        selection = generate_select(chart_date_field, chart_value_field, date_start, date_end)
+        chart_group_field = current_chart['chart_name']
+        selection = generate_select(chart_date_field, chart_value_field, chart_group_field, date_start, date_end)
     print('Select statement:\n' + str(selection))
 
+    #Fetch data for DB using select statement from section above
     try:
         query_data = session.execute(selection).fetchall()
     except:
         print(sys.exc_info())
 
     print(query_data)
+    group_by_interval = (interval_type != 'day')
 
-    print(sys._getframe().f_code.co_name + ': Checking chart grouping flag')
-    print(str2bool(current_chart['grouping']))
-    if str2bool(current_chart['grouping']) and interval_type == 'day':
-        chart_data = build_up_grouped_chart_data(query_data)
-    elif str2bool(current_chart['grouping']) and interval_type != 'day':
-        print('aaa')
-        chart_interval_field = current_chart['x_axis_field']
-        chart_data = build_up_grouped_chart_data_by_interval(query_data, chart_sum_field, grouping_field,
-                                                             chart_interval_field, interval_type)
-    else:
-        chart_data = build_up_chart_data(current_chart['chart_name'], query_data)
+    #Prepare data for chart based on results of DB query
+    chart_data = build_up_chart_data(query_data, group_by_interval)
+
+    print(interval_type)
+
+    #Checking whether data needs to be grouped by selected interval
+    if group_by_interval:
+        try:
+            chart_data = build_up_chart_data_by_interval(chart_data, interval_type)
+        except:
+            print('Failed to group by interval')
+            print(sys.exc_info())
 
     print(sys._getframe().f_code.co_name + ': Chart data will be:')
     print(chart_data)
     return chart_data
 
-def build_up_chart_data(chart_name, query_data):
+#Function to prepare data for chart. This data can be grouped up by interval later, hence 'group_by_interval' parameter.
+#If data will be grouped by interval later then 'dates' list need to be filled only with datetime type
+#else 'dates' are converted to human-readable format to display on the chart y-axis
+def build_up_chart_data(query_data, group_by_interval):
     chart_data = defaultdict(lambda: defaultdict(list))
-    for dates, values in query_data:
-        chart_data[chart_name]['dates'].append(dates.strftime('%d %b %Y'))
-        chart_data[chart_name]['values'].append(values)
+    if group_by_interval:
+        for dates, values, group in query_data:
+            chart_data[group]['dates'].append(dates)
+            chart_data[group]['values'].append(values)
+    else:
+        for dates, values, group in query_data:
+            chart_data[group]['dates'].append(dates.strftime('%d %b'))
+            chart_data[group]['values'].append(values)
     return chart_data
 
-def build_up_grouped_chart_data(query_data):
-    chart_data = defaultdict(lambda: defaultdict(list))
-    for dates, values, group in query_data:
-        chart_data[group]['dates'].append(dates.strftime('%d %b %Y'))
-        chart_data[group]['values'].append(values)
-    return chart_data
+#Not in use, to be removed soon. Unified code
+# def build_up_grouped_chart_data(query_data):
+#     chart_data = defaultdict(lambda: defaultdict(list))
+#     for dates, values, group in query_data:
+#         chart_data[group]['dates'].append(dates.strftime('%d %b'))
+#         chart_data[group]['values'].append(values)
+#     return chart_data
 
-def build_up_grouped_chart_data_by_interval(query_data, chart_sum_field, grouping_field, chart_interval_field, interval_type):
+def build_up_chart_data_by_interval(query_data, interval_type):
     chart_data = defaultdict(lambda: defaultdict(list))
-
     def grouper(item):
-        return getattr(getattr(item, chart_interval_field),interval_type), getattr(item, grouping_field)
+        if interval_type == 'week':
+            return item.isocalendar()[1]
+        else:
+            return getattr(item,interval_type)
 
-    print(chart_sum_field)
-    print(grouping_field)
-    print(chart_interval_field)
-    print(interval_type)
     res = 0
-
-    for (grouping_type, group) in groupby(query_data, grouper):
-        for item in group:
-            print(item)
-            res += getattr(item, chart_sum_field)
-        chart_data[item.client_name]['dates'].append(date_format(getattr(item, chart_interval_field),interval_type))
-        chart_data[item.client_name]['values'].append(res)
-        res = 0
-
+    for key in query_data:
+        for (grouping_type, group) in groupby(query_data[key]['dates'], grouper):
+            for item in group:
+                item_index = query_data[key]['dates'].index(item)
+                res += query_data[key]['values'][item_index]
+            chart_data[key]['dates'].append(date_format(item,interval_type))
+            chart_data[key]['values'].append(res)
+            res = 0
+    print(chart_data)
     return chart_data
+
 
 def date_format(date, format):
     date_formatted = date
     if format == 'week':
-        date_formatted = date_formatted.isocalendar()[1]
+        date_formatted = 'Week ' + str(date_formatted.isocalendar()[1])
     elif format == 'month':
-        date_formatted = date_formatted.strftime('%B %y')
+        date_formatted = date_formatted.strftime('%b %y')
     elif format == 'year':
         date_formatted = date_formatted.strftime('%Y')
-
     return date_formatted
 
-
 def str2bool(v):
-  return v.lower() in ("yes", "true", "t", "1")
+    return v.lower() in ("yes", "true", "t", "1")
 

@@ -161,6 +161,7 @@ def new_chart(request):
         print('Received something else but over_period')
 
     print(chart_data)
+    print('aaaaaaaa')
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 
