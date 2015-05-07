@@ -1,9 +1,16 @@
 {% extends "wms/index.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+
+{% block head %}
+    <!--style>
+        #resizable { width: 150px; height: 150px; padding: 0.5em; }
+        #resizable h3 { text-align: center; margin: 0; }
+    </style-->
+{% endblock %}
 {% block page-header %}{% endblock %}
 {% block content %}
-   <div class="row row-form-chart" id="row">
+    <div class="row row-form-chart" id="row">
         <div class="col-sm-12 col-md-12">
             <div id="accordion" class="panel panel-info">
                 <div class="panel-heading">
@@ -24,7 +31,7 @@
         </div>
 
         <div id="chart_panel" class="col-sm-12 col-md-12">
-            <div id="accordion2" class="panel panel-success">
+            <div id="accordion2" class="panel panel-success ui-widget-content">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBodyChart">
@@ -40,10 +47,29 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <ul class="list-group" id="grids">
+                <li data-w="1" data-h="1" data-x="0" data-y="0" class="list-group-item">
+                    <span class="badge">14</span>
+                Cras justo odio
+                </li>
+                <li data-w="1" data-h="1" data-x="0" data-y="1" class="list-group-item">
+                    <span class="badge">2</span>
+                Dapibus ac facilisis in
+                </li>
+                <li data-w="1" data-h="1" data-x="0" data-y="2" class="list-group-item">
+                    <span class="badge">1</span>
+                Morbi leo risus
+                </li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extracss %}
-    <!--link rel="stylesheet" href="{% static 'wms/jquery-ui.css' %}"-->
+    <link rel="stylesheet" href="{% static 'wms/jquery-ui.css' %}">
 {% endblock %}
 
 {% block extrajs %}
@@ -66,6 +92,15 @@
         });
     </script-->
     <script>
+        items = [{w: 1, h: 1, x: 0, y: 0},
+                 {w: 1, h: 1, x: 0, y: 1},
+                 {w: 1, h: 1, x: 0, y: 2}];
+
+        var myGrid = new GridList(items, {rows: 3});
+
+        $('#grid').gridList({rows: 3});
+    </script>
+    <script>
         $(function() {
             $('.dateinput').datepicker({
                 autoclose: true,
@@ -74,6 +109,10 @@
                 format: "dd.mm.yyyy",
             });
         });
+
+        /*$(function() {
+            $( "#accordion2" ).resizable();
+        });*/
     </script>
     <script>
         $(document).ready(function() {
@@ -110,7 +149,6 @@
         var columns = {
             chart: {type: 'column', height: 400,},
             title: {text: 'Monthly Average Rainfall'},
-            subtitle: {text: 'Source: WorldClimate.com'},
             xAxis: {title: {text : 'Дата'}},
             yAxis: {title: {text: 'Плановое кол-во документов'}},
             tooltip: {
@@ -174,6 +212,7 @@
                     if(chart_type == 'line_chart'){
                         basic.chart["renderTo"]= chart_field;
                         $.each(chart_data, function(i, item) {
+                            basic.xAxis.title.text='AAAA'
                             basic.xAxis.categories = chart_data[i]['dates'];
                             basic.series.push({ "name": i, "data": chart_data[i]['values'] });
                             y++

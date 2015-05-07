@@ -14,9 +14,35 @@
         <th>Название оси Y</th>
         <th>Поле оси X</th>
         <th>Поле оси Y</th>
+        <th>Группировка</th>
+        <th>Поле для группировки</th>
+        <th>Название поля для группировки</th>
         <th>Вывод таблицы</th>
         <th>Создан</th>
     </tr>
+
+{% endblock %}
+
+{% block footer %}
+    <div class="container">
+        <button id="comment-button" class="btn btn-large btn-success">Добавить</button>
+    </div>
+    <div id="form-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Новый график</h4>
+                </div>
+                <div id="form-modal-body" class="modal-body">
+                    <p>Форма добавления&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endblock %}
 
 {% block extracss %}
@@ -30,11 +56,41 @@
     $(document).ready(function() {
         var oTable = $('#table_header').dataTable( {
             "iDisplayLength": 15,
-            "aLengthMenu": [[15, 25, 50, 100, -1], [15, 25, 50, 100, "All"]],
+            "aLengthMenu": [[55, 25, 50, 100, -1], [5, 25, 50, 100, "All"]],
             "bProcessing": true,
             "bServerSide": false,
             "sAjaxSource": "{{data}}",
         });
     });
+    </script>
+
+    <script>
+        var formAjaxSubmit = function(form, modal) {
+            $(form).submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (xhr, ajaxOptions, thrownError) {
+                        if ( $(xhr).find('.has-error').length > 0 ) {
+                            $(modal).find('.modal-body').html(xhr);
+                            formAjaxSubmit(form, modal);
+                        } else {
+                            $(modal).modal('toggle');
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                    }
+                });
+            });
+        }
+
+        $('#comment-button').click(function() {
+            $('#form-modal-body').load('/wms/test-form/', function () {
+                $('#form-modal').modal('toggle');
+                formAjaxSubmit('#form-modal-body form', '#form-modal');
+            });
+        });
     </script>
 {% endblock %}

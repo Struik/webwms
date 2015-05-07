@@ -2,7 +2,7 @@
 import itertools
 import datetime
 from django import forms
-from wms.models import ChartType
+from wms.models import ChartType, Chartss
 from wms.chart_data import Charts
  
 from crispy_forms.helper import FormHelper
@@ -11,6 +11,46 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions, Inl
 
 DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%I:%M %p'
+
+class TestModelForm(forms.ModelForm):
+    class Meta:
+        model = Chartss
+        fields = ['chart_name', 'view_name', 'chart_type', 'x_axis_label', 'y_axis_label', 'x_axis_field',
+                  'y_axis_field', 'grouping', 'grouping_field', 'grouping_field_label', 'with_table']
+
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.form_tag = False # don't render form DOM element
+        helper.render_unmentioned_fields = True # render all fields
+        helper.label_class = 'col-md-2'
+        helper.field_class = 'col-md-10'
+        return helper
+
+    def save(self):
+        print('ewiqpo')
+        print(self.cleaned_data)
+
+class TestForm(forms.Form):
+    name = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    url = forms.URLField(required=False)
+    comment = forms.CharField(required=True, widget=forms.Textarea)
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if name == '123':
+            raise forms.ValidationError("Email already exists")
+        return name
+
+    @property
+    def helper(self):
+        helper = FormHelper()
+        helper.form_tag = False # don't render form DOM element
+        helper.render_unmentioned_fields = True # render all fields
+        helper.label_class = 'col-md-2'
+        helper.field_class = 'col-md-10'
+        return helper
 
 class NewChartForm(forms.Form):
 

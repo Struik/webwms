@@ -1,10 +1,10 @@
-import json, datetime, qsstats, re, sqlalchemy, ast
+import json, datetime, qsstats, re, sqlalchemy, ast, sys
 from django.core import serializers
 from django.shortcuts import get_object_or_404, render, render_to_response
-from wms.forms import MessageForm, ChartForm, NewChartForm
+from wms.forms import MessageForm, ChartForm, NewChartForm, TestForm, TestModelForm
 from django.http import HttpResponseRedirect, HttpResponse
 from annoying.decorators import render_to
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 from django.utils import timezone
 from django.template import RequestContext, loader, Context
@@ -25,6 +25,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from braces.views import LoginRequiredMixin
 from wms.chart_data import Charts, get_chart_data
 from wms.DjangoForms import ContactForm
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 from sqlalchemy import Column, ForeignKey, Integer, String
@@ -324,11 +325,14 @@ def charts(request):
 class ChartList(LoginRequiredMixin, BaseDatatableView):
     model = Chartss
     print(222)
-    columns = ['id','chart_name','view_name','chart_type_id','x_axis_label','y_axis_label','x_axis_field','y_axis_field','with_table','created']
+    columns = ['id','chart_name','view_name','chart_type_id','x_axis_label','y_axis_label','x_axis_field',
+               'y_axis_field','grouping','grouping_field','grouping_field_label','with_table','created']
     order_columns = ['id']
     max_display_length = 500
 
     def get_initial_queryset(self):
+        print('Chart list:')
+        print(self.model.objects.all())
         return self.model.objects.all()
 
     # def filter_queryset(self, filtered):
@@ -336,3 +340,39 @@ class ChartList(LoginRequiredMixin, BaseDatatableView):
     #     if sSearch:
     #         filtered = filtered.filter(name__icontains=sSearch)
     #     return filtered
+
+class HomeView(TemplateView):
+    template_name = 'wms/home.html'
+
+class AjaxTemplateMixin(object):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(self, 'ajax_template_name'):
+            split = self.template_name.split('.html')
+            split[-1] = '_inner'
+            split.append('.html')
+            self.ajax_template_name = ''.join(split)
+        if request.is_ajax():
+            self.template_name = self.ajax_template_name
+        return super(AjaxTemplateMixin, self).dispatch(request, *args, **kwargs)
+
+class TestFormView(SuccessMessageMixin, AjaxTemplateMixin, FormView):
+    print('ooooooo')
+    template_name = 'wms/test_form.html'
+    form_class = TestModelForm
+    success_url = reverse_lazy('wms:chart_list')
+    success_message = "Way to go!"
+    print('aaaaaaa')
+
+
+    def form_valid(self, form):
+        try:
+            print('aaavvvvv')
+            form.save()
+            return super(TestFormView, self).form_valid(form)
+        except:
+            print('osososos')
+            print(sys.exc_info())
+
+
+

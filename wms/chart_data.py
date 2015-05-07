@@ -99,7 +99,7 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
 
     #Prepare select statement depending on chart's grouping flag
     print(sys._getframe().f_code.co_name + ': Determine select handling type')
-    if str2bool(current_chart['grouping']):
+    if current_chart['grouping']:
         grouping_field = current_chart['grouping_field']
         chart_sum_field = current_chart['y_axis_field']
         chart_group_field = getattr(chart_data_object.c, grouping_field)

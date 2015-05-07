@@ -10,7 +10,7 @@
         {% block title %}<title>Solvo.Web</title>{% endblock %}
 
         <link rel="stylesheet" type="text/css" href="{% static 'wms/custom.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'wms/superhero.bootstrap.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'wms/yeti.bootstrap.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'wms/bootstrap-datetimepicker.css' %}"/>
         <link id="bsdp-css" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{% static 'wms/dataTables.bootstrap.css' %}"/>
@@ -18,9 +18,13 @@
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/tabletools/2.2.3/css/dataTables.tableTools.css">
 
         {% block extracss %}{% endblock %}
-
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.js"></script>
         <script src="{% static 'wms/jquery-1.10.2.js' %}"></script>
+
+        <script src="{% static 'wms/jquery-ui.js' %}"></script>
+        <script src="http://ubervu.github.io/grid/src/gridList.js"></script>
+        <script src="http://ubervu.github.io/grid/src/jquery.gridList.js"></script>
+
         <script src="{% static 'wms/bootstrap.js' %}"></script>
         <script src="{% static 'wms/bootswatch.js' %}"></script>
         <script src="{% static 'wms/moment.min.js' %}"></script>
@@ -140,6 +144,9 @@
         {% endblock %}
 
         {% block table_detail %}
+        {% endblock %}
+
+        {% block footer %}
         {% endblock %}
 
         {% block script %}
