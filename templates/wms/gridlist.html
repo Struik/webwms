@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<html>
+<head>
+  <!--link rel="stylesheet" href="http://ubervu.github.io/grid/demo/style.css" /-->
+  <link rel="stylesheet" href="{% static 'wms/gridlist.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
+  <script src="http://ubervu.github.io/grid/spec/fixtures.js"></script>
+  <script src="http://ubervu.github.io/grid/src/gridList.js"></script>
+  <script src="{% static 'wms/jquery.gridList.js' %}"></script>
+  <!--script src="http://ubervu.github.io/grid/src/jquery.gridList.js"></script-->
+  <script src="{% static 'wms/load.js' %}"></script>
+</head>
+<body>
+  <div class="header">
+    <a href="#remove-row" class="button remove-row">-</a>
+    <a href="#add-row" class="button add-row">+</a>
+    <p><a href="https://github.com/ubervu/grid"><strong>Github</strong> (source and docs)</a></p>
+  </div>
+  <div class="grid-container">
+    <ul id="grid" class="grid">
+      <li class="position-highlight">
+        <div class="inner"></div>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

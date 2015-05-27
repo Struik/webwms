@@ -2,6 +2,8 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
+
+
 {% block head %}
     <!--style>
         #resizable { width: 150px; height: 150px; padding: 0.5em; }
@@ -10,8 +12,21 @@
 {% endblock %}
 {% block page-header %}{% endblock %}
 {% block content %}
+
+    <style type="text/css">
+        .grid-stack {
+            background: lightgoldenrodyellow;
+        }
+
+        .grid-stack-item-content {
+            color: #2c3e50;
+            text-align: center;
+            background-color: #18bc9c;
+        }
+    </style>
+
     <div class="row row-form-chart" id="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12 col-xl">
             <div id="accordion" class="panel panel-info">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -30,7 +45,7 @@
             </div>
         </div>
 
-        <div id="chart_panel" class="col-sm-12 col-md-12">
+        <div id="chart_panel" class="col-sm-12 col-md-12 col-xl">
             <div id="accordion2" class="panel panel-success ui-widget-content">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -48,28 +63,77 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12">
-            <ul class="list-group" id="grids">
-                <li data-w="1" data-h="1" data-x="0" data-y="0" class="list-group-item">
-                    <span class="badge">14</span>
-                Cras justo odio
-                </li>
-                <li data-w="1" data-h="1" data-x="0" data-y="1" class="list-group-item">
-                    <span class="badge">2</span>
-                Dapibus ac facilisis in
-                </li>
-                <li data-w="1" data-h="1" data-x="0" data-y="2" class="list-group-item">
-                    <span class="badge">1</span>
-                Morbi leo risus
-                </li>
-            </ul>
+    <div>
+        <a class="btn btn-default" id="add-new-widget" href="#">Add Widget</a>
+    </div>
+
+    <div class="grid-stack">
+    </div>
+{% endblock %}
+
+
+{% block footer %}
+    <div class="gridcontainer container">
+        <div class="gridcontainer row">
+            <div class="col-sm-12 col-md-12 col-xl gridcontainer" id="gridtesterhome">
+                <ul id="gridtester" class="grid">
+                    <!--li class="inner">
+                        <p></p>
+                    </li-->
+                    <li class="" data-w="1" data-h="1" data-x="0" data-y="0" id="div1">
+                        <p class="inner">Drag</p>
+                    </li>
+                    <li class="" data-w="1" data-h="1" data-x="1" data-y="0" id="div2">
+                        <p class="inner">me</p>
+                    </li>
+                    <li class="" data-w="1" data-h="1" data-x="2" data-y="0" id="div3">
+                        <p class="inner">around</p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
 
+    <!--div class="col-sm-3 col-md-3">
+        <div class="row">
+            <ul class="grid" id="grid">
+                <li data-w="1" data-h="1" data-x="0" data-y="0" class="position-highlight">
+                    <div class="inner">
+                        <span class="badge">14</span>
+                    </div>
+                </li>
+                <li data-w="1" data-h="1" data-x="0" data-y="1" class="position-highlight">
+                    <div class="inner">
+                        <span class="badge">2</span>
+                    </div>
+                </li>
+                <li data-w="1" data-h="1" data-x="0" data-y="2" class="position-highlight">
+                    <div class="inner">
+                        <span class="badge">1</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div-->
+
+    <!--div class="col-sm-12 col-md-12 grid" id="gridtest">
+
+        <a href="#" class="btn btn-default" data-w="1" data-h="1" >Default</a>
+        <a href="#" class="btn btn-primary" data-w="1" data-h="1">Primary</a>
+        <a href="#" class="btn btn-success" data-w="1" data-h="1">Success</a>
+    </div-->
+
+
+
 {% block extracss %}
-    <link rel="stylesheet" href="{% static 'wms/jquery-ui.css' %}">
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <!--link rel="stylesheet" href="{% static 'wms/jquery-ui.css' %}"-->
+    <link rel="stylesheet" href="{% static 'wms/dashboard.css' %}">
+    <!--link rel="stylesheet" href="{% static 'wms/BootstrapXL.css' %}"-->
+    <!--link rel="stylesheet" href="{% static 'wms/gridlist.css' %}"-->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'wms/gridstack.css' %}">
 {% endblock %}
 
 {% block extrajs %}
@@ -77,6 +141,8 @@
     <!--script src="{% static 'wms/datepicker-ru.js' %}"></script-->
     <script src="{% static 'wms/highcharts.js' %}"></script>
 	<script src="{% static 'wms/exporting.js' %}"></script>
+    <script src="{% static 'wms/lodash.js' %}"></script>
+    <script src="{% static 'wms/gridstack.js' %}"></script>
 {% endblock %}
 
 {% block script %}
@@ -92,13 +158,57 @@
         });
     </script-->
     <script>
+        $(function () {
+            var options = {
+                float: true,
+                vertical_margin: 20,
+            };
+            $('.grid-stack').gridstack(options);
+
+            new function () {
+                this.items = [
+                    {x: 0, y: 0, width: 2, height: 1},
+//                    {x: 3, y: 1, width: 1, height: 1},
+//                    {x: 4, y: 1, width: 1, height: 1},
+//                    {x: 2, y: 3, width: 1, height: 1},
+//                    {x: 1, y: 4, width: 1, height: 1},
+//                    {x: 1, y: 3, width: 1, height: 1},
+//                    {x: 2, y: 4, width: 1, height: 1},
+//                    {x: 2, y: 5, width: 1, height: 1}
+                ];
+
+                this.grid = $('.grid-stack').data('gridstack');
+
+                this.add_new_widget = function () {
+                    var node = this.items.pop() || {
+                                x: 2,
+                                y: 0,
+                                width: 1,
+                                height: 1,
+                            };
+                    this.grid.add_widget($('<div data-gs-min-width="2" data-gs-min-height="2"><div class="grid-stack-item-content" /><div/>'),
+                        node.x, node.y, node.width, node.height);
+                }.bind(this);
+
+                $('#add-new-widget').click(this.add_new_widget);
+            };
+        });
+    </script>
+    <script>
         items = [{w: 1, h: 1, x: 0, y: 0},
                  {w: 1, h: 1, x: 0, y: 1},
                  {w: 1, h: 1, x: 0, y: 2}];
 
         var myGrid = new GridList(items, {rows: 3});
 
-        $('#grid').gridList({rows: 3});
+        $('#gridtester').gridList({
+            rows: 1,
+            itemSelector: 'li[data-w]',
+            widthHeightRatio: 0.5,
+            heightToFontSizeRatio: 0.1,
+        });
+        //$('#gridtester').gridList('resize', 1);
+        //$( '#div1222' ).draggable();
     </script>
     <script>
         $(function() {

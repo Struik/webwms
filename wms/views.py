@@ -45,6 +45,12 @@ def available_clients(user_id):
 def index(request):
     return render_to_response('wms/main.html')
 
+def gridlist(request):
+    return render_to_response('wms/gridlist.html')
+
+def gridstack(request):
+    return render_to_response('wms/gridstack.html')
+
 @login_required
 def main(request):
     return render_to_response('wms/main.html', context_instance=RequestContext(request))

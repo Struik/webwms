@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from wms import views
 from wms.views import OrderListJson, SkuList, ClientList, OrderList, OrderDetailList, SkuLists, ChartList, \
-    HomeView, TestFormView
+    HomeView, TestFormView, gridlist, gridstack
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
@@ -39,4 +39,6 @@ urlpatterns = patterns('',
 
     url(r'^home.html', HomeView.as_view(), name="home"),
     url(r'^test-form/$', TestFormView.as_view(), name="test-form"),
+    url(r'^gridlist/$', views.gridlist, name='gridlist'),
+    url(r'^gridstack/$', views.gridstack, name='gridstack'),
 )
