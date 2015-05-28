@@ -107,6 +107,7 @@
                                 <li><a href="/wms/form">Форма</a></li>
                                 <li><a href="/wms/form2">Форма2</a></li>
                                 <li><a href="/wms/form3">Форма3</a></li>
+                                <li><a href="/wms/dashboard">Dashboard</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -129,6 +130,11 @@
         </div>
 
         {% block body %}{% endblock %}
+
+            <div class="container">
+                {% block content2 %}
+                {% endblock %}
+            </div>
 
             <div class="container">
                 {% block content %}

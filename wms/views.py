@@ -45,6 +45,8 @@ def available_clients(user_id):
 def index(request):
     return render_to_response('wms/main.html')
 
+
+
 def gridlist(request):
     return render_to_response('wms/gridlist.html')
 
@@ -381,4 +383,31 @@ class TestFormView(SuccessMessageMixin, AjaxTemplateMixin, FormView):
             print(sys.exc_info())
 
 
+
+
+@login_required
+def dashboard(request):
+    #return render_to_response('wms/dashboard.html')
+    print('Fetching list of charts')
+    try:
+        chart_list = json.dumps(Charts.get_chart_names())
+    except:
+        print(sys.exc_info())
+    print('Chart list:')
+    print(chart_list)
+    d = {"person": {"Joe", "Johnson"}}
+    return render_to_response('wms/dashboard.html', d, context_instance=RequestContext(request))
+
+@csrf_exempt
+@login_required
+def get_chart_list(request):
+    print('Fetching list of charts')
+    try:
+        chart_list = Charts.get_chart_names()
+    except:
+        print(sys.exc_info())
+    print('Chart list:')
+    print(chart_list)
+    print('Returning chart list for ajax call')
+    return HttpResponse(json.dumps(chart_list), content_type='application/json')
 

@@ -1,0 +1,63 @@
+{% extends "wms/index.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}<title>Solvo.Web Dashboard</title>{% endblock %}
+{% block page-header %}Dashboard{% endblock %}
+
+{% block content2 %}
+    <div id="dashboard-header" class="dashboard-header">
+        <!-- Button trigger modal -->
+        <button id="add-new-widget" class="btn btn-large btn-success">Добавить показатель</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Список показателей</h4>
+          </div>
+          <div class="modal-body">
+              <div id="chart-list" class="list-group">
+                  {% for pers in person %}
+                  <a href="#" class="list-group-item">{{pers}}</a>
+                  {% endfor %}
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="dashboard" class="dashboard">
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('#add-new-widget').click(function() {
+            $('#myModal').modal('toggle');
+        });
+        {% autoescape off %}
+        var arr = '{{ person.first_name }}'
+        {% endautoescape %}
+        console.log(arr);
+    </script>
+    <!--script>
+        $(document).ready(function() {
+            $.ajax({url: "{% url 'wms:get_chart_list' %}", success: function(data){
+                var html = '';
+                for (var i=0; i < data.length; i++) {
+                  html += '<a href="#" class="list-group-item">' + data[i][1] + '</a>';
+                }
+                $("#chart-list").append(html);
+            }});
+        });
+    </script-->
+{% endblock %}
