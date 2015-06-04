@@ -70,6 +70,13 @@ class Charts(Base):
 
         return chart_names
 
+    @staticmethod
+    #Fetching all chart names for filling 'add-widget' form
+    def get_chart_names_dict():
+        session = create_session(bind=engine)
+        chart_names_dict = {'charts': session.query(Charts).all()}
+        return chart_names_dict
+
 def generate_select(chart_date_field, chart_value_field, chart_group_field, date_start, date_end):
     print(sys._getframe().f_code.co_name + ': Generating simple select statement')
     #'bindparam' is used to unify the code later. Grants ability to use single 'build_up_chart_data' function for both

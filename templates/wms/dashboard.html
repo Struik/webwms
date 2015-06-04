@@ -2,17 +2,51 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
+{% block extracss %}
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'wms/gridstack.css' %}">
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'wms/highcharts.js' %}"></script>
+	<script src="{% static 'wms/exporting.js' %}"></script>
+    <script src="{% static 'wms/lodash.js' %}"></script>
+    <script src="{% static 'wms/gridstack.js' %}"></script>
+{% endblock %}
+
 {% block title %}<title>Solvo.Web Dashboard</title>{% endblock %}
-{% block page-header %}Dashboard{% endblock %}
+{% block page-header %}{% endblock %}
 
 {% block content2 %}
-    <div id="dashboard-header" class="dashboard-header">
+    <style type="text/css">
+        .top-buffer {
+            margin-top:20px;
+        }
+
+        .grid-stack {
+            background: #E4F1FE;
+        }
+
+        .grid-stack-item-content {
+            color: #2c3e50;
+            text-align: center;
+            background-color: white;
+        }
+
+        /*.chart-header {
+            background-color: #ecf0f1;
+        }*/
+    </style>
+
+    <div id="dashboard-header" class="dashboard-header bs-component">
         <!-- Button trigger modal -->
-        <button id="add-new-widget" class="btn btn-large btn-success">Добавить показатель</button>
+        <button id="add-new-widget" class="btn btn-success" data-toggle="modal" data-target="#modalChartList">Добавить показатель</button>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+
+    <!-- Modal chart list -->
+    <div class="modal fade" id="modalChartList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -21,10 +55,56 @@
           </div>
           <div class="modal-body">
               <div id="chart-list" class="list-group">
-                  {% for pers in person %}
-                  <a href="#" class="list-group-item">{{pers}}</a>
+                  {% for chart in charts %}
+                  <a href="#" class="list-group-item chart">{{chart.chart_name}}</a>
                   {% endfor %}
               </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal chart settings -->
+    <div class="modal fade" id="modalChartSettings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Настройки показателя</h4>
+          </div>
+          <div class="modal-body">
+            <form id="chart-form" class="form" id="add_chart" method="get">
+                <div id="div_id_chart_type" class="form-group">
+                    <div class="controls ">
+                        <input class="form-control" id="id_chart_type" name="chart_type" type="text" value="{'chart_id': 1, 'chart_type_id': 3, 'chart_type_name': 'columns'}">
+                    </div>
+                </div>
+                <div id="div_id_start_date" class="form-group">
+                    <div class="controls ">
+                        <input class="dateinput form-control" id="id_start_date" name="start_date" type="text" value="31.05.2015">
+                    </div>
+                </div>
+                <div id="div_id_end_date" class="form-group">
+                    <div class="controls ">
+                        <input class="dateinput form-control" id="id_end_date" name="end_date" type="text" value="31.05.2015">
+                    </div>
+                </div>
+                <div id="div_id_chart_interval" class="form-group">
+                    <div class="controls ">
+                        <select class="input_sm select form-control" id="id_chart_interval" name="chart_interval">
+                            <option value="day">День</option>
+                            <option value="week">Неделя</option>
+                            <option value="month">Месяц</option>
+                            <option value="year">Год</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" name="submit" value="Построить" class="btn btn-primary btn-success" id="submit-id-submit">
+				<input type="reset" name="reset" value="Сбросить" class="btn btn-inverse btn-default" id="reset-id-reset">
+            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
@@ -35,12 +115,80 @@
 {% endblock %}
 
 {% block content %}
-    <div id="dashboard" class="dashboard">
+    <div id="dashboard" class="dashboard grid-stack top-buffer">
     </div>
 {% endblock %}
 
 {% block script %}
     <script>
+        $(document).ready(function() {
+            var chart;
+        });
+        $('.chart').click(function() {
+            $('#modalChartList').modal('toggle');
+        });
+
+        $(document).on('click', ".chart-settings", function(){
+            $('#modalChartSettings').modal('toggle');
+        })
+
+        //$("[data-toggle='popover']").popover();
+        //$("[data-toggle='tooltip']").tooltip();
+
+        $(function() {
+            $('.dateinput').datepicker({
+                autoclose: true,
+                language: "ru",
+                orientation: "top left",
+                format: "dd.mm.yyyy",
+            });
+        });
+        $('.grid-stack').on('resizestop', function (event, ui) {
+            chart.reflow();
+        });
+    </script>
+    <script>
+        $(function () {
+            var options = {
+                float: true,
+                vertical_margin: 20,
+            };
+            $('.grid-stack').gridstack(options);
+
+            new function () {
+                this.grid = $('.grid-stack').data('gridstack');
+
+                this.add_new_widget = function () {
+                    var node = {
+                                x: 0,
+                                y: 0,
+                                width: 1,
+                                height: 1,
+                            };
+                    this.grid.add_widget($('<div id="widget" data-gs-min-width="6" data-gs-min-height="6">'
+                        + '<div class="grid-stack-item-content"><div class="chart-header">'
+                        + '<span class="glyphicon glyphicon-cog chart-settings" data-container="body"'
+                        + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
+                        + 'data-original-title="" data-trigger="hover" title=""></span>'
+                        + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
+                        + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
+                        + 'data-original-title="" data-trigger="hover" title=""></span>'
+                        + '</div><div id="chart_body"/></div><div/>'),
+                        node.x, node.y, node.width, node.height);
+                        $("[data-toggle='popover']").popover();
+                }.bind(this);
+
+                this.close_widget = function () {
+                    var widget = $('#widget');
+                    this.grid.remove_widget(widget,true);
+                }.bind(this);
+
+                $('.chart').click(this.add_new_widget);
+                $('.chart-close').click(this.close_widget);
+            };
+        });
+    </script>
+    <!--script>
         $('#add-new-widget').click(function() {
             $('#myModal').modal('toggle');
         });
@@ -48,7 +196,7 @@
         var arr = '{{ person.first_name }}'
         {% endautoescape %}
         console.log(arr);
-    </script>
+    </script-->
     <!--script>
         $(document).ready(function() {
             $.ajax({url: "{% url 'wms:get_chart_list' %}", success: function(data){
@@ -60,4 +208,137 @@
             }});
         });
     </script-->
+
+
+
+    <script type="text/javascript">
+
+
+        //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
+        var chartDataUrl = "{% url 'wms:build_chart' %}";
+        $('#chart-form').submit(function () {
+
+            //saving current form object
+            var frm = $(this)
+
+            //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
+            var basic = {
+                chart: {zoomType: 'x', spacingRight: 20, height: 400,},
+                title: {text: '',x : -20},
+                xAxis: {title: {text : 'Дата'}},
+                yAxis: {title: {text: 'Плановое кол-во документов'}},
+                legend: {layout: 'horizontal', align: 'center', verticalAlign: 'bottom', borderWidth: 0},
+                series : []
+            };
+
+            var columns = {
+                chart: {type: 'column', height: 400,},
+                title: {text: 'Monthly Average Rainfall'},
+                xAxis: {title: {text : 'Дата'}},
+                yAxis: {title: {text: 'Плановое кол-во документов'}},
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series : []
+            };
+
+            var pie = {
+                chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, height: 400,},
+                title: {text: 'Количество заявок от поклажедателей'},
+                legend: {enabled: true},
+                tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.2f} % ({y})',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            showInLegend: true
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: 'Количество заявок',
+                    data: []
+                }]
+            };
+
+            //The ajax call itself. Shouldn't be to hard for comprehension
+            $.ajax({
+                type: $(this).attr('method'),
+                url: chartDataUrl,
+                data: $(this).serialize(),
+                success: function(chart_data) {
+                    var y = 0;
+                    var chart_field = 'chart_body';
+                    var row_count= ''
+                    /*if(frm.attr('id')!='add_chart'){
+                        chart_field = chart_field + (frm.attr('id')).substr(-2);
+                        row_count = (frm.attr('id')).substr(-2);}*/
+                    $('#id_chart_type'+row_count).focus().select();
+                    chart_req = eval( "(" + $('#id_chart_type').val() + ")" );
+                    chart_type = chart_req['chart_type_name'];
+                    console.log(chart_type)
+                    if(chart_type == 'line_chart'){
+                        basic.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            basic.xAxis.title.text='AAAA'
+                            basic.xAxis.categories = chart_data[i]['dates'];
+                            basic.series.push({ "name": i, "data": chart_data[i]['values'] });
+                            y++
+                        });
+                        chart = new Highcharts.Chart(basic);
+                        $("#chart_panel").get(0).scrollIntoView();
+                    }
+                    else if (chart_type == 'pie'){
+                        pie.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            var total = 0;
+                            $.each(chart_data[i]['values'],function() {
+                                total += this;
+                            });
+                            pie.series[0].data.push([ i, total ]);
+                            y++;
+                        });
+                        chart = new Highcharts.Chart(pie)
+                    }
+                    else if (chart_type == 'columns'){
+                        columns.chart["renderTo"]= chart_field;
+                        $.each(chart_data, function(i, item) {
+                            columns.xAxis.categories = chart_data[i]['dates'];
+                            columns.series.push({ "name": i, "data": chart_data[i]['values'] });
+                            y++
+                        });
+                        chart = new Highcharts.Chart(columns);
+                    }
+                    else{
+                        alert('aaa');
+                        alert("Sorry, something went wrong!");
+                    }
+
+                },
+                error: function(data) {
+                    alert("Sorry, something went wrong!");
+                }
+            });
+            //Not sure why it should be false, but it works for now
+            return false;
+        });
+    </script>
 {% endblock %}

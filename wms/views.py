@@ -151,24 +151,42 @@ def new_chart(request):
     params = request.GET
     print(params)
 
+    print(11111)
     chart_params=defaultdict()
+    print(22222)
+
     chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
     for chart_param in chart_params_dict:
         for param in params:
             if re.match(chart_param, param):
                 chart_params[chart_param]=(params.getlist(param))
 
-    chart_req = ast.literal_eval(chart_params['chart_type'][0])
-    print(chart_req)
-    if chart_req['chart_type_id'] != 0:
-        chart_object = Charts.get_chart_description(chart_req['chart_id'])
-        start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
-        end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
-        grouping_type = chart_params['chart_interval'][0]
-        chart_data = get_chart_data(chart_object, start_date, end_date, grouping_type)
-    else:
-        print('Received something else but over_period')
 
+    print(33333)
+
+    print(chart_params)
+
+    print(44444)
+
+    print(sys.exc_info())
+    print(66666)
+    chart_req = ast.literal_eval(chart_params['chart_type'][0])
+    print(77777)
+    print(chart_req)
+    print(88888)
+    try:
+        if chart_req['chart_type_id'] != 0:
+            chart_object = Charts.get_chart_description(chart_req['chart_id'])
+            start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
+            end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
+            grouping_type = chart_params['chart_interval'][0]
+            chart_data = get_chart_data(chart_object, start_date, end_date, grouping_type)
+        else:
+            print('Received something else but over_period')
+    except:
+        print(sys.exc_info())
+
+    print(99999)
     print(chart_data)
     print('aaaaaaaa')
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
@@ -390,13 +408,14 @@ def dashboard(request):
     #return render_to_response('wms/dashboard.html')
     print('Fetching list of charts')
     try:
-        chart_list = json.dumps(Charts.get_chart_names())
+        chart_list = Charts.get_chart_names_dict()
     except:
         print(sys.exc_info())
     print('Chart list:')
     print(chart_list)
-    d = {"person": {"Joe", "Johnson"}}
-    return render_to_response('wms/dashboard.html', d, context_instance=RequestContext(request))
+    #d = {"person": {"p":{"a":"1","b":"2"}}, {"z":{"a":"3","b":"4"}}}
+    d = {"person": [{"first_name": "Joe", "last_name": "Johnson"}, {"first_name": "Oleg", "last_name": "Ole"}]}
+    return render_to_response('wms/dashboard.html', chart_list, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
