@@ -606,10 +606,14 @@
                 .attr('data-gs-width', node.width)
                 .attr('data-gs-height', node.height)
                 .removeAttr('style');
+            console.log(node.width);
             self._update_container_height();
             self.container.trigger('change', [self.grid.get_dirty_nodes()]);
 
             self.grid.end_update();
+            console.log(1233123);
+            console.log(node.width);
+            console.log('gridstack:' + $('#chart_1').width());
         };
 
         el.draggable(_.extend(this.opts.draggable, {

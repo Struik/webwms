@@ -33,6 +33,14 @@
             background-color: white;
         }
 
+        #id_chart_type1{
+            display: none;
+        }
+
+        .chart-container {
+            height: 90%;
+        }
+
         /*.chart-header {
             background-color: #ecf0f1;
         }*/
@@ -56,7 +64,7 @@
           <div class="modal-body">
               <div id="chart-list" class="list-group">
                   {% for chart in charts %}
-                  <a href="#" class="list-group-item chart">{{chart.chart_name}}</a>
+                  <a href="#" class="list-group-item chart" chart-id="{{chart.id}}" chart-type-id="{{chart.chart_type_id}}" chart-type-name="columns">{{chart.chart_name}}</a>
                   {% endfor %}
               </div>
           </div>
@@ -124,13 +132,18 @@
         $('.chart').click(function() {
             $('#modalChartList').modal('toggle');
             console.log('chart clicked');
-            add_new_widget();
+            console.log('chart_id: ' + $(this).attr("chart-id") + ', chart_type_id: ' + $(this).attr("chart-type-id") + ', chart_type_name: ' + $(this).attr("chart-type-name"));
+            add_new_widget($(this).attr("chart-id"), $(this).attr("chart-type-id"), $(this).attr("chart-type-name"));
         });
 
         $(document).on('click', ".chart-settings", function(){
             console.log('chart-settings clicked');
             console.log($(this).closest(".widget").attr("id"));
+            chart_container = $(this).parent().siblings(".chart-container")
+            chart_params = {'chart_id': chart_container.attr("chart-id"), 'chart_type_id': chart_container.attr("chart-type-id"), 'chart_type_name': chart_container.attr("chart-type-name")};
+            console.log(JSON.stringify(chart_params));
             $('#chart-form').attr("chart-container-id", $(this).parent().siblings(".chart-container").attr("id"));
+            $('#chart-form #id_chart_type').val(JSON.stringify(chart_params));
             $('#modalChartSettings').modal('toggle');
         })
 
@@ -145,8 +158,19 @@
                 format: "dd.mm.yyyy",
             });
         });
-        $('.grid-stack').on('resizestop', function (event, ui) {
+
+        $( "div" ).on( "resizestop", function( event, ui ) {
+                console.log('local2:' + $('#chart_1').width());
+                setTimeout(function(){
+                    console.log('local2:' + $('#chart_1').width());
+                }, 1000);;
+            });
+        $("div").bind("resizestop", function(event, ui) {
             chart.reflow();
+            console.log('local3:' + $('#chart_1').width());
+            setTimeout(function(){
+                console.log('local3:' + $('#chart_1').width());
+            }, 1000);;
         });
     </script>
     <script>
@@ -168,7 +192,7 @@
             //$('.chart').click(add_new_widget());
             //$('.chart-close').click(this.close_widget);
         });
-        function add_new_widget() {
+        function add_new_widget(chart_id, chart_type_id, chart_type_name) {
             console.log("add_new_widget");
             chartNumber++;
             var widgetId = "widget_" + chartNumber;
@@ -183,13 +207,15 @@
             grid.add_widget($('<div id="' + widgetId + '" class="widget"'
                 + 'data-gs-min-width="6" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
-                + '<span class="glyphicon glyphicon-cog chart-settings" data-container="body"'
+                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
                 + 'data-original-title="" data-trigger="hover" title=""></span>'
                 + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
-                + 'data-original-title="" data-trigger="hover" title=""></span>'
-                + '</div><div id="' + chartContainerId + '" class="chart-container"/></div><div/>'),
+                + 'data-original-title="" data-trigger="hover" title=""></span></div>'
+                + '<div id="' + chartContainerId + '" chart-id="' + chart_id + '" chart-type-id="' + chart_type_id + '"'
+                + 'chart-type-name="' + chart_type_name + '" class="chart-container"/>'
+                + '</div><div/>'),
                 node.x, node.y, node.width, node.height);
                 $("[data-toggle='popover']").popover();
             $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
@@ -233,7 +259,7 @@
 
             //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
             var basic = {
-                chart: {zoomType: 'x', spacingRight: 20, height: 400,},
+                chart: {zoomType: 'x', spacingRight: 20,},
                 title: {text: '',x : -20},
                 xAxis: {title: {text : 'Дата'}},
                 yAxis: {title: {text: 'Плановое кол-во документов'}},
@@ -242,7 +268,7 @@
             };
 
             var columns = {
-                chart: {type: 'column', height: 400,},
+                chart: {type: 'column',},
                 title: {text: 'Monthly Average Rainfall'},
                 xAxis: {title: {text : 'Дата'}},
                 yAxis: {title: {text: 'Плановое кол-во документов'}},
@@ -264,7 +290,7 @@
             };
 
             var pie = {
-                chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, height: 400,},
+                chart: {plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false,},
                 title: {text: 'Количество заявок от поклажедателей'},
                 legend: {enabled: true},
                 tooltip: {pointFormat: '{series.name}: <b>{point.percentage:.1f} %</b> ({point.y})'},
@@ -274,12 +300,12 @@
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.2f} % ({y})',
+                            format: '{point.percentage:.2f} % ({y})',
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             },
-                            showInLegend: true
-                        }
+                        },
+                        showInLegend: true
                     }
                 },
                 series: [{
@@ -294,7 +320,7 @@
                 type: $(this).attr('method'),
                 url: chartDataUrl,
                 data: $(this).serialize(),
-                success: function(chart_data) {
+                success: function(chart_result) {
                     var y = 0;
                     var chart_field = chartContainerId;
                     var row_count= ''
@@ -303,20 +329,25 @@
                         row_count = (frm.attr('id')).substr(-2);}*/
                     $('#id_chart_type'+row_count).focus().select();
                     chart_req = eval( "(" + $('#id_chart_type').val() + ")" );
-                    chart_type = chart_req['chart_type_name'];
+                    console.log(chart_req);
+                    chart_type = chart_result['chart_type_name'];
                     console.log(chart_type)
+                    chart_data = chart_result['data']
                     if(chart_type == 'line_chart'){
+                        basic.title.text = chart_result['chart_name']
                         basic.chart["renderTo"]= chart_field;
                         $.each(chart_data, function(i, item) {
-                            basic.xAxis.title.text='AAAA'
+                            basic.xAxis.title.text = chart_result['x_axis_label']
+                            basic.yAxis.title.text = chart_result['y_axis_label']
                             basic.xAxis.categories = chart_data[i]['dates'];
                             basic.series.push({ "name": i, "data": chart_data[i]['values'] });
                             y++
                         });
                         chart = new Highcharts.Chart(basic);
-                        $("#chart_panel").get(0).scrollIntoView();
+                        //$("#chart_panel").get(0).scrollIntoView();
                     }
                     else if (chart_type == 'pie'){
+                        pie.title.text = chart_result['chart_name']
                         pie.chart["renderTo"]= chart_field;
                         $.each(chart_data, function(i, item) {
                             var total = 0;
@@ -329,8 +360,11 @@
                         chart = new Highcharts.Chart(pie)
                     }
                     else if (chart_type == 'columns'){
+                        columns.title.text = chart_result['chart_name']
                         columns.chart["renderTo"]= chart_field;
                         $.each(chart_data, function(i, item) {
+                            columns.xAxis.title.text = chart_result['x_axis_label']
+                            columns.yAxis.title.text = chart_result['y_axis_label']
                             columns.xAxis.categories = chart_data[i]['dates'];
                             columns.series.push({ "name": i, "data": chart_data[i]['values'] });
                             y++

@@ -75,6 +75,8 @@ class Charts(Base):
     def get_chart_names_dict():
         session = create_session(bind=engine)
         chart_names_dict = {'charts': session.query(Charts).all()}
+        for i in chart_names_dict['charts']:
+            print(i)
         return chart_names_dict
 
 def generate_select(chart_date_field, chart_value_field, chart_group_field, date_start, date_end):
@@ -100,6 +102,8 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
     print(current_chart)
     session = create_session(bind=engine)
     chart_data_object = Table(current_chart['view_name'], metadata, autoload=True)
+    print(133333)
+    print(current_chart)
 
     chart_date_field = getattr(chart_data_object.c, current_chart['x_axis_field'])
     chart_value_field = getattr(chart_data_object.c, current_chart['y_axis_field'])
@@ -141,7 +145,22 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
 
     print(sys._getframe().f_code.co_name + ': Chart data will be:')
     print(chart_data)
-    return chart_data
+
+    print('Chart type name:')
+    chart_type_name = ChartType.get_chart_type_name(current_chart['id'])
+    print(chart_type_name)
+
+    chart_result = {}
+    chart_result['chart_type_name'] = chart_type_name
+    #abundant code, should be optimized
+    chart_result['chart_name'] = current_chart['chart_name']
+    chart_result['x_axis_label'] = current_chart['x_axis_label']
+    chart_result['y_axis_label'] = current_chart['y_axis_label']
+    chart_result['data'] = chart_data
+    print('Chart result:')
+    print(chart_result)
+
+    return chart_result
 
 #Function to prepare data for chart. This data can be grouped up by interval later, hence 'group_by_interval' parameter.
 #If data will be grouped by interval later then 'dates' list need to be filled only with datetime type

@@ -180,16 +180,20 @@ def new_chart(request):
             start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
             end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
             grouping_type = chart_params['chart_interval'][0]
-            chart_data = get_chart_data(chart_object, start_date, end_date, grouping_type)
+            chart_result = get_chart_data(chart_object, start_date, end_date, grouping_type)
         else:
             print('Received something else but over_period')
     except:
         print(sys.exc_info())
 
     print(99999)
-    print(chart_data)
+    print(chart_result)
     print('aaaaaaaa')
-    return HttpResponse(json.dumps(chart_data), content_type='application/json')
+    try:
+        return HttpResponse(json.dumps(chart_result), content_type='application/json')
+    except:
+        print(sys.exc_info())
+
 
 
 @login_required
