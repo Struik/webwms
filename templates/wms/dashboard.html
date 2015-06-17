@@ -48,7 +48,10 @@
 
     <div id="dashboard-header" class="dashboard-header bs-component">
         <!-- Button trigger modal -->
-        <button id="add-new-widget" class="btn btn-success" data-toggle="modal" data-target="#modalChartList">Добавить показатель</button>
+        <button id="add-new-widget" class="btn btn-success" data-toggle="modal" data-target="#modalChartList">Добавить</button>
+        <button id="save-grid" class="btn btn-primary">Сохранить</button>
+        <button id="load-grid" class="btn btn-info">Загрузить</button>
+        <button id="clear-grid" class="btn btn-danger">Очистить</button>
     </div>
 
 
@@ -129,6 +132,18 @@
 
 {% block script %}
     <script>
+        $('#save-grid').click(function(){
+            save_grid();
+        });
+
+        $('#load-grid').click(function(){
+            load_grid();
+        });
+
+        $('#clear-grid').click(function(){
+            clear_grid();
+        });
+
         $('.chart').click(function() {
             $('#modalChartList').modal('toggle');
             console.log('chart clicked');
@@ -159,18 +174,18 @@
             });
         });
 
-        $( "div" ).on( "resizestop", function( event, ui ) {
+        /*$( "div" ).on( "resizestop", function( event, ui ) {
                 console.log('local2:' + $('#chart_1').width());
                 setTimeout(function(){
                     console.log('local2:' + $('#chart_1').width());
                 }, 1000);;
-            });
+            });*/
         $("div").bind("resizestop", function(event, ui) {
             chart.reflow();
-            console.log('local3:' + $('#chart_1').width());
+            /*console.log('local3:' + $('#chart_1').width());
             setTimeout(function(){
                 console.log('local3:' + $('#chart_1').width());
-            }, 1000);;
+            }, 1000);;*/
         });
     </script>
     <script>
@@ -219,6 +234,51 @@
                 node.x, node.y, node.width, node.height);
                 $("[data-toggle='popover']").popover();
             $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
+        };
+
+        function save_grid() {
+            this.serialized_data = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
+                el = $(el);
+                var node = el.data('_gridstack_node');
+                chart_object = node.el.find('.chart-container')
+                return {
+                    x: node.x,
+                    y: node.y,
+                    width: node.width,
+                    height: node.height,
+                    widget_id: node.el.attr('id'),
+                    chart_container_id: chart_object.attr('id'),
+                    chart_id: chart_object.attr('chart-id'),
+                    chart_type_id: chart_object.attr('chart-type-id'),
+                    chart_type_name: chart_object.attr('chart-type-name'),
+                };
+            }, this);
+            console.log(JSON.stringify(this.serialized_data, null, '    '));
+        };
+
+        function load_grid() {
+            grid.remove_all();
+            var items = GridStackUI.Utils.sort(this.serialized_data);
+            _.each(items, function (node) {
+                grid.add_widget($('<div id="' + node.widget_id + '" class="widget"'
+                + 'data-gs-min-width="6" data-gs-min-height="6">'
+                + '<div class="grid-stack-item-content"><div class="chart-header">'
+                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
+                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
+                + 'data-original-title="" data-trigger="hover" title=""></span>'
+                + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
+                + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
+                + 'data-original-title="" data-trigger="hover" title=""></span></div>'
+                + '<div id="' + node.chart_container_id + '" chart-id="' + node.chart_id + '" chart-type-id="' + node.chart_type_id + '"'
+                + 'chart-type-name="' + node.chart_type_name + '" class="chart-container"/>'
+                + '</div><div/>'),
+                node.x, node.y, node.width, node.height);
+                $("[data-toggle='popover']").popover();
+            }, this);
+        };
+
+        function clear_grid() {
+            grid.remove_all();
         };
     </script>
     <!--script>
