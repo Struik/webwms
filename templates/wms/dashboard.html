@@ -88,11 +88,11 @@
           </div>
           <div class="modal-body">
             <form id="chart-form" class="form" id="add_chart" method="get" chart-container-id="">
-                <div id="div_id_chart_type" class="form-group">
+                <!--div id="div_id_chart_type" class="form-group">
                     <div class="controls ">
                         <input class="form-control" id="id_chart_type" name="chart_type" type="text" value="{'chart_id': 1, 'chart_type_id': 3, 'chart_type_name': 'columns'}">
                     </div>
-                </div>
+                </div-->
                 <div id="div_id_start_date" class="form-group">
                     <div class="controls ">
                         <input class="dateinput form-control" id="id_start_date" name="start_date" type="text" value="31.05.2013">
@@ -148,15 +148,29 @@
             $('#modalChartList').modal('toggle');
             console.log('chart clicked');
             chart_description = {'chart_id': $(this).attr("chart-id"), 'chart_type_id': $(this).attr("chart-type-id"), 'chart_type_name': $(this).attr("chart-type-name")};
-            add_new_widget($(this).attr("chart-id"), $(this).attr("chart-type-id"), $(this).attr("chart-type-name"), chart_description);
+            add_new_widget(chart_description);
         });
 
         $(document).on('click', ".chart-settings", function(){
             console.log('chart-settings clicked');
-            chart_container = $(this).parent().siblings(".chart-container")
-            chart_description = chart_container.data("chart-descr")
+            chart_container = $(this).parent().siblings(".chart-container");
+            chart_description = chart_container.data("chart-descr");
+            chart_params = chart_container.data("chart-params");
+
             $('#chart-form').attr("chart-container-id", chart_container.attr("id"));
-            $('#chart-form #id_chart_type').val(chart_description);
+
+            if (chart_params !== undefined){
+                console.log(chart_params);
+                $('#chart-form #id_start_date').val(chart_params['start_date']);
+                $('#chart-form #id_end_date').val(chart_params['end_date']);
+                $('#chart-form #id_chart_interval').val(chart_params['chart_interval']);
+            }
+            else {
+                $('#chart-form #id_start_date').val('31.05.2013');
+                $('#chart-form #id_end_date').val('31.05.2015');
+                $('#chart-form #id_chart_interval').val('day');
+            }
+
             $('#modalChartSettings').modal('toggle');
         })
 
@@ -173,19 +187,14 @@
         });
 
         /*$( "div" ).on( "resizestop", function( event, ui ) {
-                console.log('local2:' + $('#chart_1').width());
-                setTimeout(function(){
-                    console.log('local2:' + $('#chart_1').width());
-                }, 1000);;
-            });*/
-        $("div").bind("resizestop", function(event, ui) {
-            console.log('local3 1:' + $('#chart_1').width())
-            chart.reflow();
-            console.log('local3 2:' + $('#chart_1').width())
-            /*console.log('local3:' + $('#chart_1').width());
+            console.log('local2:' + $('#chart_1').width());
             setTimeout(function(){
-                console.log('local3:' + $('#chart_1').width());
-            }, 1000);;*/
+                console.log('local2:' + $('#chart_1').width());
+            }, 1000);
+        });*/
+
+        $("div").bind("resizestop", function(event, ui) {
+            chart.reflow();
         });
     </script>
     <script>
@@ -204,22 +213,18 @@
                 this.grid.remove_widget(widget,true);
             }.bind(this);
 
-            //$('.chart').click(add_new_widget());
             //$('.chart-close').click(this.close_widget);
         });
-        function add_new_widget(chart_id, chart_type_id, chart_type_name, chart_description) {
+
+        function add_new_widget(chart_descr) {
             console.log("add_new_widget");
             chartNumber++;
             var widgetId = "widget_" + chartNumber;
             var chartContainerId = "chart_" + chartNumber;
             console.log(chartNumber);
             console.log(JSON.stringify(chart_description))
-            var node = {
-                        x: 0,
-                        y: 0,
-                        width: 1,
-                        height: 1,
-                    };
+
+            node = {};
             grid.add_widget($('<div id="' + widgetId + '" class="widget"'
                 + 'data-gs-min-width="6" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
@@ -233,7 +238,7 @@
                 + '</div><div/>'),
                 node.x, node.y, node.width, node.height);
                 $("[data-toggle='popover']").popover();
-            $('#' + chartContainerId).data('chart-descr', JSON.stringify(chart_description));
+            $('#' + chartContainerId).data('chart-descr', chart_descr);
             $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
         };
 
@@ -242,6 +247,8 @@
                 el = $(el);
                 var node = el.data('_gridstack_node');
                 chart_object = node.el.find('.chart-container')
+                console.log(chart_object.data('chart-descr'));
+                console.log(chart_object.data('chart-params'));
                 return {
                     x: node.x,
                     y: node.y,
@@ -249,9 +256,8 @@
                     height: node.height,
                     widget_id: node.el.attr('id'),
                     chart_container_id: chart_object.attr('id'),
-                    chart_id: chart_object.attr('chart-id'),
-                    chart_type_id: chart_object.attr('chart-type-id'),
-                    chart_type_name: chart_object.attr('chart-type-name'),
+                    chart_descr: chart_object.data('chart-descr'),
+                    chart_params: chart_object.data('chart-params'),
                 };
             }, this);
             console.log(JSON.stringify(this.serialized_data, null, '    '));
@@ -270,11 +276,12 @@
                 + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
                 + 'data-original-title="" data-trigger="hover" title=""></span></div>'
-                + '<div id="' + node.chart_container_id + '" chart-id="' + node.chart_id + '" chart-type-id="' + node.chart_type_id + '"'
-                + 'chart-type-name="' + node.chart_type_name + '" class="chart-container"/>'
+                + '<div id="' + node.chart_container_id + '" class="chart-container"/>'
                 + '</div><div/>'),
                 node.x, node.y, node.width, node.height);
                 $("[data-toggle='popover']").popover();
+            $('#' + node.chart_container_id).data('chart-descr', node.chart_descr);
+            $('#' + node.chart_container_id).data('chart-params', node.chart_params);
             }, this);
         };
 
@@ -299,44 +306,25 @@
             return o;
         };
     </script>
-    <!--script>
-        $('#add-new-widget').click(function() {
-            $('#myModal').modal('toggle');
-        });
-        {% autoescape off %}
-        var arr = '{{ person.first_name }}'
-        {% endautoescape %}
-        console.log(arr);
-    </script-->
-    <!--script>
-        $(document).ready(function() {
-            $.ajax({url: "{% url 'wms:get_chart_list' %}", success: function(data){
-                var html = '';
-                for (var i=0; i < data.length; i++) {
-                  html += '<a href="#" class="list-group-item">' + data[i][1] + '</a>';
-                }
-                $("#chart-list").append(html);
-            }});
-        });
-    </script-->
-
-
-
     <script type="text/javascript">
-
-
         //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:build_chart' %}";
         $('#chart-form').submit(function () {
-            console.log($(this).serialize());
-            data = $(this).serializeObject();
-            console.log(data);
             var chartContainerId = $(this).attr("chart-container-id");
             console.log(chartContainerId);
-            $('#modalChartSettings').modal('toggle');
 
-            //saving current form object
-            var frm = $(this)
+            chart_container = $('#' + chartContainerId);
+            chart_descr = chart_container.data('chart-descr');
+            console.log(chart_descr);
+
+            chart_params = $(this).serializeObject();
+            chart_container.data('chart-params', chart_params);
+            console.log(chart_params);
+
+            chart_req = {'chart_descr': chart_descr, 'chart_params': chart_params};
+            console.log(chart_req);
+
+            $('#modalChartSettings').modal('toggle');
 
             //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
             var basic = {
@@ -400,17 +388,12 @@
             $.ajax({
                 type: $(this).attr('method'),
                 url: chartDataUrl,
-                data: data,
+                data: {'chart_descr': chart_descr, 'chart_params': chart_params},
                 success: function(chart_result) {
                     var y = 0;
                     var chart_field = chartContainerId;
                     var row_count= ''
-                    /*if(frm.attr('id')!='add_chart'){
-                        chart_field = chart_field + (frm.attr('id')).substr(-2);
-                        row_count = (frm.attr('id')).substr(-2);}*/
                     $('#id_chart_type'+row_count).focus().select();
-                    chart_req = eval( "(" + $('#id_chart_type').val() + ")" );
-                    console.log(chart_req);
                     chart_type = chart_result['chart_type_name'];
                     console.log(chart_type)
                     chart_data = chart_result['data']
@@ -425,7 +408,6 @@
                             y++
                         });
                         chart = new Highcharts.Chart(basic);
-                        //$("#chart_panel").get(0).scrollIntoView();
                     }
                     else if (chart_type == 'pie'){
                         pie.title.text = chart_result['chart_name']

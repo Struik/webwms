@@ -151,44 +151,46 @@ def new_chart(request):
     params = request.GET
     print(params)
 
-    print(11111)
-    chart_params=defaultdict()
-    print(22222)
-
-    chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
-    for chart_param in chart_params_dict:
-        for param in params:
-            if re.match(chart_param, param):
-                chart_params[chart_param]=(params.getlist(param))
-
-
-    print(33333)
-
-    print(chart_params)
-
-    print(44444)
-
-    print(sys.exc_info())
-    print(66666)
-    chart_req = ast.literal_eval(chart_params['chart_type'][0])
-    print(77777)
-    print(chart_req)
-    print(88888)
+    # print(11111)
+    # chart_params=defaultdict()
+    # print(22222)
+    #
+    # chart_params_dict=('start_date', 'end_date', 'documents', 'chart_type', 'chart_interval')
+    # for chart_param in chart_params_dict:
+    #     for param in params:
+    #         if re.match(chart_param, param):
+    #             chart_params[chart_param]=(params.getlist(param))
+    # print(33333)
+    # print(chart_params)
+    # print(44444)
+    # print(66666)
+    # chart_req = ast.literal_eval(chart_params['chart_type'][0])
+    # print(77777)
+    # print(chart_req)
+    # print(88888)
+    # try:
+    #     if chart_req['chart_type_id'] != 0:
+    #         chart_object = Charts.get_chart_description(chart_req['chart_id'])
+    #         start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
+    #         end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
+    #         grouping_type = chart_params['chart_interval'][0]
+    #         chart_result = get_chart_data(chart_object, start_date, end_date, grouping_type)
+    #     else:
+    #         print('Received something else but over_period')
+    # except:
+    #     print(sys.exc_info())
+    print('Collecting params')
     try:
-        if chart_req['chart_type_id'] != 0:
-            chart_object = Charts.get_chart_description(chart_req['chart_id'])
-            start_date = datetime.datetime.strptime(chart_params['start_date'][0], '%d.%m.%Y')
-            end_date = datetime.datetime.strptime(chart_params['end_date'][0], '%d.%m.%Y')
-            grouping_type = chart_params['chart_interval'][0]
-            chart_result = get_chart_data(chart_object, start_date, end_date, grouping_type)
-        else:
-            print('Received something else but over_period')
+        chart_object = Charts.get_chart_description(params['chart_descr[chart_id]'])
+        start_date = datetime.datetime.strptime(params['chart_params[start_date]'], '%d.%m.%Y')
+        end_date = datetime.datetime.strptime(params['chart_params[end_date]'], '%d.%m.%Y')
+        grouping_type = params['chart_params[chart_interval]']
+        chart_result = get_chart_data(chart_object, start_date, end_date, grouping_type)
     except:
         print(sys.exc_info())
 
     print(99999)
     print(chart_result)
-    print('aaaaaaaa')
     try:
         return HttpResponse(json.dumps(chart_result), content_type='application/json')
     except:
