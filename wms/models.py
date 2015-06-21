@@ -131,3 +131,14 @@ class Chartss(models.Model):
     class Meta:
         db_table = 'wms_charts'
 
+class DashboardGroup(models.Model):
+    name = models.CharField(max_length=200)
+
+class Dashboard(models.Model):
+    name = models.CharField(max_length=200)
+    chart_model = models.CharField(max_length=2000)
+    comments = models.CharField(max_length=200)
+    dashboard_group = models.ForeignKey(DashboardGroup)
+
+
+

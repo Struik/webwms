@@ -225,7 +225,9 @@
 
         $( document ).ajaxComplete(function( event, request, settings ) {
             console.log('AjaxGlobalComplete');
-            settings['loading_gif'].hide();
+            if(settings['call_type'] == 'build_chart'){
+                settings['loading_gif'].hide();
+            };
         });
 
         function add_new_widget(chart_descr) {
@@ -274,6 +276,19 @@
                 };
             }, this);
             console.log(JSON.stringify(this.serialized_data, null, '    '));
+
+            $.ajax({
+                url: "{% url 'wms:add_dashboard' %}",
+                call_type: 'add_dashboard',
+                data: {'chart_model': this.serialized_data},
+                success: function (data) {
+                    console.log('Successfully saved grid');
+                    console.log(data);
+                },
+                error: function () {
+                    console.log('Failed to save grid');
+                },
+            });
         };
 
         function load_grid() {
@@ -417,6 +432,7 @@
                 //type: $(this).attr('method'),
                 url: chartDataUrl,
                 loading_gif: loading_gif,
+                call_type: 'build_chart',
                 data: chart_req,
                 beforeSend: function()
                 {

@@ -46,4 +46,5 @@ urlpatterns = patterns('',
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^dashboard/get_chart_list/$', views.get_chart_list, name='get_chart_list'),
     url(r'^dashboard/build_chart/$', views.new_chart, name='build_chart'),
+    url(r'^dashboard/add_dashboard/$', views.add_dashboard, name='add_dashboard'),
 )

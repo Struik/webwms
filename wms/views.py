@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType, Chartss
+from wms.models import Client, ReferredClients, Sku, Order, OrderDetail, Incoming, IncomingDetail, ChartType, Chartss, Dashboard, DashboardGroup
 from django.views.generic import CreateView, UpdateView, DeleteView, FormView, TemplateView, ListView
 from django.views.decorators.csrf import csrf_exempt
 from qsstats import QuerySetStats
@@ -196,7 +196,24 @@ def new_chart(request):
     except:
         print(sys.exc_info())
 
+@csrf_exempt
+@login_required
+def add_dashboard(request):
+    print('Fetching dashboard data')
+    params = request.GET
+    print(params)
 
+    dashboard_group_id = 1
+    dashboard_object = DashboardGroup.objects.get(id=dashboard_group_id)
+
+    new_dashboard = Dashboard(name='First', chart_model=params, comments='Comment', dashboard_group=dashboard_object)
+    new_dashboard.save()
+
+    data = 123
+    try:
+        return HttpResponse(json.dumps({'data': data}), content_type='application/json')
+    except:
+        print(sys.exc_info())
 
 @login_required
 def form(request):
