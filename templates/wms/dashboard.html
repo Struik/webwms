@@ -95,7 +95,7 @@
                 </div-->
                 <div id="div_id_start_date" class="form-group">
                     <div class="controls ">
-                        <input class="dateinput form-control" id="id_start_date" name="start_date" type="text" value="31.05.2013">
+                        <input class="dateinput form-control" id="id_start_date" name="start_date" type="text" value="31.10.2014">
                     </div>
                 </div>
                 <div id="div_id_end_date" class="form-group">
@@ -113,7 +113,7 @@
                         </select>
                     </div>
                 </div>
-                <input type="submit" name="submit" value="Построить" class="btn btn-primary btn-success" id="submit-id-submit">
+                <input type="button" name="submit" value="Построить" class="btn btn-primary btn-success" id="submit-id-submit">
 				<input type="reset" name="reset" value="Сбросить" class="btn btn-inverse btn-default" id="reset-id-reset">
             </form>
           </div>
@@ -147,17 +147,18 @@
         $('.chart').click(function() {
             $('#modalChartList').modal('toggle');
             console.log('chart clicked');
-            chart_description = {'chart_id': $(this).attr("chart-id"), 'chart_type_id': $(this).attr("chart-type-id"), 'chart_type_name': $(this).attr("chart-type-name")};
+            chart_description = {'chart_id': $(this).attr('chart-id'), 'chart_type_id': $(this).attr('chart-type-id'), 'chart_type_name': $(this).attr('chart-type-name')};
             add_new_widget(chart_description);
         });
 
-        $(document).on('click', ".chart-settings", function(){
+        $(document).on('click', '.chart-settings', function(){
             console.log('chart-settings clicked');
-            chart_container = $(this).parent().siblings(".chart-container");
-            chart_description = chart_container.data("chart-descr");
-            chart_params = chart_container.data("chart-params");
+            chart_container = $(this).parent().siblings('.chart-container');
+            chart_description = chart_container.data('chart-descr');
+            chart_params = chart_container.data('chart-params');
 
-            $('#chart-form').attr("chart-container-id", chart_container.attr("id"));
+            $('#chart-form').attr('chart-container-id', chart_container.attr('id'));
+            $('#chart-form').attr('widget-id', $(this).parents('.widget').attr('id'));
 
             if (chart_params !== undefined){
                 console.log(chart_params);
@@ -166,7 +167,7 @@
                 $('#chart-form #id_chart_interval').val(chart_params['chart_interval']);
             }
             else {
-                $('#chart-form #id_start_date').val('31.05.2013');
+                $('#chart-form #id_start_date').val('31.10.2014');
                 $('#chart-form #id_end_date').val('31.05.2015');
                 $('#chart-form #id_chart_interval').val('day');
             }
@@ -216,6 +217,17 @@
             //$('.chart-close').click(this.close_widget);
         });
 
+        $( document ).ajaxStop(function() {
+            console.log('Ajax stopped');
+            console.log($(this));
+            //$( ".loading-gif" ).hide();
+        });
+
+        $( document ).ajaxComplete(function( event, request, settings ) {
+            console.log('AjaxGlobalComplete');
+            settings['loading_gif'].hide();
+        });
+
         function add_new_widget(chart_descr) {
             console.log("add_new_widget");
             chartNumber++;
@@ -228,6 +240,7 @@
             grid.add_widget($('<div id="' + widgetId + '" class="widget"'
                 + 'data-gs-min-width="6" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
+                + '<img class="loading-gif" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
                 + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
                 + 'data-original-title="" data-trigger="hover" title=""></span>'
@@ -270,6 +283,7 @@
                 grid.add_widget($('<div id="' + node.widget_id + '" class="widget"'
                 + 'data-gs-min-width="6" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
+                + '<img class="loading-gif ' + node.widget_id + '" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
                 + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
                 + 'data-original-title="" data-trigger="hover" title=""></span>'
@@ -282,6 +296,8 @@
                 $("[data-toggle='popover']").popover();
             $('#' + node.chart_container_id).data('chart-descr', node.chart_descr);
             $('#' + node.chart_container_id).data('chart-params', node.chart_params);
+            chart_req = {'chart_descr': node.chart_descr, 'chart_params': node.chart_params};
+            build_chart(node.widget_id, node.chart_container_id, chart_req);
             }, this);
         };
 
@@ -309,15 +325,16 @@
     <script type="text/javascript">
         //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:build_chart' %}";
-        $('#chart-form').submit(function () {
-            var chartContainerId = $(this).attr("chart-container-id");
-            console.log(chartContainerId);
+        $('#chart-form [name=submit]').click(function () {
+            var chart_container_id = $('#chart-form').attr("chart-container-id");
+            var widget_id = $('#chart-form').attr("widget-id");
+            console.log(chart_container_id);
 
-            chart_container = $('#' + chartContainerId);
+            chart_container = $('#' + chart_container_id);
             chart_descr = chart_container.data('chart-descr');
             console.log(chart_descr);
 
-            chart_params = $(this).serializeObject();
+            chart_params = $('#chart-form').serializeObject();
             chart_container.data('chart-params', chart_params);
             console.log(chart_params);
 
@@ -325,6 +342,15 @@
             console.log(chart_req);
 
             $('#modalChartSettings').modal('toggle');
+
+            build_chart(widget_id, chart_container_id, chart_req);
+        });
+
+        function build_chart(widget_id, chart_container_id, chart_req){
+            console.log('Building up chart');
+            loading_gif = $('#' + widget_id).find('.loading-gif');
+            console.log('Loading gif');
+            console.log(loading_gif);
 
             //Highcharts (http://www.highcharts.com/) object for shiny charts on the page. Bear in mind licence policy
             var basic = {
@@ -384,14 +410,22 @@
                 }]
             };
 
+
+
             //The ajax call itself. Shouldn't be to hard for comprehension
             $.ajax({
-                type: $(this).attr('method'),
+                //type: $(this).attr('method'),
                 url: chartDataUrl,
-                data: {'chart_descr': chart_descr, 'chart_params': chart_params},
+                loading_gif: loading_gif,
+                data: chart_req,
+                beforeSend: function()
+                {
+                    console.log('Loading show');
+                    loading_gif.show();
+                },
                 success: function(chart_result) {
                     var y = 0;
-                    var chart_field = chartContainerId;
+                    var chart_field = chart_container_id;
                     var row_count= ''
                     $('#id_chart_type'+row_count).focus().select();
                     chart_type = chart_result['chart_type_name'];
@@ -442,10 +476,13 @@
                 },
                 error: function(data) {
                     alert("Sorry, something went wrong!");
-                }
+                },
+                complete: function() {
+                    console.log('Ajax complete');
+                },
             });
             //Not sure why it should be false, but it works for now
             return false;
-        });
+        };
     </script>
 {% endblock %}

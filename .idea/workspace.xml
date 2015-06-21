@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7a90776e-b324-4262-9a03-c2f9c2bc7cfe" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wms/static/wms/images/ajax-loader.gif" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/wms/dashboard.html" afterPath="$PROJECT_DIR$/templates/wms/dashboard.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wms/views.py" afterPath="$PROJECT_DIR$/wms/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webwms.iws" />
@@ -41,8 +41,18 @@
       <file leaf-file-name="dashboard.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/wms/dashboard.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7767355" vertical-offset="4363" max-vertical-offset="7752">
-              <caret line="281" column="38" selection-start-line="281" selection-start-column="38" selection-end-line="281" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.6172608" vertical-offset="3530" max-vertical-offset="8381">
+              <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="yeti.bootstrap.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/wms/static/wms/yeti.bootstrap.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.352941" vertical-offset="57125" max-vertical-offset="117181">
+              <caret line="3371" column="18" selection-start-line="3371" selection-start-column="12" selection-end-line="3371" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -61,8 +71,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wms/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-30.101694" vertical-offset="723" max-vertical-offset="6902">
-              <caret line="185" column="48" selection-start-line="185" selection-start-column="48" selection-end-line="185" selection-end-column="48" />
+            <state vertical-scroll-proportion="-5.322034" vertical-offset="6214" max-vertical-offset="6902">
+              <caret line="422" column="49" selection-start-line="422" selection-start-column="49" selection-end-line="422" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -71,7 +81,7 @@
       <file leaf-file-name="chart_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wms/chart_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.28" vertical-offset="2253" max-vertical-offset="3757">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2253" max-vertical-offset="3757">
               <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
               <folding />
             </state>
@@ -101,7 +111,7 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wms/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.96" vertical-offset="257" max-vertical-offset="850">
+            <state vertical-scroll-proportion="0.0" vertical-offset="257" max-vertical-offset="850">
               <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
               <folding />
             </state>
@@ -255,6 +265,32 @@
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webwms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webwms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wms" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -349,6 +385,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Develop\Python\webwms\wms\static\wms\images" />
       <recent name="D:\Mine\Python\webwms\wms\static\wms" />
       <recent name="D:\Mine\Python\webwms\templates\wms" />
       <recent name="C:\Django\webwms\templates\wms" />
@@ -521,12 +558,6 @@
       <created>1399026180583</created>
       <option name="number" value="Default" />
       <updated>1399026180583</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Custom views">
-      <created>1399227211244</created>
-      <option name="number" value="00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1399227211244</updated>
     </task>
     <task id="LOCAL-00011" summary="Custom views">
       <created>1399228780543</created>
@@ -816,7 +847,13 @@
       <option name="project" value="LOCAL" />
       <updated>1434661362669</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="Dashboard screen develop. Saving and fetching chart params and descrtiptions via chart container. Saving and loading dashboard, without charts redrawn yet.">
+      <created>1434836847641</created>
+      <option name="number" value="00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1434836847671</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -880,7 +917,6 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
-    <MESSAGE value="Css handling" />
     <MESSAGE value="Bootstrap implemented" />
     <MESSAGE value="Achieved order details refreshing" />
     <MESSAGE value="Incomings done" />
@@ -905,7 +941,8 @@
     <MESSAGE value="Dashboard screen develop. Charts axes labels, chart names and more" />
     <MESSAGE value="Dashboard screen develop. Dashboard saving" />
     <MESSAGE value="Dashboard screen develop. Saving dashboard params new way - via json" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dashboard screen develop. Saving dashboard params new way - via json" />
+    <MESSAGE value="Dashboard screen develop. Saving and fetching chart params and descrtiptions via chart container. Saving and loading dashboard, without charts redrawn yet." />
+    <option name="LAST_COMMIT_MESSAGE" value="Dashboard screen develop. Saving and fetching chart params and descrtiptions via chart container. Saving and loading dashboard, without charts redrawn yet." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1188,13 +1225,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wms/static/wms/yeti.bootstrap.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5616" max-vertical-offset="117181">
-          <caret line="341" column="17" selection-start-line="341" selection-start-column="1" selection-end-line="341" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/webwms/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.3580246" vertical-offset="1626" max-vertical-offset="2193">
@@ -1250,7 +1280,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wms/chart_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.28" vertical-offset="2253" max-vertical-offset="3757">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2253" max-vertical-offset="3757">
           <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
           <folding />
         </state>
@@ -1258,7 +1288,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wms/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.96" vertical-offset="257" max-vertical-offset="850">
+        <state vertical-scroll-proportion="0.0" vertical-offset="257" max-vertical-offset="850">
           <caret line="47" column="45" selection-start-line="47" selection-start-column="45" selection-end-line="47" selection-end-column="45" />
           <folding />
         </state>
@@ -1266,16 +1296,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wms/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-30.101694" vertical-offset="723" max-vertical-offset="6902">
-          <caret line="185" column="48" selection-start-line="185" selection-start-column="48" selection-end-line="185" selection-end-column="48" />
+        <state vertical-scroll-proportion="-5.322034" vertical-offset="6214" max-vertical-offset="6902">
+          <caret line="422" column="49" selection-start-line="422" selection-start-column="49" selection-end-line="422" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wms/static/wms/yeti.bootstrap.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.352941" vertical-offset="57125" max-vertical-offset="117181">
+          <caret line="3371" column="18" selection-start-line="3371" selection-start-column="12" selection-end-line="3371" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/wms/dashboard.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7767355" vertical-offset="4363" max-vertical-offset="7752">
-          <caret line="281" column="38" selection-start-line="281" selection-start-column="38" selection-end-line="281" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.6172608" vertical-offset="3530" max-vertical-offset="8381">
+          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
           <folding />
         </state>
       </provider>
