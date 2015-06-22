@@ -146,9 +146,9 @@ def add_chart(request):
 
 @csrf_exempt
 @login_required
-def new_chart(request):
+def build_chart(request):
     print('Fetching chart data')
-    params = request.GET
+    params = request.POST
     print(params)
 
     # print(11111)
@@ -199,21 +199,36 @@ def new_chart(request):
 @csrf_exempt
 @login_required
 def add_dashboard(request):
-    print('Fetching dashboard data')
-    params = request.GET
+    print('Fetching dashboard data for save')
+    params = request.POST
     print(params)
+    json_data = json.loads(params['chart_model'])
+    print(json_data)
 
     dashboard_group_id = 1
     dashboard_object = DashboardGroup.objects.get(id=dashboard_group_id)
 
-    new_dashboard = Dashboard(name='First', chart_model=params, comments='Comment', dashboard_group=dashboard_object)
+    new_dashboard = Dashboard(name='First', chart_model=json_data, comments='Comment', dashboard_group=dashboard_object)
     new_dashboard.save()
+    return HttpResponse(json.dumps({'data': 'data'}), content_type='application/json')
 
-    data = 123
+@csrf_exempt
+@login_required
+def get_dashboard(request):
+    print('Fetching dashboard data for load')
+    params = request.POST
+    print(params)
+    dashboard_id = params['dashboard_id']
+    print(dashboard_id)
     try:
-        return HttpResponse(json.dumps({'data': data}), content_type='application/json')
+        print('Get dashboard object from DB')
+        dashboard = Dashboard.objects.get(id=dashboard_id)
+        chart_model = dashboard.chart_model
+        print(chart_model)
+        return HttpResponse( json.dumps({'chart_model': chart_model}), content_type='application/json')
     except:
         print(sys.exc_info())
+
 
 @login_required
 def form(request):

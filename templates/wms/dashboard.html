@@ -5,6 +5,7 @@
 {% block extracss %}
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'wms/gridstack.css' %}">
+    <link rel="stylesheet" href="{% static 'wms/BootstrapXL.css' %}">
 {% endblock %}
 
 {% block extrajs %}
@@ -49,8 +50,8 @@
     <div id="dashboard-header" class="dashboard-header bs-component">
         <!-- Button trigger modal -->
         <button id="add-new-widget" class="btn btn-success" data-toggle="modal" data-target="#modalChartList">Добавить</button>
-        <button id="save-grid" class="btn btn-primary">Сохранить</button>
-        <button id="load-grid" class="btn btn-info">Загрузить</button>
+        <button id="save-dashboard" class="btn btn-primary">Сохранить</button>
+        <button id="load-dashboard" class="btn btn-info">Загрузить</button>
         <button id="clear-grid" class="btn btn-danger">Очистить</button>
     </div>
 
@@ -126,18 +127,18 @@
 {% endblock %}
 
 {% block content %}
-    <div id="dashboard" class="dashboard grid-stack top-buffer">
+    <div id="dashboard" class="dashboard grid-stack top-buffer col-xl-12">
     </div>
 {% endblock %}
 
 {% block script %}
     <script>
-        $('#save-grid').click(function(){
-            save_grid();
+        $('#save-dashboard').click(function(){
+            save_dashboard();
         });
 
-        $('#load-grid').click(function(){
-            load_grid();
+        $('#load-dashboard').click(function(){
+            load_dashboard();
         });
 
         $('#clear-grid').click(function(){
@@ -240,7 +241,7 @@
 
             node = {};
             grid.add_widget($('<div id="' + widgetId + '" class="widget"'
-                + 'data-gs-min-width="6" data-gs-min-height="6">'
+                + 'data-gs-min-width="4" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
                 + '<img class="loading-gif" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
                 + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
@@ -257,7 +258,7 @@
             $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
         };
 
-        function save_grid() {
+        function save_dashboard() {
             this.serialized_data = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
                 el = $(el);
                 var node = el.data('_gridstack_node');
@@ -278,25 +279,47 @@
             console.log(JSON.stringify(this.serialized_data, null, '    '));
 
             $.ajax({
+                type: 'POST',
                 url: "{% url 'wms:add_dashboard' %}",
                 call_type: 'add_dashboard',
-                data: {'chart_model': this.serialized_data},
+                data: {'chart_model': JSON.stringify(this.serialized_data)},
                 success: function (data) {
-                    console.log('Successfully saved grid');
+                    console.log('Successfully saved dashboard');
                     console.log(data);
                 },
                 error: function () {
-                    console.log('Failed to save grid');
+                    console.log('Failed to save dashboard');
                 },
             });
         };
 
-        function load_grid() {
+        function load_dashboard() {
+            console.log('Loading dashboard');
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'wms:get_dashboard' %}",
+                call_type: 'get_dashboard',
+                data: {'dashboard_id': 33},
+                success: function (dashboard) {
+                    console.log('Successfully loaded dashboard');
+                    console.log(dashboard);
+                    a = JSON.parse(dashboard['chart_model'].replace(/'/g, '"'))
+                    load_grid(a);
+                },
+                error: function () {
+                    console.log('Failed to load dashboard');
+                },
+            });
+        };
+
+        function load_grid(dashboard) {
+            console.log('Loading grid');
+            console.log(dashboard);
             grid.remove_all();
-            var items = GridStackUI.Utils.sort(this.serialized_data);
+            var items = GridStackUI.Utils.sort(dashboard);
             _.each(items, function (node) {
                 grid.add_widget($('<div id="' + node.widget_id + '" class="widget"'
-                + 'data-gs-min-width="6" data-gs-min-height="6">'
+                + 'data-gs-min-width="4" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
                 + '<img class="loading-gif ' + node.widget_id + '" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
                 + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
@@ -430,6 +453,7 @@
             //The ajax call itself. Shouldn't be to hard for comprehension
             $.ajax({
                 //type: $(this).attr('method'),
+                type: 'POST',
                 url: chartDataUrl,
                 loading_gif: loading_gif,
                 call_type: 'build_chart',
