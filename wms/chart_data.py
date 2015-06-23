@@ -147,7 +147,7 @@ def get_chart_data(current_chart, date_start, date_end, interval_type):
     print(chart_data)
 
     print('Chart type name:')
-    chart_type_name = ChartType.get_chart_type_name(current_chart['id'])
+    chart_type_name = ChartType.get_chart_type_name(current_chart['chart_type_id'])
     print(chart_type_name)
 
     chart_result = {}
