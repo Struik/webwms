@@ -202,13 +202,16 @@ def add_dashboard(request):
     print('Fetching dashboard data for save')
     params = request.POST
     print(params)
-    json_data = json.loads(params['chart_model'])
-    print(json_data)
+    chart_model = json.loads(params['chart_model'])
+    print(chart_model)
 
-    dashboard_group_id = 1
+    dashboard_group_id = params['dashboard_group']
     dashboard_object = DashboardGroup.objects.get(id=dashboard_group_id)
 
-    new_dashboard = Dashboard(name='First', chart_model=json_data, comments='Comment', dashboard_group=dashboard_object)
+    dashboard_name = params['dashboard_name']
+    dashboard_comments = params['dashboard_comments']
+
+    new_dashboard = Dashboard(name=dashboard_name, chart_model=chart_model, comments=dashboard_comments, dashboard_group=dashboard_object)
     new_dashboard.save()
     return HttpResponse(json.dumps({'data': 'data'}), content_type='application/json')
 

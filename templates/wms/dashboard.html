@@ -50,7 +50,7 @@
     <div id="dashboard-header" class="dashboard-header bs-component">
         <!-- Button trigger modal -->
         <button id="add-new-widget" class="btn btn-success" data-toggle="modal" data-target="#modalChartList">Добавить</button>
-        <button id="save-dashboard" class="btn btn-primary">Сохранить</button>
+        <button id="save-dashboard" class="btn btn-primary" data-toggle="modal" data-target="#modalDashboardSave">Сохранить</button>
         <button id="load-dashboard" class="btn btn-info">Загрузить</button>
         <button id="clear-grid" class="btn btn-danger">Очистить</button>
     </div>
@@ -79,6 +79,51 @@
       </div>
     </div>
 
+    <!-- Modal dashboard save -->
+    <div class="modal fade" id="modalDashboardSave" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Сохранить дэшборд</h4>
+          </div>
+          <div class="modal-body">
+              <form id="dashboard-save-form" class="form-horizontal" method="post">
+                    <div class="form-group">
+                        <label for="id_dashboard_name" class="col-lg-3 control-label">Название</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="id_dashboard_name" name="dashboard_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_dashboard_comments" class="col-lg-3 control-label">Комментарий</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="id_dashboard_comments" name="dashboard_comments">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dashboard_groups" class="col-lg-3 control-label">Группа</label>
+                        <div class="col-lg-9">
+                            <select class="form-control" id="dashboard_groups" name="dashboard_group">
+                                <option value="1">Dashboard Group</option>
+                                <option value="2">Same Group</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-3">
+                            <input type="button" name="submit" value="Сохранить" class="btn btn-success">
+				            <input type="reset" name="reset" value="Сбросить" class="btn btn-default">
+                        </div>
+                    </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal chart settings -->
     <div class="modal fade" id="modalChartSettings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -88,7 +133,7 @@
             <h4 class="modal-title">Настройки показателя</h4>
           </div>
           <div class="modal-body">
-            <form id="chart-form" class="form" id="add_chart" method="get" chart-container-id="">
+            <form id="chart-form" class="form" id="add_chart" method="post" chart-container-id="">
                 <!--div id="div_id_chart_type" class="form-group">
                     <div class="controls ">
                         <input class="form-control" id="id_chart_type" name="chart_type" type="text" value="{'chart_id': 1, 'chart_type_id': 3, 'chart_type_name': 'columns'}">
@@ -114,8 +159,8 @@
                         </select>
                     </div>
                 </div>
-                <input type="button" name="submit" value="Построить" class="btn btn-primary btn-success" id="submit-id-submit">
-				<input type="reset" name="reset" value="Сбросить" class="btn btn-inverse btn-default" id="reset-id-reset">
+                <input type="button" name="submit" value="Построить" class="btn btn-success">
+				<input type="reset" name="reset" value="Сбросить" class="btn btn-default">
             </form>
           </div>
           <div class="modal-footer">
@@ -134,7 +179,7 @@
 {% block script %}
     <script>
         $('#save-dashboard').click(function(){
-            save_dashboard();
+            //save_dashboard();
         });
 
         $('#load-dashboard').click(function(){
@@ -258,7 +303,8 @@
             $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
         };
 
-        function save_dashboard() {
+        function save_dashboard(dashboard_descr) {
+            console.log(dashboard_descr);
             this.serialized_data = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
                 el = $(el);
                 var node = el.data('_gridstack_node');
@@ -277,12 +323,14 @@
                 };
             }, this);
             console.log(JSON.stringify(this.serialized_data, null, '    '));
+            dashboard_descr['chart_model'] = JSON.stringify(this.serialized_data);
+            console.log(dashboard_descr);
 
             $.ajax({
                 type: 'POST',
                 url: "{% url 'wms:add_dashboard' %}",
                 call_type: 'add_dashboard',
-                data: {'chart_model': JSON.stringify(this.serialized_data)},
+                data: dashboard_descr,
                 success: function (data) {
                     console.log('Successfully saved dashboard');
                     console.log(data);
@@ -361,6 +409,15 @@
         };
     </script>
     <script type="text/javascript">
+        $('#dashboard-save-form [name=submit]').click(function () {
+            console.log($('#dashboard-save-form').attr("id"));
+            dashboard_descr = $('#dashboard-save-form').serializeObject();
+            console.log(dashboard_descr);
+            $('#modalDashboardSave').modal('toggle');
+            save_dashboard(dashboard_descr);
+        });
+
+
         //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:build_chart' %}";
         $('#chart-form [name=submit]').click(function () {
@@ -375,7 +432,6 @@
             chart_params = $('#chart-form').serializeObject();
             chart_container.data('chart-params', chart_params);
             console.log(chart_params);
-
             chart_req = {'chart_descr': chart_descr, 'chart_params': chart_params};
             console.log(chart_req);
 
