@@ -1,0 +1,44 @@
+{% extends "wms/index.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block extracss %}
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'wms/gridstack.css' %}">
+    <!--link rel="stylesheet" href="{% static 'wms/BootstrapXL.css' %}"-->
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'wms/highcharts.js' %}"></script>
+	<script src="{% static 'wms/exporting.js' %}"></script>
+    <script src="{% static 'wms/lodash.js' %}"></script>
+    <script src="{% static 'wms/gridstack.js' %}"></script>
+{% endblock %}
+
+{% block title %}<title>Solvo.Web Dashboards</title>{% endblock %}
+{% block page-header %}{% endblock %}
+
+
+{% block content %}
+    <div id="dashboard-snapshot" class="col-xs-12">
+
+        {% for dashboard in dashboard_list %}
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{dashboard.name}}</h3>
+              </div>
+              <div class="panel-body">
+                {{dashboard.comments}}
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+    </script>
+{% endblock %}

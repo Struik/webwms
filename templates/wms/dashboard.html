@@ -5,7 +5,7 @@
 {% block extracss %}
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'wms/gridstack.css' %}">
-    <link rel="stylesheet" href="{% static 'wms/BootstrapXL.css' %}">
+    <!--link rel="stylesheet" href="{% static 'wms/BootstrapXL.css' %}"-->
 {% endblock %}
 
 {% block extrajs %}
@@ -53,6 +53,7 @@
         <button id="save-dashboard" class="btn btn-primary" data-toggle="modal" data-target="#modalDashboardSave">Сохранить</button>
         <button id="load-dashboard" class="btn btn-info">Загрузить</button>
         <button id="clear-grid" class="btn btn-danger">Очистить</button>
+        <button id="snapshot" class="btn btn-danger">Snapshot</button>
     </div>
 
 
@@ -171,11 +172,6 @@
     </div>
 {% endblock %}
 
-{% block content %}
-    <div id="dashboard" class="dashboard grid-stack top-buffer col-xl-12">
-    </div>
-{% endblock %}
-
 {% block script %}
     <script>
         $('#save-dashboard').click(function(){
@@ -188,6 +184,10 @@
 
         $('#clear-grid').click(function(){
             clear_grid();
+        });
+
+        $('#snapshot').click(function(){
+            console.log('Snap!');
         });
 
         $('.chart').click(function() {

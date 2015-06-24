@@ -442,8 +442,6 @@ class TestFormView(SuccessMessageMixin, AjaxTemplateMixin, FormView):
             print(sys.exc_info())
 
 
-
-
 @login_required
 def dashboard(request):
     #return render_to_response('wms/dashboard.html')
@@ -457,6 +455,15 @@ def dashboard(request):
     #d = {"person": {"p":{"a":"1","b":"2"}}, {"z":{"a":"3","b":"4"}}}
     d = {"person": [{"first_name": "Joe", "last_name": "Johnson"}, {"first_name": "Oleg", "last_name": "Ole"}]}
     return render_to_response('wms/dashboard.html', chart_list, context_instance=RequestContext(request))
+
+@login_required
+def dashboard_list(request):
+    print('Fetching list of dashboards')
+    try:
+        dashboard_list = Dashboard.objects.all()
+    except:
+        print(sys.exc_info())
+    return render_to_response('wms/dashboards.html', {'dashboard_list': dashboard_list}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required
