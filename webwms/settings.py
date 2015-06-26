@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 os.path
-os.environ['Path']='D:\\Develop\\Oracle11gx64\\instantclient_11_2;'+os.environ['Path']
+#os.environ['Path']='D:\\Develop\\Oracle11gx64\\instantclient_11_2;'+os.environ['Path']
+os.environ['Path']='C:\\OracleClient\\Oleg\product\\11.2.0\\client_1\\BIN;'+os.environ['Path']
 from django.core.urlresolvers import reverse_lazy
 
 LOGIN_URL = '/wms/login/'

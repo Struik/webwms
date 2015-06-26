@@ -460,10 +460,11 @@ def dashboard(request):
 def dashboard_list(request):
     print('Fetching list of dashboards')
     try:
-        dashboard_list = Dashboard.objects.all()
+        dashboard_list = Dashboard.objects.all().order_by("name")
+        dashboard_groups = DashboardGroup.objects.all().order_by("dashboard_group_id")
     except:
         print(sys.exc_info())
-    return render_to_response('wms/dashboards.html', {'dashboard_list': dashboard_list}, context_instance=RequestContext(request))
+    return render_to_response('wms/dashboards.html', {'dashboard_list': dashboard_list, 'dashboard_groups': dashboard_groups,}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @login_required

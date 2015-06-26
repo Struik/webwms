@@ -55,7 +55,7 @@
              })();
         </script>
         <link id="dyncss" rel="stylesheet" type="text/css" href="">
-        <script type="text/javascript">
+        <!--script type="text/javascript">
             function setDynCSS(url) {
             if (!arguments.length) {
             url = (url = document.cookie.match(/\bdyncss=([^;]*)/)) && url[1];
@@ -68,7 +68,7 @@
             return url;
             }
             setDynCSS();
-        </script>
+        </script-->
 
         {% block head %}{% endblock %}
 
@@ -128,6 +128,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div id="wrapper">
+            {% block wrapped-content %}
+            {% endblock %}
         </div>
 
         {% block body %}{% endblock %}
