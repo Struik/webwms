@@ -214,27 +214,8 @@
 
 {% block script %}
     <script>
-        $('#save-dashboard').click(function(){
-            //save_dashboard();
-        });
-
         $('#load-dashboard').click(function(){
             load_dashboard();
-        });
-
-        $('#clear-grid').click(function(){
-            clear_grid();
-        });
-
-        $('#snapshot').click(function(){
-            console.log('Snap!');
-        });
-
-        $('.chart').click(function() {
-            $('#modalChartList').modal('toggle');
-            console.log('chart clicked');
-            chart_description = {'chart_id': $(this).attr('chart-id'), 'chart_type_id': $(this).attr('chart-type-id'), 'chart_type_name': $(this).attr('chart-type-name')};
-            add_new_widget(chart_description);
         });
 
         $(document).on('click', '.chart-settings', function(){
@@ -261,9 +242,6 @@
             $('#modalChartSettings').modal('toggle');
         })
 
-        //$("[data-toggle='popover']").popover();
-        //$("[data-toggle='tooltip']").tooltip();
-
         $(function() {
             $('.dateinput').datepicker({
                 autoclose: true,
@@ -273,14 +251,8 @@
             });
         });
 
-        /*$( "div" ).on( "resizestop", function( event, ui ) {
-            console.log('local2:' + $('#chart_1').width());
-            setTimeout(function(){
-                console.log('local2:' + $('#chart_1').width());
-            }, 1000);
-        });*/
-
         $("div").bind("resizestop", function(event, ui) {
+            console.log('Resized');
             chart.reflow();
         });
     </script>
@@ -295,19 +267,6 @@
             };
             $('.grid-stack').gridstack(options);
             grid = $('.grid-stack').data('gridstack');
-
-            this.close_widget = function () {
-                var widget = $('#widget');
-                this.grid.remove_widget(widget,true);
-            }.bind(this);
-
-            //$('.chart-close').click(this.close_widget);
-        });
-
-        $( document ).ajaxStop(function() {
-            console.log('Ajax stopped');
-            console.log($(this));
-            //$( ".loading-gif" ).hide();
         });
 
         $( document ).ajaxComplete(function( event, request, settings ) {
@@ -316,71 +275,6 @@
                 settings['loading_gif'].hide();
             };
         });
-
-        function add_new_widget(chart_descr) {
-            console.log("add_new_widget");
-            chartNumber++;
-            var widgetId = "widget_" + chartNumber;
-            var chartContainerId = "chart_" + chartNumber;
-            console.log(chartNumber);
-            console.log(JSON.stringify(chart_description))
-
-            node = {};
-            grid.add_widget($('<div id="' + widgetId + '" class="widget"'
-                + 'data-gs-min-width="4" data-gs-min-height="6">'
-                + '<div class="grid-stack-item-content"><div class="chart-header">'
-                + '<img class="loading-gif" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
-                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
-                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
-                + 'data-original-title="" data-trigger="hover" title=""></span>'
-                + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
-                + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
-                + 'data-original-title="" data-trigger="hover" title=""></span></div>'
-                + '<div id="' + chartContainerId + '" class="chart-container"/>'
-                + '</div><div/>'),
-                node.x, node.y, node.width, node.height);
-                $("[data-toggle='popover']").popover();
-            $('#' + chartContainerId).data('chart-descr', chart_descr);
-            $( "#" + widgetId + " .chart-settings" ).trigger( "click" );
-        };
-
-        function save_dashboard(dashboard_descr) {
-            console.log(dashboard_descr);
-            this.serialized_data = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
-                el = $(el);
-                var node = el.data('_gridstack_node');
-                chart_object = node.el.find('.chart-container')
-                console.log(chart_object.data('chart-descr'));
-                console.log(chart_object.data('chart-params'));
-                return {
-                    x: node.x,
-                    y: node.y,
-                    width: node.width,
-                    height: node.height,
-                    widget_id: node.el.attr('id'),
-                    chart_container_id: chart_object.attr('id'),
-                    chart_descr: chart_object.data('chart-descr'),
-                    chart_params: chart_object.data('chart-params'),
-                };
-            }, this);
-            console.log(JSON.stringify(this.serialized_data, null, '    '));
-            dashboard_descr['chart_model'] = JSON.stringify(this.serialized_data);
-            console.log(dashboard_descr);
-
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'wms:add_dashboard' %}",
-                call_type: 'add_dashboard',
-                data: dashboard_descr,
-                success: function (data) {
-                    console.log('Successfully saved dashboard');
-                    console.log(data);
-                },
-                error: function () {
-                    console.log('Failed to save dashboard');
-                },
-            });
-        };
 
         function load_dashboard(chart_id) {
             console.log('Loading dashboard');
@@ -393,7 +287,9 @@
                     console.log('Successfully loaded dashboard');
                     console.log(dashboard);
                     a = JSON.parse(dashboard['chart_model'].replace(/'/g, '"'))
+                    $( '.hamburger' ).trigger( "click" );
                     load_grid(a);
+
                 },
                 error: function () {
                     console.log('Failed to load dashboard');
@@ -411,11 +307,8 @@
                 + 'data-gs-min-width="4" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
                 + '<img class="loading-gif ' + node.widget_id + '" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
-                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
+                + '<span class="glyphicon glyphicon-cog chart-settings pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
-                + 'data-original-title="" data-trigger="hover" title=""></span>'
-                + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
-                + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
                 + 'data-original-title="" data-trigger="hover" title=""></span></div>'
                 + '<div id="' + node.chart_container_id + '" class="chart-container"/>'
                 + '</div><div/>'),
@@ -426,10 +319,6 @@
             chart_req = {'chart_descr': node.chart_descr, 'chart_params': node.chart_params};
             build_chart(node.widget_id, node.chart_container_id, chart_req);
             }, this);
-        };
-
-        function clear_grid() {
-            grid.remove_all();
         };
 
         $.fn.serializeObject = function(){
@@ -450,15 +339,6 @@
         };
     </script>
     <script type="text/javascript">
-        $('#dashboard-save-form [name=submit]').click(function () {
-            console.log($('#dashboard-save-form').attr("id"));
-            dashboard_descr = $('#dashboard-save-form').serializeObject();
-            console.log(dashboard_descr);
-            $('#modalDashboardSave').modal('toggle');
-            save_dashboard(dashboard_descr);
-        });
-
-
         //A call using Ajax to get data for chart and place it on the page when form is submitted (Submit button clicked)
         var chartDataUrl = "{% url 'wms:build_chart' %}";
         $('#chart-form [name=submit]').click(function () {

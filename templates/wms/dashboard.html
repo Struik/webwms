@@ -202,6 +202,16 @@
             add_new_widget(chart_description);
         });
 
+        function close_widget(widget) {
+            console.log('Closing widget: ' + widget.attr('id'));
+            this.grid.remove_widget(widget,true);
+        };
+
+        $(document).on('click', '.chart-close', function(){
+            var widget = $('#' + $(this).parents('.widget').attr('id'));
+            close_widget(widget);
+        });
+
         $(document).on('click', '.chart-settings', function(){
             console.log('chart-settings clicked');
             chart_container = $(this).parent().siblings('.chart-container');
@@ -259,13 +269,6 @@
             };
             $('.grid-stack').gridstack(options);
             grid = $('.grid-stack').data('gridstack');
-
-            this.close_widget = function () {
-                var widget = $('#widget');
-                this.grid.remove_widget(widget,true);
-            }.bind(this);
-
-            //$('.chart-close').click(this.close_widget);
         });
 
         $( document ).ajaxStop(function() {
@@ -294,11 +297,11 @@
                 + 'data-gs-min-width="4" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
                 + '<img class="loading-gif" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
-                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
-                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
-                + 'data-original-title="" data-trigger="hover" title=""></span>'
-                + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
+                + '<span class="glyphicon glyphicon-remove chart-close pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
+                + 'data-original-title="" data-trigger="hover" title=""></span>'
+                + '<span class="glyphicon glyphicon-cog chart-settings pull-right" data-container="body"'
+                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
                 + 'data-original-title="" data-trigger="hover" title=""></span></div>'
                 + '<div id="' + chartContainerId + '" class="chart-container"/>'
                 + '</div><div/>'),
@@ -375,11 +378,11 @@
                 + 'data-gs-min-width="4" data-gs-min-height="6">'
                 + '<div class="grid-stack-item-content"><div class="chart-header">'
                 + '<img class="loading-gif ' + node.widget_id + '" style="display:none" src="{% static 'wms/images/ajax-loader.gif' %}"/>'
-                + '<span class="glyphicon glyphicon-cog chart-settings  pull-right" data-container="body"'
-                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
-                + 'data-original-title="" data-trigger="hover" title=""></span>'
-                + '<span class="glyphicon glyphicons-remove chart-close" data-container="body"'
+                + '<span class="glyphicon glyphicon-remove chart-close pull-right" data-container="body"'
                 + 'data-toggle="popover" data-placement="bottom" data-content="Закрыть показатель"'
+                + 'data-original-title="" data-trigger="hover" title=""></span>'
+                + '<span class="glyphicon glyphicon-cog chart-settings pull-right" data-container="body"'
+                + 'data-toggle="popover" data-placement="bottom" data-content="Настройки показателя"'
                 + 'data-original-title="" data-trigger="hover" title=""></span></div>'
                 + '<div id="' + node.chart_container_id + '" class="chart-container"/>'
                 + '</div><div/>'),
