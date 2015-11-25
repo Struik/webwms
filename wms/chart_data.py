@@ -84,8 +84,9 @@ def generate_select(chart_date_field, chart_value_field, chart_group_field, date
     #'bindparam' is used to unify the code later. Grants ability to use single 'build_up_chart_data' function for both
     #single and grouped selects ('build_up_grouped_chart_data' function is deprecated now)
     selection = select([chart_date_field, chart_value_field, bindparam("grouping_field", chart_group_field)]).\
-        where(and_(chart_date_field <= date_end, chart_date_field >= date_start)).\
         order_by(chart_date_field)
+        #where(and_(chart_date_field <= date_end, chart_date_field >= date_start)).\
+
     return selection
 
 def generate_grouped_select(chart_date_field, chart_value_field, chart_sum_field, chart_group_field, date_start,
